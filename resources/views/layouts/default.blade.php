@@ -20,7 +20,6 @@
         <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
         <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans overflow-hidden flex" id="body">
         <x-pos-modal name="confirm-product" :show="$errors->userDeletion->isNotEmpty()" focusable>

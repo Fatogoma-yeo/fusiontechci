@@ -21,7 +21,6 @@
         <script src="{{ asset('js/toastr.js') }}"></script>
         <script src="{{ asset('js/jquery-ui.js') }}"></script>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans">
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-4"></div>
@@ -71,7 +70,7 @@
                 this._responsive.detect();
                 this.defineCurrentScreen();
             });
-            
+
             $(document).ready(function(){
                 $('#search').on('keyup',function(e){
                     var $value= e.target.value;
@@ -90,7 +89,7 @@
                     var value = $(this).text();
                     var product_id = $(this).find("input[name='product_id']").val();
                     $(".product_list").html("");
-                    $("#search").val("");  
+                    $("#search").val("");
 
                     var fieldHTML =+'<tbody class="text-md">'
                                 +'       <tr class="prod_item border-b-2 border-gray-400 px-2 py-2">'
@@ -122,9 +121,9 @@
                                 +'                <p class="m-2 uppercase value hidden">0 f cfa</p>'
                                 +'            </td>'
                                 +'       </tr>'
-                                +'    </tbody>'; 
+                                +'    </tbody>';
                     var x = 1;
-                    if(x < maxField){ 
+                    if(x < maxField){
                         x++;
                         $(wrapper).append(fieldHTML);
                     }
