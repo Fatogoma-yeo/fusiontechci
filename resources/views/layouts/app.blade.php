@@ -21,6 +21,7 @@
         <script src="{{ asset('js/toastr.js') }}"></script>
         <script src="{{ asset('js/jquery-ui.js') }}"></script>
 
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans">
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-4"></div>
