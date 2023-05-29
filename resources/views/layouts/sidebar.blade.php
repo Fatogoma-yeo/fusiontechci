@@ -125,7 +125,7 @@
         </div>
         @endcan
         <div id="sublist4" class="hidden bg-gray-0 border rounded-lg pb-1">
-          can('inventory_stock')
+          @can('inventory_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventories.index') }}" class="text-white ml-4 mr-2">
                     {{ __('Inventaire des Stocks') }}
