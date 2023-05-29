@@ -125,41 +125,55 @@
         </div>
         @endcan
         <div id="sublist4" class="hidden bg-gray-0 border rounded-lg pb-1">
+          can('inventory_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventories.index') }}" class="text-white ml-4 mr-2">
                     {{ __('Inventaire des Stocks') }}
                 </a>
             </div>
+          @endcan
+          @can('inventory_physic_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventories.create') }}" class="text-white ml-4 mr-2">
                     {{ __('Saisir de Stocks Physique') }}
                 </a>
             </div>
+          @endcan
+          @can('update_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventory.validate') }}" class="text-white ml-4 mr-2">
                     {{ __('Validation de l\'inventaire') }}
                 </a>
             </div>
+          @endcan
+          @can('hs_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventory.stock-hs') }}" class="text-white ml-4 mr-2">
                     {{ __('Stocks HS') }}
                 </a>
             </div>
+          @endcan
+          @can('hs_physic_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventory.physic-stock-hs') }}" class="text-white ml-4 mr-2">
                     {{ __('Saisir de Stocks HS') }}
                 </a>
             </div>
+          @endcan
+          @can('update_hs_stock')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('inventory.stock-validate') }}" class="text-white ml-4 mr-2">
                     {{ __('Validation de Stocks') }}
                 </a>
             </div>
+          @endcan
+          @can('ajust_stock')
             <div class="pt-1 pb-2 space-y-1">
                 <a href="{{ route('product.stock-ajustment') }}" class="text-white ml-4 mr-2">
                     {{ __('Stock Adjustment') }}
                 </a>
             </div>
+          @endcan
         </div>
 
         @can('users_access')

@@ -279,6 +279,30 @@ class PermissionTableSeeder extends Seeder
                 'name' => 'inventory_access',
             ],
             [
+                'title' => 'List Inventory Stock',
+                'name' => 'inventory_stock',
+            ],
+            [
+                'title' => 'Create Inventory Stock',
+                'name' => 'inventory_physic_stock',
+            ],
+            [
+                'title' => 'Validate Inventory Stock',
+                'name' => 'update_stock',
+            ],
+            [
+                'title' => 'List Stock HS',
+                'name' => 'hs_stock',
+            ],
+            [
+                'title' => 'Create HS Stock',
+                'name' => 'hs_physic_stock',
+            ],
+            [
+                'title' => 'Validate HS Stock',
+                'name' => 'update_hs_stock',
+            ],
+            [
                 'title' => 'Read Stock',
                 'name' => 'stock_show',
             ],
