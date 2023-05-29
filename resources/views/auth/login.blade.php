@@ -3,11 +3,11 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="flex flex-col items-center justify-center select-none">
-        <div class="flex flex-col bg-white px-4 sm:px-6 md:px-8 lg:px-10 py-2 rounded-xl shadow-2xl w-full max-w-md  border-l-4 border-cyan-900">
-            <div class="font-medium self-center text-xl sm:text-2xl uppercase text-center rounded-full text-white">
-                <img class="w-32" src="{{ asset( 'svg/fs.logo.svg' ) }}" alt="">
+        <div class="flex flex-col bg-white px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl shadow-2xl w-full max-w-md  border-l-4 border-cyan-900">
+            <div class="font-medium self-center sm:text-2xl text-center">
+                <img class="w-48 h-auto" src="{{ asset( 'svg/fusion_logo.svg' ) }}" alt="fusiontechci">
             </div>
-            <div class="mt-6">
+            <div class="">
                 <form method="POST" action="{{ route('login') }}" autocomplete="">
                     @csrf
 

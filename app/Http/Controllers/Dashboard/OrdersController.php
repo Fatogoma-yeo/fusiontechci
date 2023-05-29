@@ -13,6 +13,7 @@ use App\Models\PosList;
 use App\Models\Client;
 use App\Models\CashFlow;
 use App\Models\OrderProduct;
+use App\Models\Inventory;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -260,6 +261,7 @@ class OrdersController extends Controller
             $products = Product::with('category')->where('id', $value)->get();
             $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
             $productHistories = new ProductHistory;
+            $inventories = new Inventory;
 
             foreach ($procur_product as $product_det) {
                 $purchase_price = $product_det->purchase_price;
@@ -304,6 +306,11 @@ class OrdersController extends Controller
             $productHistories->author_id = Auth::id();
 
             $productHistories->save();
+
+
+            $ProductsHistoryDetails = ProductHistory::where('product_id', $value)->latest()->first();
+            $inventories_quantity = $ProductsHistoryDetails->after_quantity;
+            Inventory::where('product_id', $value)->update(['after_quantity' => $inventories_quantity]);
 
         }
 

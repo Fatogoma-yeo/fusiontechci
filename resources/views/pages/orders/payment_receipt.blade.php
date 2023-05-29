@@ -19,10 +19,10 @@
     </head>
     <body>
         <div class="w-full h-full" id="invoice_content">
-            <div class="w-full md:w-1/2 lg:w-1/3 shadow-lg bg-white p-2 mx-auto">
+            <div class="w-full md:w-1/2 lg:w-1/3 shadow-lg bg-white mx-auto">
                 <div class="flex items-center justify-center">
-                    <h3 class="text-3xl font-bold">Fusiontechci</h3>
-                    <!-- <img src="" alt=""> -->
+                    <!-- <h3 class="text-3xl font-bold">Fusiontechci</h3> -->
+                    <img class="w-32" src="{{ asset( 'svg/fusion_logo.svg' ) }}" alt="fusiontechci">
                 </div>
                 <div class="p-2 border-b border-gray-700">
                     <div class="flex flex-wrap -mx-2 text-sm">
@@ -93,7 +93,7 @@
                         <strong>{{ __( 'Note: ' ) }}</strong> {{ __('order-note') }}
                     </div> -->
                     <div class="pt-6 pb-4 text-center text-gray-800 text-sm">
-                        
+
                     </div>
                 </div>
             </div>

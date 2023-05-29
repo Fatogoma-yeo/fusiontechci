@@ -96,8 +96,6 @@
                         +'            <td class="p-2 border-2 border-gray-400">'
                         +'              <select name="operation" id="operation" class="p-2 border-gray-300 rounded-md shadow-sm bg-gray-100 w-full focus:border-indigo-500 focus:ring-indigo-500" required>'
                         +'                   <option value="">Select</option>'
-                        +'                   <option value="{{ __("Added") }}">{{ __("Added") }}</option>'
-                        +'                   <option value="{{ __("Deleted") }}">{{ __("Deleted") }}</option>'
                         +'                   <option value="{{ __("Defective") }}">{{ __("Defective") }}</option>'
                         +'                   <option value="{{ __("Lost") }}">{{ __("Lost") }}</option>'
                         +'               </select>'
@@ -110,16 +108,16 @@
                         +'                <input type="number" class="hidden" id="total_price" name="total_price[]">'
                         +'            </td>'
                         +'       </tr>'
-                        +'    </tbody>'; 
+                        +'    </tbody>';
 
             var x = 1;
-            if(x < maxField){ 
+            if(x < maxField){
                 x++;
                 $(wrapper).append(fieldHTML);
             }
 
         });
-        
+
     });
 
     function upTo(el, tagName) {

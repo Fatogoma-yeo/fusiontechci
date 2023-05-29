@@ -43,7 +43,7 @@
                             </ul>
                         </div>
                         <div>
-                            <img class="w-32" src="{{ asset( 'svg/fs.logo.svg' ) }}" alt="fusiontechci">
+                            <img class="w-32" src="{{ asset( 'svg/fusion_logo.svg' ) }}" alt="fusiontechci">
                         </div>
                     </div>
                 </div>

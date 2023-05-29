@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\ExpensesCategoriesController;
 use App\Http\Controllers\Dashboard\ExpensesController;
+use App\Http\Controllers\InventoryController;
 use App\Mail\OwnerNotificate;
 
 /*
@@ -62,6 +63,16 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::get('cash-flow/history', [ExpensesController::class, 'cashFlowHistory'])->name('expenses.history');
     Route::resource('expense_categories', ExpensesCategoriesController::class);
 });
+Route::middleware('auth')->group(function ()
+{
+  Route::resource('inventories', InventoryController::class);
+  Route::match(['get', 'post'], 'inventory/validate', [InventoryController::class, 'inventoryValidate'])->name('inventory.validate');
+  Route::match(['get', 'post'], 'inventory/physic-stock-hs', [InventoryController::class, 'inventoryPhysicStockHs'])->name('inventory.physic-stock-hs');
+  Route::match(['get', 'post'], 'inventory/stock-validate', [InventoryController::class, 'inventoryStockValidate'])->name('inventory.stock-validate');
+  Route::get('inventory/stock-hs', [InventoryController::class, 'inventoryStockHs'])->name('inventory.stock-hs');
+
+});
+
 Route::middleware('auth')->group(function ()
 {
     Route::get('/reports/sales', [ReportsController::class, 'salesReport'])->name('report.sales');

@@ -25,9 +25,11 @@ const toggleSubDir = (check) => {
   let subList6 = document.getElementById("sublist6");
   let subList7 = document.getElementById("sublist7");
   let subList8 = document.getElementById("sublist8");
+  let subList9 = document.getElementById("sublist9");
   switch (check) {
     case 1:
-      subList6.classList.add("hidden");
+      subList9.classList.add("hidden");
+      subList8.classList.add("hidden");
       subList7.classList.add("hidden");
       subList6.classList.add("hidden");
       subList5.classList.add("hidden");
@@ -37,6 +39,7 @@ const toggleSubDir = (check) => {
       subList1.classList.remove("hidden");
       break;
     case 2:
+      subList9.classList.add("hidden");
       subList8.classList.add("hidden");
       subList7.classList.add("hidden");
       subList6.classList.add("hidden");
@@ -47,6 +50,7 @@ const toggleSubDir = (check) => {
       subList1.classList.add("hidden");
       break;
     case 3:
+      subList9.classList.add("hidden");
       subList8.classList.add("hidden");
       subList7.classList.add("hidden");
       subList6.classList.add("hidden");
@@ -57,6 +61,7 @@ const toggleSubDir = (check) => {
       subList1.classList.add("hidden");
       break;
     case 4:
+      subList9.classList.add("hidden");
       subList8.classList.add("hidden");
       subList7.classList.add("hidden");
       subList6.classList.add("hidden");
@@ -67,6 +72,7 @@ const toggleSubDir = (check) => {
       subList1.classList.add("hidden");
       break;
     case 5:
+      subList9.classList.add("hidden");
       subList8.classList.add("hidden");
       subList7.classList.add("hidden");
       subList6.classList.add("hidden");
@@ -77,6 +83,7 @@ const toggleSubDir = (check) => {
       subList1.classList.add("hidden");
       break;
     case 6:
+      subList9.classList.add("hidden");
       subList8.classList.add("hidden");
       subList7.classList.add("hidden");
       subList6.classList.remove("hidden");
@@ -87,6 +94,7 @@ const toggleSubDir = (check) => {
       subList1.classList.add("hidden");
       break;
     case 7:
+      subList9.classList.add("hidden");
       subList8.classList.add("hidden");
       subList7.classList.remove("hidden");
       subList6.classList.add("hidden");
@@ -97,7 +105,19 @@ const toggleSubDir = (check) => {
       subList1.classList.add("hidden");
       break;
       case 8:
+        subList9.classList.add("hidden");
         subList8.classList.remove("hidden");
+        subList7.classList.add("hidden");
+        subList6.classList.add("hidden");
+        subList5.classList.add("hidden");
+        subList4.classList.add("hidden");
+        subList3.classList.add("hidden");
+        subList2.classList.add("hidden");
+        subList1.classList.add("hidden");
+        break;
+      case 9:
+        subList9.classList.remove("hidden");
+        subList8.classList.add("hidden");
         subList7.classList.add("hidden");
         subList6.classList.add("hidden");
         subList5.classList.add("hidden");
@@ -108,4 +128,3 @@ const toggleSubDir = (check) => {
         break;
   }
 };
-

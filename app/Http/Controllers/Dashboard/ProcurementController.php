@@ -15,6 +15,7 @@ use App\Models\Provider;
 use App\Models\Procurement;
 use App\Models\ProcurementsProduct;
 use App\Models\ExpenseCategory;
+use App\Models\Inventory;
 
 class ProcurementController extends Controller
 {
@@ -135,6 +136,7 @@ class ProcurementController extends Controller
 
             $procurementProduct = new ProcurementsProduct;
             $productHistories = new ProductHistory;
+            $inventories = new Inventory;
 
             $product_detail = Product::where('id', $value)->get();
             foreach ($product_detail as $product) {
@@ -153,6 +155,7 @@ class ProcurementController extends Controller
 
             // Product History
             $proHistoryCount = ProductHistory::where('product_id', $value)->count();
+            $inventoryCount = Inventory::where('product_id', $value)->count();
 
             switch ($proHistoryCount) {
                 case 0:
@@ -193,8 +196,27 @@ class ProcurementController extends Controller
                     break;
             }
 
-            // echo '<pre>';print_r($procurement);die;
+            switch ($inventoryCount) {
+                case 0:
+                    $inventories->product_id = $value;
+                    $inventories->before_quantity = $data['quantity'][$key];
+                    $inventories->after_quantity = $data['quantity'][$key];
+                    $inventories->purchase_price = $data['purchase_price'][$key];
+                    $inventories->unit_price = $data['net_purchase_price'][$key];
+                    $inventories->author_id = Auth::id();
 
+                    $inventories->save();
+                    break;
+
+                default:
+                    $inventoryDetails = Inventory::where('product_id', $value)->latest()->first();
+                    $inventory_quantity = $inventoryDetails->before_quantity + $data['quantity'][$key];
+
+                    Inventory::where('product_id', $value)->update(['before_quantity' =>$inventory_quantity]);
+                    break;
+            }
+
+            // echo '<pre>';print_r($procurement);die;
         }
 
         $provider_purchases = Procurement::select(

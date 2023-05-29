@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\ProductCategory;
 use App\Models\ProductHistory;
 use App\Models\ProcurementsProduct;
+use App\Models\Inventory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
@@ -136,41 +137,26 @@ class ProductController extends Controller
                 // echo "<pre>"; print_r($data); die;
                 foreach ($data['product_id'] as $key => $value) {
 
-                    $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
-                    $productHistories = new ProductHistory;
+                  if ($data['operation'] == "Défectueuse" || $data['operation'] == "Perdue") {
+                      $stock_hs_detail = Inventory::where('product_id', $value)->first();
+                      if ($stock_hs_detail->stock_hs === null) {
 
-                    foreach ($procur_product as $product_det) {
-                        $purchase_price = $product_det->purchase_price;
-                        $productHistories->purchase_price = $purchase_price;
-                    }
+                        $stock_hs = $data['quantity'][$key];
+                        Inventory::where('product_id', $value)->update(['stock_hs' => $stock_hs]);
 
-                    $product_detail = Product::where('id', $value)->get();
-                    foreach ($product_detail as $product) {
-                        $product_name = $product->name;
-                    }
+                      }else {
 
-                    // Product History
-                    $procurementProductDetails = ProcurementsProduct::where('product_id', $value)->latest()->first();
-                    $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->first();
-                    $productHistories->product_name = $product_name;
-                    $productHistories->procurement_name = "N/A";
-                    $productHistories->product_id = $value;
-                    $productHistories->before_quantity = $ProductHistoryDetails->after_quantity;
-                    $productHistories->quantity = $data['quantity'][$key];
-                    $productHistories->after_quantity = $ProductHistoryDetails->after_quantity - $data['quantity'][$key];
-                    $productHistories->unit_price = $data['unit_price'][$key];
-                    $productHistories->total_price = $data['total_price'][$key];
-                    $productHistories->author_id = Auth::id();
+                        $stock_hs = $stock_hs_detail->stock_hs + $data['quantity'][$key];
+                        Inventory::where('product_id', $value)->update(['stock_hs' => $stock_hs]);
+
+                      }
+                  }
 
                     // echo '<pre>';print_r($procurement);die;
                 }
 
-                $productHistories->operation = $data['operation'];
-
-                $productHistories->save();
-
                 $users = ['comptabiliter@fusiontechci.com', 'admin@fusiontechci.com'];
-                Mail::to($users)->send(new OwnerNotificate());
+                // Mail::to($users)->send(new OwnerNotificate());
 
                 return redirect()->back()->with('success', __('The stock has been adjustment successfully.'));
             }

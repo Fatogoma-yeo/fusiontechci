@@ -109,7 +109,7 @@
                                 +'                <input type="number" id="net_purchase_price" class="m-2 w-auto border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="net_purchase_price[]" onkeyup="valuefunc(this)" required>'
                                 +'            </td>'
                                 +'            <td class="border-2 border-gray-400">'
-                                +'                <input type="number" id="gross_purchase_price" class="m-2 w-auto border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="gross_purchase_price[]" :value="0" required>'
+                                +'                <input type="number" id="gross_purchase_price" class="m-2 w-auto border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="gross_purchase_price[]" required>'
                                 +'            </td>'
                                 +'            <td class="border-2 border-gray-400">'
                                 +'                <input type="number" id="purchase_price" class="m-2 w-auto border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="purchase_price[]"  onkeyup="pricefunc(this)" required>'
