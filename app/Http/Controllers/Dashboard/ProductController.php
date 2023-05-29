@@ -155,8 +155,8 @@ class ProductController extends Controller
                     // echo '<pre>';print_r($procurement);die;
                 }
 
-                $users = ['comptabiliter@fusiontechci.com', 'admin@fusiontechci.com'];
-                // Mail::to($users)->send(new OwnerNotificate());
+                $users = ['comptabilite@fusiontechci.com', 'admin@fusiontechci.com'];
+                Mail::to($users)->send(new OwnerNotificate());
 
                 return redirect()->back()->with('success', __('The stock has been adjustment successfully.'));
             }
