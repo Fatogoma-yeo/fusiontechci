@@ -102,8 +102,8 @@ class InventoryController extends Controller
           return redirect()->back()->with('success', 'Le stock hors service a été validé avec succès. Merci !');
         }
 
-        $stock_hs_detail = Inventory::with('product')->get();
-        $inventoryCount = Inventory::where('stock_hs', '<>', null)->orWhere('stock_hs_physic', '<>', null)->count();
+        $stock_hs_detail = Inventory::with('product')->where('stock_hs_physic', '<>', 0)->get();
+        $inventoryCount = Inventory::where('stock_hs_physic', '<>', 0)->count();
         $inventoryCheckCount = Inventory::where(['check_stock_hs_1' =>1, 'check_stock_hs_2' =>1])->count();
 
         return view('pages.inventory.stock_validate', compact('stock_hs_detail', 'inventoryCheckCount', 'inventoryCount'));

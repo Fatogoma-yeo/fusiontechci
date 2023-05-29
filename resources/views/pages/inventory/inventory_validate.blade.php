@@ -76,34 +76,46 @@
                                             <td class="p-2 border border-gray-500 text-right flex flex-row">
                                               @if($products->inventory)
                                                 <span class="flex flex-row mx-2" id="comptable">
-                                                  @if($products->inventory->check_stock_physic_1 == 0)
-                                                    <button onclick="checkStockPhysic1('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                                      @if($products->inventory->stock_physic == 0 || $products->inventory->stock_physic == null) disabled @endif>
+                                                    @if($products->inventory->check_stock_physic_1 == 0)
+                                                        @if(Auth::user()->email == 'comptabilite@fusiontechci.com')
+                                                          <button onclick="checkStockPhysic1('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                            @if($products->inventory->stock_physic == 0 || $products->inventory->stock_physic == null) disabled @endif>
 
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                        </svg>
-                                                    </button>
-                                                  @else
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600 inline-flex">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                    </svg>
-                                                  @endif
+                                                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                              </svg>
+                                                          </button>
+                                                        @else
+                                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 inline-flex">
+                                                              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                          </svg>
+                                                        @endif
+                                                    @else
+                                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600 inline-flex">
+                                                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                      </svg>
+                                                    @endif
                                                 </span>
-                                                <span class="flex flex-row" id="chef_comptable">
-                                                  @if($products->inventory->check_stock_physic_2 == 0)
-                                                    <button onclick="checkStockPhysic2('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                                      @if($products->inventory->stock_physic == 0 || $products->inventory->stock_physic == null) disabled @endif>
+                                                <span class="flex flex-row" id="chef_commercial">
+                                                    @if($products->inventory->check_stock_physic_2 == 0)
+                                                      @if(Auth::user()->email == 'servicecommercial@fusiontechci.com')
+                                                         <button onclick="checkStockPhysic2('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                            @if($products->inventory->stock_physic == 0 || $products->inventory->stock_physic == null) disabled @endif>
 
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                              </svg>
+                                                          </button>
+                                                      @else
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 inline-flex">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                                         </svg>
-                                                    </button>
-                                                  @else
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600 inline-flex">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                    </svg>
-                                                  @endif
+                                                      @endif
+                                                    @else
+                                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600 inline-flex">
+                                                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                      </svg>
+                                                    @endif
                                                 </span>
                                               @else
                                                 <span>-------</span>
@@ -125,7 +137,7 @@
                                         <td class="p-2 border border-gray-500 text-right"><span class="mx-2 font-semibold" id="total_stock_physic">0</span></td>
                                         <td class="p-2 border border-gray-500 text-center">
                                           <span>
-                                            @if($productDetail)
+                                            @if($productDetail && Auth::user()->email == 'agencefke@fusiontechci.com')
                                               <button class="inline-flex items-center px-4 py-2 bg-gray-0 rounded font-semibold text-sm text-white tracking-widest hover:bg-green-600 focus:bg-green-600 active:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition ease-in-out duration-150" @if($inventoryCount != $inventoryCheckCount || $inventoryCount == 0) disabled @endif>
                                                   {{ __( 'Stocked' ) }}
                                               </button>
