@@ -909,6 +909,9 @@ select {
 .h-24 {
   height: 6rem;
 }
+.h-28 {
+  height:7rem!important
+}
 .h-10 {
   height: 2.5rem;
 }
