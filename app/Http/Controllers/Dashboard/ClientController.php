@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Gender;
 use App\Services\ClientService;
-use App\Services\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Dashboard\Store\StoreClientRequest;
 use App\Http\Requests\Dashboard\Update\UpdateClientRequest;
