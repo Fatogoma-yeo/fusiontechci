@@ -114,10 +114,10 @@ class OrdersController extends Controller
 
                     $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-28">
                                     <span class="flex justify-center">
-                                        <h2 class="text-lg  text-black font-bold">'.$product->name.'</h2>
+                                        <h2 class="text-md text-black font-bold">'.$product->name.'</h2>
                                     </span>
                                     <span class="flex justify-center">
-                                        <h3 class="text-md text-black font-bold">';
+                                        <h3 class="text-sm text-black font-bold">';
                     foreach($procurementDetail as $value) {
                         if ($product->id == $value->product_id) {
                             $output .= " $value->net_purchase_price F CFA";
@@ -154,10 +154,10 @@ class OrdersController extends Controller
 
                     $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-28">
                                     <span class="flex justify-center">
-                                        <h2 class="text-lg  text-black font-bold">'.$product->name.'</h2>
+                                        <h2 class="text-md text-black font-bold">'.$product->name.'</h2>
                                     </span>
                                     <span class="flex justify-center">
-                                        <h3 class="text-md text-black font-bold">';
+                                        <h3 class="text-sm text-black font-bold">';
                     foreach($procurementDetail as $value) {
                         if ($product->id == $value->product_id) {
                             $output .= " $value->net_purchase_price F CFA";
