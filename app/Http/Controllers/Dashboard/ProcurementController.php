@@ -16,6 +16,7 @@ use App\Models\Procurement;
 use App\Models\ProcurementsProduct;
 use App\Models\ExpenseCategory;
 use App\Models\Inventory;
+use App\Models\User;
 
 class ProcurementController extends Controller
 {
@@ -35,6 +36,7 @@ class ProcurementController extends Controller
 
     public function index()
     {
+        $userDetails = User::get();
         $procurements = Procurement::paginate(5);
         $providers = Provider::with('procurement')->get();
         foreach ($providers as $provider) {
@@ -42,7 +44,7 @@ class ProcurementController extends Controller
         }
         // dd($providers);
 
-        return view('pages.procurements.index', compact('procurements', 'providers'));
+        return view('pages.procurements.index', compact('procurements', 'providers', 'userDetails'));
     }
 
     public function get(Request $request)

@@ -91,7 +91,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-2 py-4">Pas de Produits</td>
+                            <td colspan="7" class="px-2 py-4 text-center">Pas de Produits</td>
                         </tr>
                     @endforelse
                 </tbody>

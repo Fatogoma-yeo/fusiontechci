@@ -71,11 +71,11 @@
                             @currency($provider->amount_paid)
                         </td>
                         <td class="px-2 py-4 text-gray-900">
-                            @if(Auth::user()->id == $provider->author_id)
-                                <span class="rounded-full bg-green-0 px-2 py-2">{{ Auth::user()->name }}</span>
-                            @else
-                                <span class="rounded-full bg-green-0 px-2 py-2"></span>
-                            @endif
+                            @foreach ($userDetails as $user)
+                                @if($user->id == $provider->author_id)
+                                    <span class="font-semibold px-2 py-2 bg-green-0 rounded-full">{{ $user->name }}</span>
+                                @endif
+                            @endforeach
                         </td>
                         <td class="px-2 py-4">
                             {{ $provider->created_at }}
@@ -99,7 +99,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="px-2 py-4">Pas de Fournisseurs</td>
+                        <td colspan="9" class="px-2 py-4 text-center">Pas de Fournisseurs</td>
                     </tr>
                 @endforelse
                 </tbody>

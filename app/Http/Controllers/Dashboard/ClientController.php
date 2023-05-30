@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Gender;
 use App\Services\ClientService;
+use App\Services\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Dashboard\Store\StoreClientRequest;
 use App\Http\Requests\Dashboard\Update\UpdateClientRequest;
@@ -73,9 +74,11 @@ class ClientController extends Controller
 
             return response()->json(["customers" => $output, "nothing" => $notput, "newuser" => $notpuTtoNew]);
         }
+
+        $userDetails = User::get();
         $clients = Client::orderBy('id', 'DESC')->paginate(5);
 
-        return view('pages.clients.index', compact('clients'));
+        return view('pages.clients.index', compact('clients', 'userDetails'));
     }
 
     /**

@@ -25,10 +25,11 @@ class CategoryController extends Controller
     }
     public function index()
     {
+        $userDetails = User::get();
         $categories = ProductCategory::orderBy('id', 'DESC')->paginate(5);
         $parentCategory = ProductCategory::where('parent_id', null)->get();
 
-        return view('pages.categories.index', compact('categories', 'parentCategory'));
+        return view('pages.categories.index', compact('categories', 'parentCategory', 'userDetails'));
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Http\Requests\Dashboard\Update\UpdateProviderRequest;
 use App\Http\Requests\Dashboard\ProviderRequest;
 use App\Services\ProviderService;
 use App\Models\Provider;
+use App\Models\User;
 
 class ProviderController extends Controller
 {
@@ -33,8 +34,9 @@ class ProviderController extends Controller
 
     public function index()
     {
+        $userDetails = User::get();
         $providers = Provider::orderBy('id', 'DESC')->paginate(5);
-        return view('pages.providers.index', compact('providers'));
+        return view('pages.providers.index', compact('providers', 'userDetails'));
     }
 
     /**
