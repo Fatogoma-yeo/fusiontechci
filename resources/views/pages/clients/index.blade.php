@@ -117,7 +117,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="px-2 py-4">Pas de Clients</td>
+                        <td colspan="10" class="px-2 py-4 text-center">Pas de Clients</td>
                     </tr>
                 @endforelse
                 </tbody>

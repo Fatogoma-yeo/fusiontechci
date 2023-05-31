@@ -18,11 +18,12 @@ return new class extends Migration
             $table->string( 'name' );
             $table->float( 'value', 18, 5 )->default(0);
             $table->float( 'cost', 18, 5 )->default(0);
+            $table->string( 'invoice_number' )->nullable();
             $table->datetime( 'invoice_date' )->nullable();
             $table->string( 'payment_status' )->default( 'unpaid' );
             $table->integer( 'author_id' );
             $table->integer('provider_id');
-            
+
             $table->timestamps();
         });
     }

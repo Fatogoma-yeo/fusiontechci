@@ -13,6 +13,7 @@ class Procurement extends Model
         'name',
         'value',
         'cost',
+        'invoice_number',
         'invoice_date',
         'payment_status',
         'provider_id',
@@ -31,7 +32,7 @@ class Procurement extends Model
 
     public function provider()
     {
-        return $this->hasMany(Provider::class);
+        return $this->belongsTo(Provider::class);
     }
     public function producthistory()
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Dashboard\Store\StoreProcurementRequest;
+use App\Http\Requests\Dashboard\Update\UpdateProcurementRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -38,10 +39,7 @@ class ProcurementController extends Controller
     {
         $userDetails = User::get();
         $procurements = Procurement::paginate(5);
-        $providers = Provider::with('procurement')->get();
-        foreach ($providers as $provider) {
-            $providers = $provider;
-        }
+        $providers = Provider::get();
         // dd($providers);
 
         return view('pages.procurements.index', compact('procurements', 'providers', 'userDetails'));
@@ -98,6 +96,11 @@ class ProcurementController extends Controller
             $procurement->provider_id = 0;
         }else {
             $procurement->provider_id = $data['provider_id'];
+        }
+        if ($data['invoice_number'] == null) {
+            $procurement->invoice_number = 'N/A';
+        }else {
+            $procurement->invoice_number = $data['invoice_number'];
         }
         if ($data['invoice_date'] == null) {
             $procurement->invoice_date = now();
@@ -254,9 +257,9 @@ class ProcurementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Procurement $procurement)
     {
-        //
+        return view('pages.procurements.show', compact('procurement'));
     }
 
     /**
@@ -265,9 +268,11 @@ class ProcurementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Procurement $procurement)
     {
-        //
+        $providers = Provider::get();
+
+        return view('pages.procurements.edit', compact('providers', 'procurement'));
     }
 
     /**
@@ -277,9 +282,102 @@ class ProcurementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProcurementRequest $request, Procurement $procurement)
     {
-        //
+
+         if ($request["provider_id"] != $procurement->provider_id) {
+              $provider_detail = Provider::where('id', $request["provider_id"])->first();
+              $providers_details = Provider::where('id', $procurement->provider_id)->first();
+
+              if ($request["status_payment"] == 'paid') {
+                  switch ($provider_detail->amount_paid) {
+                    case 0:
+                      $provider_detail->update(['amount_paid' => $procurement->cost]);
+                      break;
+
+                    default:
+                      $provider_detail->update(['amount_paid' => $provider_detail->amount_paid + $procurement->cost]);
+                      break;
+                  }
+                  switch ($providers_details->amount_paid) {
+                    case 0:
+                      $providers_details->update(['amount_paid' => 0]);
+                      break;
+
+                    default:
+                      $providers_details->update(['amount_paid' => $providers_details->amount_paid - $procurement->cost]);
+                      break;
+                  }
+                }else {
+                  switch ($provider_detail->amount_du) {
+                    case 0:
+                      $provider_detail->update(['amount_du' => $procurement->cost]);
+                      break;
+
+                    default:
+                      $provider_detail->update(['amount_du' => $provider_detail->amount_du + $procurement->cost]);
+                      break;
+                  }
+                  switch ($providers_details->amount_du) {
+                      case 0:
+                        $providers_details->update(['amount_du' => 0]);
+                        break;
+
+                      default:
+                        $providers_details->update(['amount_du' => $providers_details->amount_du - $procurement->cost]);
+                        break;
+                   }
+                }
+          }
+
+          if ($request["provider_id"] == $procurement->provider_id) {
+              if ($request["status_payment"] != $procurement->payment_status) {
+                  $providers = Provider::where('id', $procurement->provider_id)->first();
+                  if ($procurement->payment_status == 'paid') {
+                    switch ($providers->amount_du) {
+                      case 0:
+                        $providers->update(['amount_du' => $procurement->cost]);
+                        $providers->update(['amount_paid' => $providers->amount_paid - $procurement->cost]);
+                        break;
+
+                      default:
+                        $providers->update(['amount_du' => $providers->amount_du + $procurement->cost]);
+                        $providers->update(['amount_paid' => $providers->amount_paid - $procurement->cost]);
+                        break;
+                    }
+
+                  }else {
+                    switch ($providers->amount_paid) {
+                      case 0:
+                        $providers->update(['amount_paid' => $procurement->cost]);
+                        $providers->update(['amount_du' => $providers->amount_du - $procurement->cost]);
+                        break;
+
+                      default:
+                        $providers->update(['amount_paid' => $providers->amount_paid + $procurement->cost]);
+                        $providers->update(['amount_du' => $providers->amount_du - $procurement->cost]);
+                        break;
+                    }
+
+                  }
+              }
+          }
+
+          $procurements = Procurement::find($procurement->id);
+          $fields = $request->only(['name', 'invoice_number', 'provider_id']);
+
+          foreach ($fields as $name => $field) {
+            $procurements->$name = $field;
+          }
+
+          $procurements->payment_status = $request["status_payment"];
+          $procurements->value =$procurement->value;
+          $procurements->cost = $procurement->cost;
+          $procurements->author_id = Auth::id();
+
+          $procurements->update();
+
+        return redirect()->route('procurements.index')->with('success', 'L\'achat a été modifié avec succès !');
     }
 
     /**

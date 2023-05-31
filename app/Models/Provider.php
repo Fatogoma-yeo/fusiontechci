@@ -22,6 +22,6 @@ class Provider extends Model
 
     public function procurement()
     {
-        return $this->belongsTo(Procurement::class);
+        return $this->hasMany(Procurement::class);
     }
 }
