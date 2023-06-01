@@ -114,7 +114,7 @@
                 </div>
             </div>
         </div>
-        <div class="md:w-1/2 sm:w-full flex overflow-hidden" id="pos-grid-div">
+        <div class="md:w-1/2 sm:w-full flex w-full overflow-hidden" id="pos-grid-div">
             <div id="pos-grid" class="flex-auto flex flex-col rounded-md  bg-gray-100">
                 <div id="grid-container" class="rounded shadow  overflow-hidden flex-auto flex flex-col">
                     <div class="px-2 py-2 sm:px-2">
@@ -129,7 +129,7 @@
                     </div>
                     <div class="flex flex-col flex-auto">
                         @if($product_detail != null)
-                            <div class="flex xs:grid-cont-2 lg:grid-container sm:grid-cont-4 md:grid-cont-3 gap-0 flex-auto overflow-auto h-96" id="pos_products">
+                            <div class="flex xs:grid-cont-2 lg:grid-container sm:grid-cont-4 md:grid-cont-3 gap-0 flex-auto overflow-auto pb-6 h-96" id="pos_products">
 
                             </div>
                         @else
