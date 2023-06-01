@@ -59,6 +59,7 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::match(['get', 'post'], 'product/stock-ajustment', [ProductController::class, 'showStockAdjustment'])->name('product.stock-ajustment');
     Route::resource('procurements', ProcurementController::class);
     Route::get('product', [ProcurementController::class, 'get'])->name('product.get');
+    Route::get('paid', [ProcurementController::class, 'procured'])->name('paid.procured');
     Route::resource('expenses', ExpensesController::class);
     Route::get('cash-flow/history', [ExpensesController::class, 'cashFlowHistory'])->name('expenses.history');
     Route::resource('expense_categories', ExpensesCategoriesController::class);

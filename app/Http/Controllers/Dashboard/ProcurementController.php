@@ -64,6 +64,18 @@ class ProcurementController extends Controller
         }
     }
 
+    public function procured(Request $request)
+    {
+        if ($request->ajax()) {
+            $procurementDet = Procurement::where('id', $request["procurement_id"])->first();
+            $providers = Provider::where('id', $procurementDet->provider_id)->first();
+
+            $providers->update(['amount_paid' => $providers->amount_paid + $procurementDet->cost]);
+            $providers->update(['amount_du' => $providers->amount_du - $procurementDet->cost]);
+
+            $procurementDet->update(['payment_status' => 'paid']);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
