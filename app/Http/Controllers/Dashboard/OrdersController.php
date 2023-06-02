@@ -112,7 +112,7 @@ class OrdersController extends Controller
                                        </svg>';
                        }
 
-                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
+                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
                                        <span class="flex justify-center">
                                            <h2 class="text-sm font-bold">'.$procurement->product->name.'</h2>
                                        </span>
@@ -141,7 +141,7 @@ class OrdersController extends Controller
                                    </svg>';
                    }
 
-                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
+                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
                                    <span class="flex justify-center">
                                        <h2 class="text-sm font-bold">'.$product->name.'</h2>
                                    </span>
@@ -173,7 +173,7 @@ class OrdersController extends Controller
                                        </svg>';
                        }
 
-                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
+                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
                                        <span class="flex justify-center">
                                            <h2 class="text-sm font-bold">'.$procurement->product->name.'</h2>
                                        </span>
@@ -202,7 +202,7 @@ class OrdersController extends Controller
                                    </svg>';
                    }
 
-                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
+                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
                                    <span class="flex justify-center">
                                        <h2 class="text-sm font-bold">'.$product->name.'</h2>
                                    </span>
