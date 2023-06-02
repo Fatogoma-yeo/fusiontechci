@@ -112,12 +112,12 @@ class OrdersController extends Controller
                                        </svg>';
                        }
 
-                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-28">
+                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
                                        <span class="flex justify-center">
-                                           <h2 class="text-md  text-black font-bold">'.$procurement->product->name.'</h2>
+                                           <h2 class="text-sm font-bold">'.$procurement->product->name.'</h2>
                                        </span>
                                        <span class="flex justify-center">
-                                           <h3 class="text-sm text-black font-bold">'.
+                                           <h3 class="text-sm font-bold">'.
                                              $procurement->net_purchase_price .'F CFA
                                            </h3>
                                          </span>
@@ -141,9 +141,9 @@ class OrdersController extends Controller
                                    </svg>';
                    }
 
-                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-28">
+                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
                                    <span class="flex justify-center">
-                                       <h2 class="text-md text-black font-bold">'.$product->name.'</h2>
+                                       <h2 class="text-sm font-bold">'.$product->name.'</h2>
                                    </span>
                                </div>
                            </a>
@@ -173,12 +173,12 @@ class OrdersController extends Controller
                                        </svg>';
                        }
 
-                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-28">
+                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
                                        <span class="flex justify-center">
-                                           <h2 class="text-md  text-black font-bold">'.$procurement->product->name.'</h2>
+                                           <h2 class="text-sm font-bold">'.$procurement->product->name.'</h2>
                                        </span>
                                        <span class="flex justify-center">
-                                           <h3 class="text-sm text-black font-bold">'.
+                                           <h3 class="text-sm font-bold">'.
                                              $procurement->net_purchase_price .'F CFA
                                            </h3>
                                          </span>
@@ -202,9 +202,9 @@ class OrdersController extends Controller
                                    </svg>';
                    }
 
-                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-28">
+                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-24 py-2 text-center">
                                    <span class="flex justify-center">
-                                       <h2 class="text-md text-black font-bold">'.$product->name.'</h2>
+                                       <h2 class="text-sm font-bold">'.$product->name.'</h2>
                                    </span>
                                </div>
                            </a>
