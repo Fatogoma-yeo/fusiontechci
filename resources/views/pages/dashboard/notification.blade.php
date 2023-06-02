@@ -23,7 +23,7 @@
                 <div class="overflow-y-auto flex flex-col flex-auto">
                   @forelse(auth()->user()->notification as $notify)
                     <div class="notification-card notice border-b">
-                        <div class="p-2 cursor-pointer" @click="even( notification )">
+                        <div class="p-2">
                             <div class="flex items-center justify-between">
                                 <h1 class="font-semibold">{{ $notify->title }}</h1>
                                 <button @click="deleteNotify('{{ $notify->id }}')" class="border rounded-full h-8 w-8 items-center justify-center">
