@@ -63,6 +63,7 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::resource('expenses', ExpensesController::class);
     Route::get('cash-flow/history', [ExpensesController::class, 'cashFlowHistory'])->name('expenses.history');
     Route::resource('expense_categories', ExpensesCategoriesController::class);
+    Route::resource('notifications', NotificationController::class);
 });
 Route::middleware('auth')->group(function ()
 {
@@ -83,6 +84,12 @@ Route::middleware('auth')->group(function ()
     Route::get('/reports/profit', [ReportsController::class, 'profitReport'])->name('report.profit');
     Route::get('/reports/cash-flow', [ReportsController::class, 'cashFlowReport'])->name('report.cash-flow');
     Route::get('/reports/flux-history', [ReportsController::class, 'fluxHistoryReport'])->name('report.flux-history');
+});
+
+Route::middleware('auth')->group(function ()
+{
+    Route::get( 'notification', [ NotificationController::class, 'deleteSingleNotification' ])->name('notifications.deleteSingle');
+    Route::get( 'notifications', [ NotificationController::class, 'deletAllNotifications' ])->name('notifications.deletAll');
 });
 
 require __DIR__.'/auth.php';

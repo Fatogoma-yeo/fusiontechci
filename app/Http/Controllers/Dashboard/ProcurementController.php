@@ -17,6 +17,7 @@ use App\Models\Procurement;
 use App\Models\ProcurementsProduct;
 use App\Models\ExpenseCategory;
 use App\Models\Inventory;
+use App\Models\Notification;
 use App\Models\User;
 
 class ProcurementController extends Controller
@@ -260,6 +261,17 @@ class ProcurementController extends Controller
             $provider->update(['amount_du' => $purchaseDetails->total]);
         }
 
+        $notification = new Notification;
+        $procurements = Procurement::where('created_at', now())->first();
+        $action_user = User::where('id', $procurements->author_id)->first();
+        $users = User::where('email', 'comptabilite@fusiontechci.com')->first();
+
+        $notification->title = "Achats";
+        $notification->user_id = $users->id;
+        $notification->description = "Nouvel achat effectué par ".$action_user->name." chez ".$provider->name." portant la référence ".$procurements->name;
+
+        $notification->save();
+
         return redirect()->back()->with('success', 'La Commande a été enregistrer avec succès');
     }
 
@@ -300,6 +312,7 @@ class ProcurementController extends Controller
          if ($request["provider_id"] != $procurement->provider_id) {
               $provider_detail = Provider::where('id', $request["provider_id"])->first();
               $providers_details = Provider::where('id', $procurement->provider_id)->first();
+              $object = "le changement du fournisseur ".$providers_details->name." par ".$provider_detail->name;
 
               if ($request["status_payment"] == 'paid') {
                   switch ($provider_detail->amount_paid) {
@@ -344,6 +357,7 @@ class ProcurementController extends Controller
 
           if ($request["provider_id"] == $procurement->provider_id) {
               if ($request["status_payment"] != $procurement->payment_status) {
+                  $object = "le changement de status de paiement";
                   $providers = Provider::where('id', $procurement->provider_id)->first();
                   if ($procurement->payment_status == 'paid') {
                     switch ($providers->amount_du) {
@@ -388,6 +402,17 @@ class ProcurementController extends Controller
           $procurements->author_id = Auth::id();
 
           $procurements->update();
+
+          $notification = new Notification;
+          $action_user_id = Procurement::where('updated_at', now())->first();
+          $action_user = User::where('id', $action_user_id->author_id)->first();
+          $users = User::where('email', 'comptabilite@fusiontechci.com')->first();
+
+          $notification->title = "Modification";
+          $notification->user_id = $users->id;
+          $notification->description = "Nouvelle modification faite par ".$action_user->name." sur ".$object." de la commande ".$procurement->name;
+
+          $notification->save();
 
         return redirect()->route('procurements.index')->with('success', 'L\'achat a été modifié avec succès !');
     }

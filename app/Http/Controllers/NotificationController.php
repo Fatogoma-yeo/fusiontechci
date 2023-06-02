@@ -17,6 +17,21 @@ class NotificationController extends Controller
         //
     }
 
+    public function deleteSingleNotification(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            Notification::where('id', $data['notify_id'])->delete();
+        }
+    }
+
+    public function deletAllNotifications(Request $request)
+    {
+        if ($request->ajax()) {
+            Notification::where('user_id', Auth::user()->id)->delete();
+        }
+    }
+    
     /**
      * Show the form for creating a new resource.
      *

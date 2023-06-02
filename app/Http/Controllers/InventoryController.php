@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateInventoryRequest;
 use App\Models\ProductHistory;
 use App\Models\Product;
 use App\Models\Inventory;
+use App\Models\Notification;
+use App\Models\User;
 use DB;
 
 class InventoryController extends Controller
@@ -66,6 +68,24 @@ class InventoryController extends Controller
 
             foreach ($data['product_id'] as $key => $value) {
                 Inventory::where('product_id', $value)->update(['stock_hs_physic' => $data['hs_quantity'][$key]]);
+            }
+
+            $user_1 = User::where('email', 'comptabilite@fusiontechci.com')->first();
+            $user_2 = User::where('email', 'servicecommercial@fusiontechci.com')->first();
+            $users_detail = [$user_1, $user_2];
+
+            foreach ($users_detail as $users) {
+              $notification = new Notification;
+              $inventories = Inventory::where('updated_at', now())->first();
+              $action_user = User::where('id', $inventories->author_id)->first();
+              $date = date_format($inventories->updated_at, 'd-m-Y');
+              $heure = date_format($inventories->updated_at, 'H:i:s');
+
+              $notification->title = "Inventaire";
+              $notification->user_id = $users->id;
+              $notification->description = "Vous êtes appelé à valider le stock hors service saisi par ".$action_user->name." le ".$date." à ".$heure;
+
+              $notification->save();
             }
 
             return redirect()->back()->with('success', 'Le stock hors service a été enregistré avec succès. Merci !');
@@ -140,6 +160,24 @@ class InventoryController extends Controller
 
         foreach ($data['product_id'] as $key => $value) {
           Inventory::where('product_id', $value)->update(['stock_physic' =>$data['physic_quantity'][$key]]);
+        }
+
+        $user_1 = User::where('email', 'comptabilite@fusiontechci.com')->first();
+        $user_2 = User::where('email', 'servicecommercial@fusiontechci.com')->first();
+        $users_detail = [$user_1, $user_2];
+
+        foreach ($users_detail as $users) {
+          $notification = new Notification;
+          $inventories = Inventory::where('updated_at', now())->first();
+          $action_user = User::where('id', $inventories->author_id)->first();
+          $date = date_format($inventories->updated_at, 'd-m-Y');
+          $heure = date_format($inventories->updated_at, 'H:i:s');
+
+          $notification->title = "Inventaire";
+          $notification->user_id = $users->id;
+          $notification->description = "Vous êtes appelé à valider le stock physique saisi par ".$action_user->name." le ".$date." à ".$heure;
+
+          $notification->save();
         }
 
         return redirect()->back()->with('success', 'Le stock physique a été enregistré avec succès. Merci !');
