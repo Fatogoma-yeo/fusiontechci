@@ -22,7 +22,7 @@
                 {{ __('Réinitialiser') }}
             </a>
         </div>
-        <ul class="md:hidden flex flex-row pt-2 px-2">
+        <ul class="md:hidden flex flex-row pt-2 pb-1 px-2">
             <li  class="" @click=" openTab = 1 " id="panier">
                 <button  :class="openTab === 1 ? activeClasses : inactiveClasses" class="inline-block cursor-pointer text-gray-900 bg-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-2 text-md font-medium text-center border-transparent border-b-2" >
                     <span> {{ __( 'Cart' ) }} </span>
@@ -36,7 +36,7 @@
             </li>
         </ul>
     </div>
-    <div class="flex flex-auto overflow-hidden -m-2 p-3 gap-2 h-screen">
+    <div class="flex flex-auto overflow-hidden -m-2 px-3 pb-4 md:pt-4 gap-2 h-screen">
         <div class="flex w-full md:flex md:w-1/2 hidden overflow-hidden rounded-md" id="pos-cart-div">
             <div id="pos-cart" class="flex-auto flex flex-col bg-gray-100">
                 <div class="rounded shadow flex flex-col flex-auto overflow-hidden">
