@@ -41,7 +41,9 @@
                     <select name="category_id" id="category_id" class="mt-1 block w-full py-2 px-3 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" >
                         <option value=""></option>
                         @foreach($categories as $category)
+                          @if($category->name != "Compte des achats")
                             <option value="{{ $category->id}}" name="category_id">{{ $category->name }}</option>
+                          @endif
                         @endforeach
                     </select>
                     <h6 class="text-xs mt-1">{{ __('Assign the expense to a category') }}</h6>

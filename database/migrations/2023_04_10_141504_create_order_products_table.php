@@ -26,8 +26,9 @@ return new class extends Migration
             $table->float( 'unit_price', 18, 5 )->default(0);
             $table->string( 'pos_subtotal', 18, 5 )->default(0);
             $table->string( 'purchase_price', 18, 5 )->default(0);
+            $table->float( 'total_price', 18, 5 )->default(0);
             $table->integer( 'author_id' );
-            
+
             $table->timestamps();
         });
     }

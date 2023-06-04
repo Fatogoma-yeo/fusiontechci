@@ -48,6 +48,8 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::delete('delete', [OrdersController::class, 'pos_product'])->name('delete.pos_product');
     Route::get('gross', [OrdersController::class, 'price'])->name('gross.price');
     Route::get('pos', [OrdersController::class, 'search'])->name('pos.search');
+    Route::get('quantity', [OrdersController::class, 'changeQuantity'])->name('quantity.change');
+    Route::get('popup', [OrdersController::class, 'discount'])->name('popup.discount');
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('providers', ProviderController::class);
@@ -61,7 +63,8 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::get('product', [ProcurementController::class, 'get'])->name('product.get');
     Route::get('paid', [ProcurementController::class, 'procured'])->name('paid.procured');
     Route::resource('expenses', ExpensesController::class);
-    Route::get('cash-flow/history', [ExpensesController::class, 'cashFlowHistory'])->name('expenses.history');
+    Route::get('cash-flow/histories', [ExpensesController::class, 'orderCashFlowHistory'])->name('expenses.history');
+    Route::get('cash-flow/history', [ExpensesController::class, 'cashFlowHistory'])->name('expense.history');
     Route::resource('expense_categories', ExpensesCategoriesController::class);
     Route::resource('notifications', NotificationController::class);
 });

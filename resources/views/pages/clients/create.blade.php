@@ -34,7 +34,7 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-4 w-full">
-            <div class="grid grid-cols-3 gap-4 pb-8">
+            <div class="grid grid-cols-2 gap-4 pb-8">
                 <!-- Email Address -->
                 <div class="col-span-1 mt-4">
                     <x-input-label for="email" :value="__('E-mail')" />
@@ -52,18 +52,6 @@
                     <x-input-label for="phone" :value="__('Téléphone')" />
 
                     <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')"  required/>
-                </div>
-                <!-- Birsth date -->
-                <div class="col-span-1 mt-4">
-                    <x-input-label for="birth_date" :value="__('Date de naissance')" />
-
-                    <x-text-input id="birth_date" class="block mt-1 w-full" type="date" name="birth_date" :value="old('birth_date')"  />
-                </div>
-                <!-- Limite Crédit -->
-                <div class="col-span-1 mt-4">
-                    <x-input-label for="limit_credit" :value="__('Limite de Crédit')" />
-
-                    <x-text-input id="limit_credit" class="block mt-1 w-full" type="number" name="limit_credit" :value="old('limit_credit')"  />
                 </div>
                 <!-- Genre -->
                 <div class="col-span-1 mt-4">

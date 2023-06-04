@@ -27,17 +27,25 @@
                                   <thead class="bg-gray-300">
                                       <tr>
                                           <th class="border border-gray-500 p-2 text-left">{{ __( 'Products' ) }}</th>
-                                          <th width="150" class="border border-gray-500 p-2 text-left">{{ __( 'Stock HS' ) }}</th>
+                                          <th width="150" class="border border-gray-500 p-2 text-left">{{ __( 'Stock HS Existant' ) }}</th>
+                                          <th width="150" class="border border-gray-500 p-2 text-left">{{ __( 'Stock HS Physique' ) }}</th>
                                       </tr>
                                   </thead>
                                   <tbody>
                                     @forelse ($stock_detail as $inventory)
                                         <tr class="text-sm">
                                             <td class="p-2 border border-gray-500"><span class="mx-2">{{$inventory->product->name}}</span></td>
-                                              <td class="p-2 border border-gray-500 text-right">
-                                                  <input type="text" name="product_id[]" class="hidden" value="{{$inventory->product->id}}">
-                                                  <input type="number" id="hs_quantity" class="mx-2 w-28 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="hs_quantity[]" required>
-                                              </td>
+                                            <td class="p-2 border border-gray-500 text-right">
+                                              @if($inventory->stock_hs != null)
+                                                <span class="mx-2">{{ $inventory->stock_hs }}</span>
+                                              @else
+                                                <span class="mx-2">0</span>
+                                              @endif
+                                            </td>
+                                            <td class="p-2 border border-gray-500 text-right">
+                                                <input type="text" name="product_id[]" class="hidden" value="{{$inventory->product->id}}">
+                                                <input type="number" id="hs_quantity" class="mx-2 w-28 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="hs_quantity[]" required>
+                                            </td>
                                           </tr>
                                       @empty
                                           <tr>

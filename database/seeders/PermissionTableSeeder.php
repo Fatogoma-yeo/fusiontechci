@@ -91,6 +91,10 @@ class PermissionTableSeeder extends Seeder
                 'name' => 'expense_delete',
             ],
             [
+                'title' => 'Read Cashier Cash flow',
+                'name' => 'order_cash_flow_show',
+            ],
+            [
                 'title' => 'Read Cash flow',
                 'name' => 'cash_flow_show',
             ],

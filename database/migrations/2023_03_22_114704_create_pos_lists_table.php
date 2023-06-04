@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('product_name');
             $table->float('net_purchase_price');
             $table->float('gross_purchase_price');
+            $table->float( 'discount', 18, 5 )->default(0);
+            $table->float( 'discount_percentage', 18, 5 )->nullable();
             $table->integer('quantity');
             $table->integer('author_id');
-            
+
             $table->timestamps();
         });
     }

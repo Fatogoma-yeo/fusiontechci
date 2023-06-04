@@ -33,7 +33,6 @@
                                 <thead class="bg-gray-300">
                                     <tr>
                                         <th class="border border-gray-500 p-2 text-left">{{ __( 'Product' ) }}</th>
-                                        <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'Sale Price' ) }}</th>
                                         <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'En Stock' ) }}</th>
                                         <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'Stock Physique' ) }}</th>
                                         <th width="150" class="border border-gray-500 p-2 text-left">{{ __( 'Validation' ) }}</th>
@@ -46,13 +45,6 @@
                                             <input class="hidden" type="number" name="product_id[]" value="{{$products->id}}">
                                             <span class="mx-2">{{$products->name}}</span>
                                           </td>
-                                          <td class="p-2 border border-gray-500 text-right">
-                                              @if($products->inventory)
-                                                  <span class="mx-2">@currency($products->inventory->unit_price)</span>
-                                              @else
-                                                  <span class="mx-2">@currency(0)</span>
-                                              @endif
-                                            </td>
                                             <td class="p-2 border border-gray-500 text-right" id="en_stock">
                                               @if($products->inventory)
                                                   <span class="mx-2">{{ $products->inventory->after_quantity }}</span>
@@ -78,7 +70,7 @@
                                                 <span class="flex flex-row mx-2" id="comptable">
                                                     @if($products->inventory->check_stock_physic_1 == 0)
                                                         @if(Auth::user()->email == 'comptabilite@fusiontechci.com')
-                                                          <button onclick="checkStockPhysic1('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                          <button type="button" onclick="checkStockPhysic1('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                                             @if($products->inventory->stock_physic == 0 || $products->inventory->stock_physic == null) disabled @endif>
 
                                                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -99,7 +91,7 @@
                                                 <span class="flex flex-row" id="chef_commercial">
                                                     @if($products->inventory->check_stock_physic_2 == 0)
                                                       @if(Auth::user()->email == 'servicecommercial@fusiontechci.com')
-                                                         <button onclick="checkStockPhysic2('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                         <button type="button" onclick="checkStockPhysic2('{{ $products->id }}')" class="inline-flex justify-center py-1 px-2 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                                             @if($products->inventory->stock_physic == 0 || $products->inventory->stock_physic == null) disabled @endif>
 
                                                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -132,13 +124,13 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td class="p-2 border border-gray-500" colspan="2"></td>
+                                        <td class="p-2 border border-gray-500" colspan="1"></td>
                                         <td class="p-2 border border-gray-500 text-right"><span class="mx-2 font-semibold" id="total_stock">0</span></td>
                                         <td class="p-2 border border-gray-500 text-right"><span class="mx-2 font-semibold" id="total_stock_physic">0</span></td>
                                         <td class="p-2 border border-gray-500 text-center">
                                           <span>
                                             @if($productDetail && Auth::user()->email == 'agencefke@fusiontechci.com')
-                                              <button class="inline-flex items-center px-4 py-2 bg-gray-0 rounded font-semibold text-sm text-white tracking-widest hover:bg-green-600 focus:bg-green-600 active:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition ease-in-out duration-150" @if($inventoryCount != $inventoryCheckCount || $inventoryCount == 0) disabled @endif>
+                                              <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-0 rounded font-semibold text-sm text-white tracking-widest hover:bg-green-600 focus:bg-green-600 active:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition ease-in-out duration-150" @if($inventoryCount != $inventoryCheckCount || $inventoryCount == 0) disabled @endif>
                                                   {{ __( 'Stocked' ) }}
                                               </button>
                                             @endif

@@ -12,6 +12,7 @@ use App\Models\CashFlow;
 use App\Http\Requests\Dashboard\Store\ExpenseRequest;
 use App\Http\Requests\Dashboard\Update\UpdatExpenseRequest;
 use Auth;
+use Carbon\Carbon;
 
 class ExpensesController extends Controller
 {
@@ -27,6 +28,7 @@ class ExpensesController extends Controller
          $this->middleware('permission:expense_edit', ['only' =>['edit','update']]);
          $this->middleware('permission:expense_delete', ['only' =>['destroy']]);
          $this->middleware('permission:cash_flow_show', ['only' =>['cashFlowHistory']]);
+         $this->middleware('permission:order_cash_flow_show', ['only' =>['orderCashFlowHistory']]);
      }
     public function index()
     {
@@ -34,6 +36,13 @@ class ExpensesController extends Controller
         $expenses = Expense::orderBy('id', 'DESC')->paginate(5);
 
         return view('pages.expenses.index', compact('expenses', 'userDetails'));
+    }
+
+    public function orderCashFlowHistory()
+    {
+        $userDetails = User::get();
+        $cash_flow_history = CashFlow::where('order_id', '<>', 'null')->latest()->paginate(10);
+        return view('pages.expenses.order-cash-flow-history', compact('cash_flow_history', 'userDetails'));
     }
 
     public function cashFlowHistory()
@@ -62,23 +71,24 @@ class ExpensesController extends Controller
      */
     public function store(ExpenseRequest $request)
     {
+        $data = $request->all();
         $expenses = new Expense;
         $cash_flows = new CashFlow;
 
-        $expenses->name = $request["name"];
-        $expenses->value = $request["value"];
-        $expenses->category_id = $request["category_id"];
+        $expenses->name = $data["name"];
+        $expenses->value = $data["value"];
+        $expenses->category_id = $data["category_id"];
         $expenses->author_id = Auth::id();
 
         $expenses->save();
 
         $expenses_details = Expense::where('created_at', Carbon::now())->first();
-        $expense_category = ExpenseCategory::where('id', $request["category_id"])->first();
+        $expense_category = ExpenseCategory::where('id', $data["category_id"])->first();
 
-        $cash_flows->name = $request['name'];
+        $cash_flows->name = $data['name'];
         $cash_flows->expense_id = $expenses_details->id;
-        $cash_flows->expense_category_id = $request["category_id"];
-        $cash_flows->value = $request["value"];
+        $cash_flows->expense_category_id = $data["category_id"];
+        $cash_flows->value = $data["value"];
         $cash_flows->operation = $expense_category->operation;
         $cash_flows->author_id = Auth::id();
 

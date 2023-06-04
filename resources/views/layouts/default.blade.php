@@ -28,6 +28,7 @@
         </x-pos-modal>
         <x-key-modal><x-check-modal /></x-key-modal>
         <x-edit-modal />
+        <x-pos-discount-popup />
         <x-user-modal><x-pos-user-modal /></x-user-modal>
         <x-user-select-modal><x-pos-user-select /></x-user-select-modal>
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-2 rounded-lg"></div>
@@ -123,11 +124,15 @@
                                 $('.product_list').html(response);
                                 $(function () {
                                     var gtotal = 0;
+                                    var discounTotal = 0;
                                     $("[id*=posSubTotals]").each(function(){
                                         gtotal = gtotal + parseFloat($(this).html());
                                     });
+                                    $("[id*=rabais]").each(function(){
+                                        discounTotal = discounTotal + parseFloat($(this).html());
+                                    });
                                     $('#subTotal').html(gtotal.toString());
-                                    $('#Total').html(gtotal.toString());
+                                    $('#Total').html(gtotal.toString() - discounTotal.toString());
                                 });
                                 counter();
                             }
@@ -145,11 +150,15 @@
                         $('.product_list').html(response);
                         $(function () {
                             var gtotal = 0;
+                            var discounTotal = 0;
                             $("[id*=posSubTotals]").each(function(){
                                 gtotal = gtotal + parseFloat($(this).html());
                             });
+                            $("[id*=rabais]").each(function(){
+                                discounTotal = discounTotal + parseFloat($(this).html());
+                            });
                             $('#subTotal').html(gtotal.toString());
-                            $('#Total').html(gtotal.toString());
+                            $('#Total').html(gtotal.toString() - discounTotal.toString());
                         });
                         counter();
                     }

@@ -33,7 +33,6 @@
                                 <thead class="bg-gray-300">
                                     <tr>
                                         <th class="border border-gray-500 p-2 text-left">{{ __( 'Product' ) }}</th>
-                                        <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'Sale Price' ) }}</th>
                                         <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'Stock HS' ) }}</th>
                                         <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'Stock HS Saisi' ) }}</th>
                                         <th width="150" class="border border-gray-500 p-2 text-left">{{ __( 'Validation' ) }}</th>
@@ -44,9 +43,6 @@
                                       <tr class="text-sm">
                                           <input class="hidden" type="number" name="product_id[]" value="{{$inventory->product->id}}">
                                           <td class="p-2 border border-gray-500"><span class="mx-2">{{$inventory->product->name}}</span></td>
-                                          <td class="p-2 border border-gray-500 text-right">
-                                              <span class="mx-2">@currency($inventory->unit_price)</span>
-                                          </td>
                                           <td class="p-2 border border-gray-500 text-right" id="stock_hs">
                                             @if($inventory->stock_hs != null)
                                               <span class="mx-2">{{ $inventory->stock_hs }}</span>
@@ -118,7 +114,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td class="p-2 border border-gray-500" colspan="2"></td>
+                                        <td class="p-2 border border-gray-500" colspan="1"></td>
                                         <td class="p-2 border border-gray-500 text-right"><span class="mx-2 font-semibold" id="total_stock">0</span></td>
                                         <td class="p-2 border border-gray-500 text-right"><span class="mx-2 font-semibold" id="total_stock_physic">0</span></td>
                                         <td class="p-2 border border-gray-500 text-center">

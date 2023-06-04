@@ -32,8 +32,8 @@ $maxWidth = [
                 </div>
             </div>
             <div class="w-full text-2xl font-bold text-center flex">
-                <!-- <div class="w-full p-4 border" id="result">1</div> -->
-                <input id="counter" class="read-only:bg-gray-100 w-full p-4 border text-center" value="" />
+                <div class="w-full p-4 border hidden" id="results"></div>
+                <input id="counter" class="read-only:bg-gray-100 w-full p-4 border text-center" value="0" />
             </div>
             <div class="w-full text-primary text-center font-semibold flex">
                 <div class="w-full p-8 hover:bg-gray-200 cursor-pointer border" onclick="number(7)">7</div>
@@ -79,17 +79,30 @@ $maxWidth = [
         }
 
         function getquantityfunc() {
-            document.getElementById('quantitie').innerHTML = val.value;
-            var quantity = document.getElementById('quantitie').textContent;
-            var price = document.getElementById('prices').textContent;
-            document.getElementById('posSubTotals').innerHTML = quantity * price;
-
-            var gtotal = 0;
-            $("[id*=posSubTotals]").each(function(){
-                gtotal = gtotal + parseFloat($(this).html());
-            });
-            $('#subTotal').html(current.format(gtotal.toString()));
-            $('#Total').html(current.format(gtotal.toString()));
+            var id = document.getElementById("results").textContent;
+            if (id) {
+              $.ajax({
+                  type: 'get',
+                  url: "{{ route('quantity.change') }}",
+                  data:{"quantity": val.value, "product_id": id},
+                  success: function(response){
+                      $('.product_list').html(response);
+                      $(function () {
+                          var gtotal = 0;
+                          var discounTotal = 0;
+                          $("[id*=posSubTotals]").each(function(){
+                              gtotal = gtotal + parseFloat($(this).html());
+                          });
+                          $("[id*=rabais]").each(function(){
+                              discounTotal = discounTotal + parseFloat($(this).html());
+                          });
+                          $('#subTotal').html(gtotal.toString());
+                          $('#Total').html(gtotal.toString() - discounTotal.toString());
+                      });
+                      counter();
+                  },
+              });
+            }
 
             edit_modal.style.display = "none";
             x.style.overflow = "auto";

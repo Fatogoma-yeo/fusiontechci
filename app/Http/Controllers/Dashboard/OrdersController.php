@@ -13,10 +13,10 @@ use App\Models\PosList;
 use App\Models\Client;
 use App\Models\CashFlow;
 use App\Models\OrderProduct;
+use App\Models\Orders;
 use App\Models\Inventory;
 use Auth;
 use DB;
-use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -223,6 +223,39 @@ class OrdersController extends Controller
         echo json_encode($product_counter);
     }
 
+    public function changeQuantity(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            // echo "<pre>"; print_r($data); die;
+            PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['quantity' => $data['quantity']]);
+
+            $productsDetails = PosList::get();
+            $productsDetails = json_decode($productsDetails, true);
+            return view('pages.orders.products', compact('productsDetails'));
+        }
+    }
+
+    public function discount(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            // echo "<pre>"; print_r($data); die;
+            $pos_products = PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->first();
+            $new_price = $pos_products->net_purchase_price - $data['discount'];
+            if ($new_price < $pos_products->gross_purchase_price) {
+              return response()->json(['action' => "not_reduce", 'message' => "Cette réduction ne peut être appliquer. Veillez revoir votre somme de réduction"]);
+            }else {
+
+              PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['discount' => $data['discount'], "net_purchase_price" =>$new_price]);
+
+              $productsDetails = PosList::get();
+              $productsDetails = json_decode($productsDetails, true);
+              return view('pages.orders.products', compact('productsDetails'));
+            }
+        }
+    }
+
     public function pos_product(Request $request)
     {
         if ($request->ajax()) {
@@ -324,7 +357,7 @@ class OrdersController extends Controller
 
             $ordersProducts->save();
 
-            $orderDetail = OrderProduct::where('created_at', Carbon::now())->get();
+            $orderDetail = OrderProduct::where('created_at', now())->get();
             foreach ($orderDetail as $order_detail) {
                 $order_id = $order_detail->id;
                 $orders = $order_detail;
@@ -358,7 +391,7 @@ class OrdersController extends Controller
 
         // Cash Flow History
 
-        $orders_details = OrderProduct::where('created_at', Carbon::now())->first();
+        $orders_details = OrderProduct::where('created_at', now())->first();
         $expenseCategories = ExpenseCategory::where('account', '001')->first();
 
 
@@ -376,6 +409,18 @@ class OrdersController extends Controller
         $cash_flows->save();
 
 
+        $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->first();
+
+        $order = new Orders;
+
+        $order->payment_status = "paid";
+        $order->discount = $data['discount'];
+        $order->subtotal = $data['subtotal'];
+        $order->total = $data['total'];
+        $order->customer_id = $customersDetail->id;
+        $order->author = Auth::id();
+
+        $order->save();
         // echo "</pre>"; print_r($date_generate); die;
 
         $category = ProductCategory::get();
@@ -384,22 +429,10 @@ class OrdersController extends Controller
         }
 
         $ordersDetails = OrderProduct::where('created_at', now())->get();
-        $orderDetail = OrderProduct::where('created_at', now())
-        ->select(
-            DB::raw('SUM(pos_subtotal) as subtotal'),
-            DB::raw('SUM(discount) as discount'),
-            DB::raw('DATE_FORMAT(created_at, "%d-%m-%Y %H:%m:%s") as date'),
-        )
-        ->groupBy('date')
-        ->get();
-        foreach ($orderDetail as $orders) {
-            $orders = $orders;
-            $after_purchases_amount = $orders->subtotal;
-        }
+        $orders = Orders::where('created_at', now())->first();
 
-        $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->first();
         $before_purchases_amount = $customersDetail->purchases_amount;
-        $purchases_amout = $before_purchases_amount + $after_purchases_amount;
+        $purchases_amout = $before_purchases_amount + $orders->total;
         Client::where('name', 'LIKE', '%'.$data["customer"].'%')->update(['purchases_amount' => $purchases_amout]);
 
         $customer_name = $data["customer"];

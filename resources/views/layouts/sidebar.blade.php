@@ -107,6 +107,13 @@
           @endcan
           @can('cash_flow_show')
             <div class="pt-1 pb-2 space-y-1">
+                <a href="{{ route('expense.history') }}" class="text-white ml-4 mr-2">
+                    {{ __('Flux de trésorie') }}
+                </a>
+            </div>
+          @endcan
+          @can('order_cash_flow_show')
+            <div class="pt-1 pb-2 space-y-1">
                 <a href="{{ route('expenses.history') }}" class="text-white ml-4 mr-2">
                     {{ __('Flux de trésorie') }}
                 </a>

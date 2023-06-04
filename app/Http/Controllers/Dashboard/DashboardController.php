@@ -96,15 +96,15 @@ class DashboardController extends Controller
         ->get();
 
         $expense_sammary = Expense::select(
-            DB::raw('SUM(value) as dayValue'),
-            DB::raw('created_at as day'),
+            DB::raw('SUM(value) as total'),
+            DB::raw('DATE_FORMAT(created_at,"%W") as day'),
         )
         ->groupBy('day')
         ->get();
 
         $defective_sammary = ProductHistory::where('operation', __('Defective'))->select(
             DB::raw('SUM(total_price) as dayDefective'),
-            DB::raw('created_at as day')
+            DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
         ->get();

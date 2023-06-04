@@ -16,9 +16,9 @@
                 <span>{{ __( 'Total' ) }} : </span>
                 <span class="uppercase"><span class="mr-2" id="total_value"></span>f cfa</span>
             </div>
-            <div id="discount" @click="toggleDiscount()" class="cursor-pointer h-16 flex justify-between items-center border rounded-md md:text-2xl p-2">
+            <div id="discount_details" class="cursor-pointer h-16 flex justify-between items-center border rounded-md md:text-2xl p-2">
                 <span>{{ __( 'Discount' ) }} : </span>
-                <span class="discount_value">0 F CFA</span>
+                <span class="uppercase"><span class="mr-2" id="discount_value"></span>f cfa</span>
             </div>
             <!-- <div id="paid" class="h-16 flex justify-between items-center border rounded-md md:text-2xl p-2">
                 <span>{{ __( 'Paid' ) }} : </span>

@@ -46,7 +46,7 @@
                             <div class="hidden lg:flex lg:w-1/6 p-2 border border-t-0">{{ __( 'Quantity' ) }}</div>
                             <div class="hidden lg:flex lg:w-1/6 p-2 border border-r-0 border-t-0">{{ __( 'Total' ) }}</div>
                         </div>
-                        <div class="flex flex-col overflow-auto product_list h-72">
+                        <div class="flex flex-auto flex-col overflow-auto product_list">
                             <!-- Loop Procuts On Cart -->
                             @include('pages.orders.products')
                             <!-- End Loop -->
@@ -95,7 +95,7 @@
                                     </svg>
                                     <span class="text-lg hidden md:inline lg:text-2xl">{{ __( 'Hold' ) }}</span>
                                 </div>
-                                <div @click="openDiscountPopup()" id="discount-button" class="flex-shrink-0 w-1/4 flex items-center font-bold cursor-pointer justify-center bg-white border-r border-box-edge hover:bg-indigo-100 flex-auto text-gray-700">
+                                <div @click="openDiscountPopupS()" id="discount-button" class="flex-shrink-0 w-1/4 flex items-center font-bold cursor-pointer justify-center bg-white border-r border-box-edge hover:bg-indigo-100 flex-auto text-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mr-2 inline-flex">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185zM9.75 9h.008v.008H9.75V9zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 4.5h.008v.008h-.008V13.5zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                     </svg>
@@ -154,6 +154,7 @@
     const x = document.getElementsByTagName('BODY')[0] // Select body tag because of disable scroll when modal is active
     const modal = document.getElementById('modal') // modal
     const edit_modal = document.getElementById('edit-modal') // edit modal
+    const discount_modal = document.getElementById('discount-modal') // discount modal
     const modalClose = document.getElementById('modal-close') // close modal button
     // const modalBtn = document.getElementById('modal-button') // launch modal button
     const user_modal = document.getElementById('user-modal') // modal
@@ -221,6 +222,13 @@
         edit_modal.style.display = "none";
         x.style.overflow = "auto";
     }
+
+    function discountModalClosefun() {
+        document.getElementById("finalValue").value = 0;
+        discount_modal.style.display = "none";
+        x.style.overflow = "auto";
+    }
+
     // Close modal when click away from modal
     window.onclick = function (event) {
         if (event.target == user_select) {
@@ -229,13 +237,34 @@
         }
     }
 
-    function changeQuantity() {
+    function changeQuantity(id) {
+        document.getElementById("results").textContent = id;
         edit_modal.style.display = "flex"; // Show modal
         x.style.overflow = "hidden"; //Disable scroll on body
     }
 
+    function openDiscountPopup(id) {
+        var ids = document.getElementById('pos_product_id');
+        if (id) {
+          document.getElementById("initkey").textContent = id;
+          discount_modal.style.display = "flex"; // Show modal
+          x.style.overflow = "hidden"; //Disable scroll on body
+        }else if (ids) {
+          discount_modal.style.display = "flex"; // Show modal
+          x.style.overflow = "hidden"; //Disable scroll on body
+        }else {
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text("Vous devez fournir des produits avant de procéder.");
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 5000);
+        }
+    }
+
     function save_form() {
         var ids = document.getElementById('pos_product_id');
+        var totalDiscount = document.getElementById('rabais').textContent;
         var total = document.getElementById('Total').textContent;
         var customer = document.getElementById('pos_customer').textContent;
         if (ids) {
@@ -243,12 +272,14 @@
                 modal.style.display = "flex"; // Show modal
                 x.style.overflow = "hidden"; //Disable scroll on body
                 document.getElementById('total_value').textContent = total;
+                document.getElementById('discount_value').textContent = totalDiscount;
             }else {
                 user_select.style.display = "flex"; // Show modal
                 user_modal.style.display = "none";
                 x.style.overflow = "hidden"; //Disable scroll on body
                 save_pos_condition();
                 document.getElementById('total_value').textContent = total;
+                document.getElementById('discount_value').textContent = totalDiscount;
             }
         }else {
             $('#notifDiv').fadeIn();

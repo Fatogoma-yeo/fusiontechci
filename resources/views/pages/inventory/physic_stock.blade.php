@@ -36,6 +36,7 @@
                                   <thead class="bg-gray-300">
                                       <tr>
                                           <th class="border border-gray-500 p-2 text-left">{{ __( 'Products' ) }}</th>
+                                          <th width="150" class="border border-gray-500 p-2 text-center">{{ __( 'En Physique' ) }}</th>
                                           <th width="150" class="border border-gray-500 p-2 text-right">{{ __( 'Stock Physique' ) }}</th>
                                       </tr>
                                   </thead>
@@ -43,14 +44,21 @@
                                     @forelse ($products_detail as $products)
                                         <tr class="text-sm">
                                             <td class="p-2 border border-gray-500"><span class="mx-2">{{$products->name}}</span></td>
-                                              <td class="p-2 border border-gray-500 text-right">
-                                                  @if($products->inventory)
-                                                    <input type="text" name="product_id[]" class="hidden" value="{{$products->id}}">
-                                                    <input type="number" id="physic_quantity" class="mx-2 w-28 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="physic_quantity[]" required>
-                                                  @else
-                                                    <span class="mx-2">Aucune quantité</span>
-                                                  @endif
-                                              </td>
+                                            <td class="p-2 border border-gray-500 text-right">
+                                              @if($products->inventory)
+                                                  <span class="mx-2">{{ $products->inventory->after_quantity }}</span>
+                                              @else
+                                                  <span class="mx-2">0</span>
+                                              @endif
+                                            </td>
+                                            <td class="p-2 border border-gray-500 text-right">
+                                                @if($products->inventory)
+                                                  <input type="text" name="product_id[]" class="hidden" value="{{$products->id}}">
+                                                  <input type="number" id="physic_quantity" class="mx-2 w-28 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" name="physic_quantity[]" required>
+                                                @else
+                                                  <span class="mx-2">Aucune quantité</span>
+                                                @endif
+                                            </td>
                                           </tr>
                                       @empty
                                           <tr>

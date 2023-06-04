@@ -30,7 +30,7 @@
                             <span class="font-semibold">{{ __('Customer') }}</span> : {{ $customer_name }}
                         </div>
                         <div class="px-2 w-1/2">
-                            <span class="font-semibold">{{ __('Date') }}</span> : {{ $orders->date}}
+                            <span class="font-semibold">{{ __('Date') }}</span> : {{ $orders->created_at}}
                         </div>
                     </div>
                 </div>
@@ -52,18 +52,26 @@
                                         <span class="text-xs text-gray-600">{{ $categoryDetail->name }}</span>
                                     @endif
                                 </td>
-                                <td class="p-2 border-b border-gray-800 text-right uppercase">{{ $product->pos_subtotal }} f cfa</td>
+                                <td class="p-2 border-b border-gray-800 text-right uppercase">@currency( $product->pos_subtotal )</td>
                             </tr>
                             @endforeach
                         </tbody>
                         <tbody>
                             <tr>
                                 <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Sub Total' ) }}</td>
-                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">{{ $orders->subtotal }} f cfa</td>
+                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">@currency( $orders->subtotal )</td>
                             </tr>
+                            @if ( $orders->discount > 0 )
+                            <tr>
+                                <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">
+                                    <span>{{ __( 'Discount' ) }}</span>
+                                </td>
+                                <td class="p-2 border-b border-gray-800 text-sm text-right">@currency( $orders->discount )</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Total' ) }}</td>
-                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">{{ $orders->subtotal - $orders->discount }} f cfa</td>
+                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">@currency( $orders->total )</td>
                             </tr>
                             <!-- <tr>
                                 <td colspan="2" class="font-bold p-2 border-b border-gray-800 text-sm font-semibolld">{{ __( 'Current Payment' ) }} : {{ __( 'Unknown Payment' ) }}</td>
@@ -71,7 +79,7 @@
                             </tr> -->
                             <tr>
                                 <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Total Paid' ) }}</td>
-                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">{{ $orders->subtotal - $orders->discount }} f cfa</td>
+                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">@currency( $orders->total )</td>
                             </tr>
                             @switch( $orders->status )
                                 @case( 'sold' )
@@ -83,7 +91,7 @@
                                 @case( 'partially' )
                                 <tr>
                                     <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Due' ) }}</td>
-                                    <td class="p-2 border-b border-gray-800 text-sm text-right">{{ ns()->currency->define( abs( $orders->change ) ) }}</td>
+                                    <td class="p-2 border-b border-gray-800 text-sm text-right">@currency( abs( $orders->change ) )</td>
                                 </tr>
                                 @break
                             @endswitch
