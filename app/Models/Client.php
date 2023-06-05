@@ -16,10 +16,8 @@ class Client extends Model
         'phone',
         'gender',
         'author_id',
-        'birth_date',
         'purchase_amount',
         'owed_amount',
-        'credit_limit_amount',
         'account_amount',
     ];
 }

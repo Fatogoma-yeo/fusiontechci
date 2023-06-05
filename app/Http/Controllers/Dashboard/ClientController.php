@@ -102,7 +102,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request)
     {
         $data = $request->only([
-            'name', 'first_name', 'phone', 'email', 'gender', 'limit_credit', 'birth_date'
+            'name', 'first_name', 'phone', 'email', 'gender'
         ]);
 
         return $this->clientService->create( $data );
@@ -119,10 +119,6 @@ class ClientController extends Controller
             $customers->email = $data['email'];
             $customers->first_name = $data['first_name'];
             $customers->phone = $data['phone'];
-            $customers->birth_date = $data['birth_date'];
-            if ($data['limit_credit'] != '') {
-                $customers->credit_limit_amount = $data['limit_credit'];
-            }
             $customers->gender = $data['gender'];
             $customers->author_id = Auth::id();
 
