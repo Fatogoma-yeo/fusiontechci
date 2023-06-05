@@ -32,7 +32,7 @@
         <x-user-modal><x-pos-user-modal /></x-user-modal>
         <x-user-select-modal><x-pos-user-select /></x-user-select-modal>
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-2 rounded-lg"></div>
-        <div class="h-screen flex-auto flex flex-col bg-gray-300" id="pos-container">
+        <div class="min-h-screen flex-auto flex flex-col bg-gray-300" id="pos-container">
             <div class="flex-auto overflow-hidden flex p-2">
                 <div class="flex flex-auto overflow-hidden -m-2">
                     @yield('content')
