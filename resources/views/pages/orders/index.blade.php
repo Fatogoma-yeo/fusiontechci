@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
 <div x-data ="{ openTab: 2, activeClasses:'shadow bg-white text-gray-800', inactiveClasses:'focus:bg-gray-100 text-white' }" class="flex flex-auto flex-col h-screen" id="pos-container" x-cloak>
-    <div class="flex overflow-hidden flex-shrink-0 px-2 pt-2">
+    <div class="flex overflow-hidden flex-shrink-0 px-2 pb-1 pt-2">
         <div class="-mx-2 flex overflow-x-auto pb-1">
             <div class="header-buttons flex px-2 flex-shrink-0">
                 <div class="px-2 flex flex-row gap-2 overflow-x-auto">
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <ul class="md:hidden flex flex-row pt-1 px-4">
+    <ul class="md:hidden flex flex-row px-4">
         <li  class="" @click=" openTab = 1 " id="panier">
             <button  :class="openTab === 1 ? activeClasses : inactiveClasses" class="inline-block cursor-pointer text-gray-900 bg-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-2 text-md font-medium text-center border-transparent border-b-2" >
                 <span> {{ __( 'Cart' ) }} </span>

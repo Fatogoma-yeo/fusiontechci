@@ -2548,7 +2548,7 @@ select {
     overflow-y: auto!important
   }
   .md\:pt-4 {
-    padding-top: 1rem/* 16px */;
+        padding-top: 1rem/* 16px */;
   }
   .md\:pb-0 {
     padding-bottom: 0px;
@@ -2612,7 +2612,9 @@ select {
     padding-left: 2rem;
     padding-right: 2rem;
   }
-
+  .lg\:pt-4 {
+    padding-top: 1rem/* 16px */;
+  }
   .lg\:text-xl {
     font-size: 1.25rem!important;
     line-height: 1.75rem!important;
