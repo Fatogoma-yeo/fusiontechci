@@ -16,7 +16,7 @@
                                 +<span id="total_sales">@currency($detals->total_sales)</span>
                             @empty
                                 +<span id="total_sales">@currency(00)</span>
-                            @endforelse 
+                            @endforelse
                             {{ __( 'Today' ) }}
                         </h4>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
                         <h6 class="font-bold hidden text-right md:inline-block">{{ __( 'Clients Registered' ) }}</h6>
                         <h3 class="text-2xl font-bold uppercase">
-                            f cfa 0.0
+                            0
                         </h3>
                     </div>
                     <div class="w-1/2 md:w-full flex flex-col px-2 justify-end items-end">

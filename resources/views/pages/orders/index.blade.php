@@ -127,9 +127,9 @@
                             <input type="text" id="pos_search" class="bg-gray-50 border-transparent rounded-r-md focus:border-transparent focus:ring-0 text-gray-900 text-sm block w-full"  placeholder="{{__('Search for products.')}}">
                         </div>
                     </div>
-                    <div class="flex flex-col flex-auto">
+                    <div class="overflow-hidden h-full flex-col flex">
                         @if($product_detail != null)
-                            <div class="flex xs:grid-cont-2 lg:grid-container sm:grid-cont-4 md:grid-cont-3 gap-0 flex-auto overflow-auto pb-6 h-96" id="pos_products">
+                            <div class="flex xs:grid-cont-2 lg:grid-container sm:grid-cont-4 md:grid-cont-3 gap-0 flex-auto overflow-auto w-full h-full pb-6" id="pos_products">
 
                             </div>
                         @else
