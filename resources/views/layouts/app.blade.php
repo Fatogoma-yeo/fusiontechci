@@ -39,13 +39,16 @@
                 </div>
             </div>
             <div class="min-h-screen overflow-y-auto w-full column" id="right">
-                <div class="top-right" id='test1'>
+                <div class="top-right">
                     @include('layouts.navigation')
                 </div>
-                <div class="bottom bg-gray-0">
+                <div class="overflow-y-auto flex-auto bg-gray-0">
                     <main>
                         {{ $slot }}
                     </main>
+                </div>
+                <div class="p-2 text-xs flex justify-end text-gray-500 bg-gray-0">
+                    <a tager="_blank" href="" class="hover:text-blue-400 mx-2 inline-block">Ates©2023</a>
                 </div>
             </div>
         </div>

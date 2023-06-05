@@ -62,7 +62,7 @@
                               <div class="col-span-1 mt-4">
                                   <x-input-label for="phone" :value="__('Téléphone')" />
 
-                                  <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')"  />
+                                  <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')"  required/>
                               </div>
                               <!-- Genre -->
                               <div class="col-span-1 mt-4">
