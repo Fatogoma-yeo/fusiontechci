@@ -25,21 +25,21 @@
     </head>
     <body class="font-sans">
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-4"></div>
-        <div class="flex w-full" x-data="{ isOpen : true }" id="test">
-            <div class="min-h-screen overflow-y-auto transition-all duration-200 column testPrint" :class="isOpen?'w-auto' : 'w-0'" id="left">
-                <div class="top-left shadow-md rounded-b-lg bg-gray-0 text-white border-b-4 border-gray-500">
+        <div class="flex w-full h-full overflow-hidden" x-data="{ isOpen : true }">
+            <div class="h-full flex flex-col overflow-y-auto flex-shrink-0 transition-all duration-200" :class="isOpen?'w-auto' : 'w-0'">
+                <div class="flex-shrink-0 shadow-md rounded-b-lg bg-gray-0 text-white border-b-4 border-gray-500">
                     <div class="h-16 flex justify-center items-center">
                         Fusiontechci
                     </div>
                 </div>
-                <div class="bottom">
+                <div class="overflow-y-auto flex-auto">
                     <aside class="sticky top-0 shadow-md">
                         @include('layouts.sidebar')
                     </aside>
                 </div>
             </div>
-            <div class="min-h-screen overflow-y-auto w-full column" id="right">
-                <div class="top-right">
+            <div class="h-full overflow-y-auto w-full flex flex-col" id="right">
+                <div class="flex flex-shrink-0">
                     @include('layouts.navigation')
                 </div>
                 <div class="overflow-y-auto flex-auto bg-gray-0">
