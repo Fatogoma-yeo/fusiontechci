@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
-<div x-data ="{ openTab: 2, activeClasses:'shadow bg-white text-gray-800', inactiveClasses:'focus:bg-gray-100 text-white' }" class="flex flex-auto flex-col h-screen" id="pos-container" x-cloak>
-    <div class="flex overflow-hidden flex-shrink-0 px-2 pb-1 pt-2">
+<div x-data ="{ openTab: 2, activeClasses:'shadow bg-white text-gray-800', inactiveClasses:'focus:bg-gray-100 text-white' }" class="h-full flex-auto flex flex-col" id="pos-container" x-cloak>
+    <div class="flex overflow-hidden flex-shrink-0 px-2 pt-2 pb-1">
         <div class="-mx-2 flex overflow-x-auto pb-1">
             <div class="header-buttons flex px-2 flex-shrink-0">
                 <div class="px-2 flex flex-row gap-2 overflow-x-auto">
@@ -41,9 +41,9 @@
         </li>
     </ul>
     <div class="flex-auto overflow-hidden flex px-2 pb-2">
-        <div class="flex flex-auto overflow-hidden -m-2 px-3 pb-4 pt-2 gap-2">
-            <div class="flex w-full md:flex md:w-1/2 hidden overflow-hidden rounded-md" id="pos-cart-div">
-                <div id="pos-cart" class="flex-auto flex flex-col bg-gray-100">
+        <div class="flex flex-auto overflow-hidden -m-2">
+            <div class="flex w-full md:flex md:w-1/2 hidden overflow-hidden p-2" id="pos-cart-div">
+                <div id="pos-cart" class="flex-auto flex flex-col rounded-md bg-gray-100">
                     <div class="rounded shadow flex flex-col flex-auto overflow-hidden">
                         <div class="flex flex-col h-full justify-between">
                             <div class="w-full text-primary font-semibold flex">
@@ -119,7 +119,7 @@
                     </div>
                 </div>
             </div>
-            <div class="md:w-1/2 sm:w-full flex overflow-hidden w-full" id="pos-grid-div">
+            <div class="md:w-1/2 sm:w-full flex overflow-hidden w-full p-2" id="pos-grid-div">
                 <div id="pos-grid" class="flex flex-auto flex-col rounded-md  bg-gray-100">
                     <div id="grid-container" class="rounded shadow  overflow-hidden flex flex-auto flex-col">
                         <div class="px-2 py-2 sm:px-2">

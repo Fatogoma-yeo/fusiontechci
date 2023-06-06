@@ -22,7 +22,7 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans overflow-hidden flex" id="body">
+    <body class="font-sans" id="body">
         <x-pos-modal name="confirm-product" :show="$errors->userDeletion->isNotEmpty()" focusable>
             <x-quantity-modal />
         </x-pos-modal>
@@ -32,12 +32,8 @@
         <x-user-modal><x-pos-user-modal /></x-user-modal>
         <x-user-select-modal><x-pos-user-select /></x-user-select-modal>
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-2 rounded-lg"></div>
-        <div class="min-h-screen flex-auto flex flex-col bg-gray-300" id="pos-container">
-            <div class="flex-auto overflow-hidden flex p-2">
-                <div class="flex flex-auto overflow-hidden -m-2">
-                    @yield('content')
-                </div>
-            </div>
+        <div id="pos-app" class="h-full w-full bg-gray-300">
+            @yield('content')
         </div>
         <script type="text/javascript">
             $.ajaxSetup({

@@ -1732,6 +1732,7 @@ select {
 .pt-20 {
   padding-top: 5rem;
 }
+.\[key\:string\]{key:string}body,html{font-family:Jost;height:100%;width:100%}
 .print\:w-1\/2{
   width:50%!important
 }
