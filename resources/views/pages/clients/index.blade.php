@@ -67,35 +67,35 @@
                         <th scope="row" class="px-2 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                             {{ $client->name }}
                         </th>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $client->first_name }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $client->email }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $client->phone }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @currency($client->account_amount)
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @currency($client->owed_amount)
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @currency($client->purchases_amount)
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $client->gender }}
                         </td>
-                        <td class="px-2 py-4 text-gray-900">
+                        <td class="px-2 py-4 whitespace-nowrap text-gray-900">
                             @foreach ($userDetails as $user)
                                 @if($user->id == $client->author_id)
                                     <span class="rounded-full bg-green-0 px-2 py-2">{{ $user->name }}</span>
                                 @endif
                             @endforeach
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $client->created_at }}
                         </td>
                         <td class="flex px-2 py-2 justify-end">

@@ -19,8 +19,8 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="px-1 border-dashed py-1 border-b-2 border-blue-400">
-                            <a onclick="gross_purchaseNOT('{{ $product['gross_purchase_price'] }}')" class="hover:text-blue-400 cursor-pointer outline-none border-dashed py-1 border-b  text-sm">
+                        <div class="px-1 border-dashed py-1 border-b-2 @if($product['is_gross'] == 1) border-green-600 @else border-blue-400 @endif">
+                            <a onclick="gross_purchase('{{ $product['product_id'] }}')" class="cursor-pointer outline-none border-dashed py-1 border-b text-sm @if($product['is_gross'] == 1) text-green-600 hover:text-green-700 @else hover:text-blue-400 @endif">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
                                 </svg>
@@ -31,9 +31,22 @@
                 <div class="flex justify-between product-controls">
                     <div class="-mx-1 flex flex-wrap">
                         <div class="px-1 w-1/2 md:w-auto mb-1">
-                            <span class="hidden posprix" id="prices">{{ $product["net_purchase_price"] }}</span>
-                            <a class="outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm">
-                                {{ __( 'Price' ) }} : <span id="net_purchase_price"> {{ $product["net_purchase_price"] }} fcfa</span>
+                            <span class="hidden posprix" id="prices">
+                              @if($product['is_gross'] == 1)
+                                {{ $product["gross_purchase_price"] }}
+                              @else
+                                {{ $product["net_purchase_price"] }}
+                              @endif
+                            </span>
+                            <a class="outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm @if($product['is_gross'] == 1) border-green-600 text-green-600 @else border-blue-400 @endif">
+                                {{ __( 'Price' ) }} :
+                                <span id="net_purchase_price">
+                                  @if($product['is_gross'] == 1)
+                                    {{ $product["gross_purchase_price"] }} fcfa
+                                  @else
+                                    {{ $product["net_purchase_price"] }} fcfa
+                                  @endif
+                                </span>
                             </a>
                         </div>
                         <div class="px-1 w-1/2 md:w-auto mb-1">
@@ -43,8 +56,23 @@
                             <a onclick="changeQuantity('{{ $product['product_id'] }}')" class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm" id="quantities">{{ __( 'Quantity' ) }}: {{ $product["quantity"] }} </a>
                         </div>
                         <div class="px-1 w-1/2 md:w-auto mb-1 lg:hidden">
-                            <span class="hidden" id="posSubTotals">{{ $product["quantity"] * $product["net_purchase_price"] }}</span>
-                            <span class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm">{{ __( 'Total' ) }}: <span id="total_purchase_price">{{ $product["quantity"] * $product["net_purchase_price"] }}</span> F CFA </span>
+                            <span class="hidden" id="posSubTotals">
+                              @if($product['is_gross'] == 1)
+                                {{ $product["quantity"] * $product["gross_purchase_price"] }}
+                              @else
+                                {{ $product["quantity"] * $product["net_purchase_price"] }}
+                              @endif
+                            </span>
+                            <span class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm">
+                              {{ __( 'Total' ) }}:
+                              <span id="total_purchase_price">
+                                @if($product['is_gross'] == 1)
+                                  {{ $product["quantity"] * $product["gross_purchase_price"] }}
+                                @else
+                                  {{ $product["quantity"] * $product["net_purchase_price"] }}
+                                @endif
+                              </span> F CFA
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -52,7 +80,13 @@
             <div onclick="changeQuantity('{{ $product['product_id'] }}')"  class="hidden lg:flex w-1/6 p-2 border items-center justify-center cursor-pointer">
                 <span class="border-b-2 border-dashed border-blue-400 p-2 quantity" id="quantitie">{{ $product["quantity"] }}</span>
             </div>
-            <div class="hidden lg:flex w-1/6 p-2 border border-r-0 border-t-0 items-center justify-center posTotal"> {{ $product["quantity"] * $product["net_purchase_price"] }} F CFA </div>
+            <div class="hidden lg:flex w-1/6 p-2 border border-r-0 border-t-0 items-center justify-center posTotal">
+              @if($product['is_gross'] == 1)
+                {{ $product["quantity"] * $product["gross_purchase_price"] }} F CFA
+              @else
+                {{ $product["quantity"] * $product["net_purchase_price"] }} F CFA
+              @endif
+            </div>
         </div>
     @endforeach
 @endif

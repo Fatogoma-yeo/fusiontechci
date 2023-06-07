@@ -161,31 +161,25 @@
                 });
             }
 
-            var count = 0;
-
-            function gross_purchase(price) {
-                count++;
-                $("[id*=quantitie]").each(function(){
-                    quantity = parseFloat($(this).html());
-                });
-
+            function gross_purchase(id) {
                 $.ajax({
                     type: "get",
                     url: "{{ route('gross.price') }}",
-                    data:{"price" : price},
+                    data:{"product_id" : id},
                     success: function(response) {
-                        var price = response.gross_price;
-                        var gross_price = price.gross_purchase_price;
-                        var subtotal = gross_price * quantity;
-
-                        $("[class*=posTotal]").each(function(){
-                            $(this).html(subtotal);
-                        });
-
-                        // $(".posTotal").html(subtotal);
-                        $("#posSubTotals").html(subtotal);
-                        $("#net_purchase_price").html(gross_price);
-                        alert(count);
+                      $('.product_list').html(response);
+                      $(function () {
+                          var gtotal = 0;
+                          var discounTotal = 0;
+                          $("[id*=posSubTotals]").each(function(){
+                              gtotal = gtotal + parseFloat($(this).html());
+                          });
+                          $("[id*=rabais]").each(function(){
+                              discounTotal = discounTotal + parseFloat($(this).html());
+                          });
+                          $('#subTotal').html(gtotal.toString());
+                          $('#Total').html(gtotal.toString() - discounTotal.toString());
+                      });
                     },
                 });
             }

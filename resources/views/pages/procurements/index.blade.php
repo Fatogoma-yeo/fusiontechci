@@ -61,37 +61,37 @@
                         <th scope="row" class="px-2 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                             {{ $procurement->name }}
                         </th>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                           @foreach($providers as $provider)
                             @if($provider->id == $procurement->provider_id)
                               {{ $provider->name }}
                             @endif
                           @endforeach
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @if ($procurement->payment_status == 'paid')
                                 {{ __('payé') }}
                             @else
                                 {{ __('impayé') }}
                             @endif
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $procurement->invoice_date }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @currency($procurement->value)
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @currency($procurement->cost)
                         </td>
-                        <td class="px-2 py-4 text-gray-900">
+                        <td class="px-2 py-4 whitespace-nowrap text-gray-900">
                             @foreach ($userDetails as $user)
                                 @if($user->id == $procurement->author_id)
                                     <span class="font-semibold px-2 py-2 bg-green-0 rounded-full">{{ $user->name }}</span>
                                 @endif
                             @endforeach
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $procurement->created_at }}
                         </td>
                         <td class="flex px-2 py-2 justify-end">

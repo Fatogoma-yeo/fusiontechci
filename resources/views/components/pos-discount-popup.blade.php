@@ -93,7 +93,7 @@ $maxWidth = [
                           $('#notifDiv').fadeOut();
                       }, 5000);
                   }else if (response.posDiscount) {
-                    var discount = response.posDiscount.discount_percentage;
+                    var discount = response.posDiscount.pos_discount;
                       document.getElementById("rabais").textContent = discount;
                       $(function () {
                           var gtotal = 0;

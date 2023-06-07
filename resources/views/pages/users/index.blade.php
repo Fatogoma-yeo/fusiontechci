@@ -51,17 +51,17 @@
                                         <th scope="row" class="px-2 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                             {{ $user->name }}
                                         </th>
-                                        <td class="px-2 py-4">
+                                        <td class="px-2 py-4 whitespace-nowrap">
                                             {{ $user->email }}
                                         </td>
-                                        <td class="px-2 py-4">
+                                        <td class="px-2 py-4 whitespace-nowrap">
                                         @if(!empty($user->getRoleNames()))
                                             @foreach($user->getRoleNames() as $role)
                                                 <span class="rounded-full bg-green-0 px-2 py-2">{{ $role }}</span>
                                             @endforeach
                                         @endif
                                         </td>
-                                        <td class="px-2 py-4">
+                                        <td class="px-2 py-4 whitespace-nowrap">
                                             Active
                                         </td>
                                         <td class="flex px-2 py-2 justify-end">

@@ -52,24 +52,24 @@
                         <th scope="row" class="px-2 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                             {{ $category->name }}
                         </th>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $category->total_items }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             @if($category->displays_on_pos == 1)
                                 Oui
                             @else
                                 Non
                             @endif
                         </td>
-                        <td class="px-2 py-4 text-gray-900">
+                        <td class="px-2 py-4 whitespace-nowrap text-gray-900">
                             @foreach ($userDetails as $user)
                                 @if($user->id == $category->author_id)
                                     <span class="rounded-full bg-green-0 px-2 py-2">{{ $user->name }}</span>
                                 @endif
                             @endforeach
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $category->created_at }}
                         </td>
                         <td class="flex px-2 py-2 justify-end">

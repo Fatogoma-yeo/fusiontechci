@@ -64,7 +64,7 @@ class OrdersController extends Controller
                         $poslist->author_id = $data['author_id'];
                         $poslist->save();
 
-                        $productsDetails = PosList::get();
+                        $productsDetails = PosList::where('author_id', Auth::id())->get();
                         $productsDetails = json_decode($productsDetails, true);
                         return view('pages.orders.products', compact('productsDetails'));
 
@@ -230,7 +230,7 @@ class OrdersController extends Controller
             // echo "<pre>"; print_r($data); die;
             PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['quantity' => $data['quantity']]);
 
-            $productsDetails = PosList::get();
+            $productsDetails = PosList::where('author_id', Auth::id())->get();
             $productsDetails = json_decode($productsDetails, true);
             return view('pages.orders.products', compact('productsDetails'));
         }
@@ -250,7 +250,7 @@ class OrdersController extends Controller
 
                   PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['discount' => $data['discount'], "net_purchase_price" =>$new_price]);
 
-                  $productsDetails = PosList::get();
+                  $productsDetails = PosList::where('author_id', Auth::id())->get();
                   $productsDetails = json_decode($productsDetails, true);
                   return view('pages.orders.products', compact('productsDetails'));
                 }
@@ -258,11 +258,11 @@ class OrdersController extends Controller
                 $disCout = PosList::where(['discount' => 0, 'author_id' => Auth::id()])->count();
                 $poscount = PosList::where('author_id', Auth::id())->count();
                 if ($disCout == $poscount) {
-                    PosList::where('author_id', Auth::id())->update(['discount_percentage' => $data['discount']]);
+                    PosList::where('author_id', Auth::id())->update(['pos_discount' => $data['discount']]);
                     $pos_detail = PosList::where('author_id', Auth::id())->firstOrFail();
                     return response()->json(['posDiscount' => $pos_detail]);
                 }else {
-                    $productsDetails = PosList::get();
+                    $productsDetails = PosList::where('author_id', Auth::id())->get();
                     $productsDetails = json_decode($productsDetails, true);
                     return view('pages.orders.products', compact('productsDetails'));
                 }
@@ -277,7 +277,7 @@ class OrdersController extends Controller
             $product_id = $data['product_id'];
             PosList::where(['product_id' => $product_id, 'author_id' => Auth::user()->id])->delete();
 
-            $productsDetails = PosList::get();
+            $productsDetails = PosList::where('author_id', Auth::id())->get();
             $productsDetails = json_decode($productsDetails, true);
             return view('pages.orders.products', compact('productsDetails'));
         }
@@ -287,10 +287,19 @@ class OrdersController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $gross_price = $data['price'];
-            $price = PosList::where('gross_purchase_price', $gross_price)->firstOrFail();
-
-            return response()->json(['gross_price' => $price]);
+            $poslistcount = PosList::countposlist($data['product_id']);
+            // echo "<pre>";print_r($poslistcount);die;
+            if ($poslistcount == 1) {
+                PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['is_gross' => 1]);
+                $productsDetails = PosList::where('author_id', Auth::id())->get();
+                $productsDetails = json_decode($productsDetails, true);
+                return view('pages.orders.products', compact('productsDetails'));
+            }else {
+                PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['is_gross' => 0]);
+                $productsDetails = PosList::where('author_id', Auth::id())->get();
+                $productsDetails = json_decode($productsDetails, true);
+                return view('pages.orders.products', compact('productsDetails'));
+            }
         }
     }
 

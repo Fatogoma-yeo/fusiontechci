@@ -44,20 +44,20 @@
                         <td scope="row" class="px-2 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                             {{ $account->name }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $account->account }}
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $account->operation }}
                         </td>
-                        <td class="px-2 py-4 text-gray-900">
+                        <td class="px-2 py-4 whitespace-nowrap text-gray-900">
                             @foreach ($userDetails as $user)
                                 @if($user->id == $account->author_id)
                                     <span class="font-semibold px-2 py-2 bg-green-0 rounded-full">{{ $user->name }}</span>
                                 @endif
                             @endforeach
                         </td>
-                        <td class="px-2 py-4">
+                        <td class="px-2 py-4 whitespace-nowrap">
                             {{ $account->created_at }}
                         </td>
                         <td class="px-2 py-4 text-right">
