@@ -51,7 +51,7 @@ class OrdersController extends Controller
             }
             $countposlist = PosList::where(['product_id' => $product_id, 'author_id' => Auth::user()->id])->count();
             $Poslists = PosList::where(['product_id' => $product_id, 'author_id' => Auth::user()->id])->get();
-            $History_product = ProductHistory::where('product_id', $product_id)->latest()->first();
+            $History_product = ProductHistory::where('product_id', $product_id)->latest()->firstOrFail();
             if ($countprocurement > 0) {
                 if ($History_product->after_quantity >= $data['quantity']) {
                     if ($countposlist === 0) {
@@ -83,7 +83,7 @@ class OrdersController extends Controller
             PosList::where('author_id', Auth::user()->id)->delete();
         }
 
-        $product_detail = Product::first();
+        $product_detail = Product::firstOrFail();
 
         return view('pages.orders.index', compact('productsDetails', 'product_detail'));
     }
@@ -241,17 +241,31 @@ class OrdersController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             // echo "<pre>"; print_r($data); die;
-            $pos_products = PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->first();
-            $new_price = $pos_products->net_purchase_price - $data['discount'];
-            if ($new_price < $pos_products->gross_purchase_price) {
-              return response()->json(['action' => "not_reduce", 'message' => "Cette réduction ne peut être appliquer. Veillez revoir votre somme de réduction"]);
+            if ($data['product_id']) {
+                $pos_products = PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->firstOrFail();
+                $new_price = $pos_products->net_purchase_price - $data['discount'];
+                if ($new_price < $pos_products->gross_purchase_price) {
+                  return response()->json(['action' => "not_reduce", 'message' => "Cette réduction ne peut être appliquer. Veillez revoir votre somme de réduction"]);
+                }else {
+
+                  PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['discount' => $data['discount'], "net_purchase_price" =>$new_price]);
+
+                  $productsDetails = PosList::get();
+                  $productsDetails = json_decode($productsDetails, true);
+                  return view('pages.orders.products', compact('productsDetails'));
+                }
             }else {
-
-              PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['discount' => $data['discount'], "net_purchase_price" =>$new_price]);
-
-              $productsDetails = PosList::get();
-              $productsDetails = json_decode($productsDetails, true);
-              return view('pages.orders.products', compact('productsDetails'));
+                $disCout = PosList::where(['discount' => 0, 'author_id' => Auth::id()])->count();
+                $poscount = PosList::where('author_id', Auth::id())->count();
+                if ($disCout == $poscount) {
+                    PosList::where('author_id', Auth::id())->update(['discount_percentage' => $data['discount']]);
+                    $pos_detail = PosList::where('author_id', Auth::id())->firstOrFail();
+                    return response()->json(['posDiscount' => $pos_detail]);
+                }else {
+                    $productsDetails = PosList::get();
+                    $productsDetails = json_decode($productsDetails, true);
+                    return view('pages.orders.products', compact('productsDetails'));
+                }
             }
         }
     }
@@ -274,7 +288,7 @@ class OrdersController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $gross_price = $data['price'];
-            $price = PosList::where('gross_purchase_price', $gross_price)->first();
+            $price = PosList::where('gross_purchase_price', $gross_price)->firstOrFail();
 
             return response()->json(['gross_price' => $price]);
         }
@@ -365,9 +379,9 @@ class OrdersController extends Controller
 
 
             // Product History
-            $procurementProductDetails = ProcurementsProduct::where('product_id', $value)->latest()->first();
-            $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->first();
-            $ProductOrderDetails = OrderProduct::where('product_id', $value)->latest()->first();
+            $procurementProductDetails = ProcurementsProduct::where('product_id', $value)->latest()->firstOrFail();
+            $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
+            $ProductOrderDetails = OrderProduct::where('product_id', $value)->latest()->firstOrFail();
             $productHistories->product_name = $productDetail["product_name"][$key];
             $productHistories->procurement_name = "N/A";
             $productHistories->product_id = $value;
@@ -383,7 +397,7 @@ class OrdersController extends Controller
             $productHistories->save();
 
 
-            $ProductsHistoryDetails = ProductHistory::where('product_id', $value)->latest()->first();
+            $ProductsHistoryDetails = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
             $inventories_quantity = $ProductsHistoryDetails->after_quantity;
             Inventory::where('product_id', $value)->update(['after_quantity' => $inventories_quantity]);
 
@@ -391,8 +405,8 @@ class OrdersController extends Controller
 
         // Cash Flow History
 
-        $orders_details = OrderProduct::where('created_at', now())->first();
-        $expenseCategories = ExpenseCategory::where('account', '001')->first();
+        $orders_details = OrderProduct::where('created_at', now())->firstOrFail();
+        $expenseCategories = ExpenseCategory::where('account', '001')->firstOrFail();
 
 
         $cash_flows = new CashFlow;
@@ -409,7 +423,7 @@ class OrdersController extends Controller
         $cash_flows->save();
 
 
-        $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->first();
+        $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
 
         $order = new Orders;
 
@@ -429,7 +443,7 @@ class OrdersController extends Controller
         }
 
         $ordersDetails = OrderProduct::where('created_at', now())->get();
-        $orders = Orders::where('created_at', now())->first();
+        $orders = Orders::where('created_at', now())->firstOrFail();
 
         $before_purchases_amount = $customersDetail->purchases_amount;
         $purchases_amout = $before_purchases_amount + $orders->total;

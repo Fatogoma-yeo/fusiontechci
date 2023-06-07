@@ -52,7 +52,7 @@ class InventoryController extends Controller
         }
 
         $products_detail = Product::with('inventory')->get();
-        $productDetail = Product::with('inventory')->first();
+        $productDetail = Product::with('inventory')->firstOrFail();
         $inventoryCount = Inventory::count();
         $inventoryCheckCount = Inventory::where(['check_stock_physic_1' =>1, 'check_stock_physic_2' =>1])->count();
 
@@ -70,14 +70,14 @@ class InventoryController extends Controller
                 Inventory::where('product_id', $value)->update(['stock_hs_physic' => $data['hs_quantity'][$key]]);
             }
 
-            $user_1 = User::where('email', 'comptabilite@fusiontechci.com')->first();
-            $user_2 = User::where('email', 'servicecommercial@fusiontechci.com')->first();
+            $user_1 = User::where('email', 'comptabilite@fusiontechci.com')->firstOrFail();
+            $user_2 = User::where('email', 'servicecommercial@fusiontechci.com')->firstOrFail();
             $users_detail = [$user_1, $user_2];
 
             foreach ($users_detail as $users) {
               $notification = new Notification;
-              $inventories = Inventory::where('updated_at', now())->first();
-              $action_user = User::where('id', $inventories->author_id)->first();
+              $inventories = Inventory::where('updated_at', now())->firstOrFail();
+              $action_user = User::where('id', $inventories->author_id)->firstOrFail();
               $date = date_format($inventories->updated_at, 'd-m-Y');
               $heure = date_format($inventories->updated_at, 'H:i:s');
 
@@ -92,7 +92,7 @@ class InventoryController extends Controller
         }
 
         $stock_detail = Inventory::with('product')->get();
-        $stockDetail = Inventory::with('product')->where('stock_hs_physic', '<>', null)->first();
+        $stockDetail = Inventory::with('product')->where('stock_hs_physic', '<>', null)->firstOrFail();
 
         return view('pages.inventory.physic_stock_hs', compact('stock_detail', 'stockDetail'));
     }
@@ -143,7 +143,7 @@ class InventoryController extends Controller
     public function create()
     {
         $products_detail = Product::with('inventory')->get();
-        $productDetail = Product::with('inventory')->first();
+        $productDetail = Product::with('inventory')->firstOrFail();
 
         return view('pages.inventory.physic_stock', compact('products_detail', 'productDetail'));
     }
@@ -162,14 +162,14 @@ class InventoryController extends Controller
           Inventory::where('product_id', $value)->update(['stock_physic' =>$data['physic_quantity'][$key]]);
         }
 
-        $user_1 = User::where('email', 'comptabilite@fusiontechci.com')->first();
-        $user_2 = User::where('email', 'servicecommercial@fusiontechci.com')->first();
+        $user_1 = User::where('email', 'comptabilite@fusiontechci.com')->firstOrFail();
+        $user_2 = User::where('email', 'servicecommercial@fusiontechci.com')->firstOrFail();
         $users_detail = [$user_1, $user_2];
 
         foreach ($users_detail as $users) {
           $notification = new Notification;
-          $inventories = Inventory::where('updated_at', now())->first();
-          $action_user = User::where('id', $inventories->author_id)->first();
+          $inventories = Inventory::where('updated_at', now())->firstOrFail();
+          $action_user = User::where('id', $inventories->author_id)->firstOrFail();
           $date = date_format($inventories->updated_at, 'd-m-Y');
           $heure = date_format($inventories->updated_at, 'H:i:s');
 

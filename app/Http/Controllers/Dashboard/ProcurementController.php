@@ -68,8 +68,8 @@ class ProcurementController extends Controller
     public function procured(Request $request)
     {
         if ($request->ajax()) {
-            $procurementDet = Procurement::where('id', $request["procurement_id"])->first();
-            $providers = Provider::where('id', $procurementDet->provider_id)->first();
+            $procurementDet = Procurement::where('id', $request["procurement_id"])->firstOrFail();
+            $providers = Provider::where('id', $procurementDet->provider_id)->firstOrFail();
 
             $providers->update(['amount_paid' => $providers->amount_paid + $procurementDet->cost]);
             $providers->update(['amount_du' => $providers->amount_du - $procurementDet->cost]);
@@ -132,8 +132,8 @@ class ProcurementController extends Controller
 
         $procurement->save();
 
-        $procurementDetail = Procurement::where('created_at', now())->first();
-        $expenseCategories = ExpenseCategory::where('account', '002')->first();
+        $procurementDetail = Procurement::where('created_at', now())->firstOrFail();
+        $expenseCategories = ExpenseCategory::where('account', '002')->firstOrFail();
 
         $cash_flows->name = $data['name'];
         $cash_flows->procurement_id = $procurementDetail->id;
@@ -194,8 +194,8 @@ class ProcurementController extends Controller
                     break;
 
                 default:
-                    $procurementProductDetails = ProcurementsProduct::where('product_id', $value)->latest()->first();
-                    $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->first();
+                    $procurementProductDetails = ProcurementsProduct::where('product_id', $value)->latest()->firstOrFail();
+                    $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
                     $productHistories->product_name = $product_name;
                     $productHistories->purchase_price = $data['purchase_price'][$key];
                     $productHistories->procurement_id = $procurement_id;
@@ -227,7 +227,7 @@ class ProcurementController extends Controller
                     break;
 
                 default:
-                    $inventoryDetails = Inventory::where('product_id', $value)->latest()->first();
+                    $inventoryDetails = Inventory::where('product_id', $value)->latest()->firstOrFail();
                     $inventory_quantity = $inventoryDetails->before_quantity + $data['quantity'][$key];
 
                     Inventory::where('product_id', $value)->update(['before_quantity' =>$inventory_quantity]);
@@ -254,7 +254,7 @@ class ProcurementController extends Controller
             $purchaseDetails = $provider_purchase;
         }
 
-        $provider = Provider::where('id', $purchaseDetails->provider_id)->first();
+        $provider = Provider::where('id', $purchaseDetails->provider_id)->firstOrFail();
         if ($purchaseDetails->payment_status == 'paid') {
             $provider->update(['amount_paid' => $purchaseDetails->total]);
         }else {
@@ -262,9 +262,9 @@ class ProcurementController extends Controller
         }
 
         $notification = new Notification;
-        $procurements = Procurement::where('created_at', now())->first();
-        $action_user = User::where('id', $procurements->author_id)->first();
-        $users = User::where('email', 'comptabilite@fusiontechci.com')->first();
+        $procurements = Procurement::where('created_at', now())->firstOrFail();
+        $action_user = User::where('id', $procurements->author_id)->firstOrFail();
+        $users = User::where('email', 'comptabilite@fusiontechci.com')->firstOrFail();
 
         $notification->title = "Achats";
         $notification->user_id = $users->id;
@@ -310,8 +310,8 @@ class ProcurementController extends Controller
     {
 
          if ($request["provider_id"] != $procurement->provider_id) {
-              $provider_detail = Provider::where('id', $request["provider_id"])->first();
-              $providers_details = Provider::where('id', $procurement->provider_id)->first();
+              $provider_detail = Provider::where('id', $request["provider_id"])->firstOrFail();
+              $providers_details = Provider::where('id', $procurement->provider_id)->firstOrFail();
               $object = "le changement du fournisseur ".$providers_details->name." par ".$provider_detail->name;
 
               if ($request["status_payment"] == 'paid') {
@@ -358,7 +358,7 @@ class ProcurementController extends Controller
           if ($request["provider_id"] == $procurement->provider_id) {
               if ($request["status_payment"] != $procurement->payment_status) {
                   $object = "le changement de status de paiement";
-                  $providers = Provider::where('id', $procurement->provider_id)->first();
+                  $providers = Provider::where('id', $procurement->provider_id)->firstOrFail();
                   if ($procurement->payment_status == 'paid') {
                     switch ($providers->amount_du) {
                       case 0:
@@ -404,9 +404,9 @@ class ProcurementController extends Controller
           $procurements->update();
 
           $notification = new Notification;
-          $action_user_id = Procurement::where('updated_at', now())->first();
-          $action_user = User::where('id', $action_user_id->author_id)->first();
-          $users = User::where('email', 'comptabilite@fusiontechci.com')->first();
+          $action_user_id = Procurement::where('updated_at', now())->firstOrFail();
+          $action_user = User::where('id', $action_user_id->author_id)->firstOrFail();
+          $users = User::where('email', 'comptabilite@fusiontechci.com')->firstOrFail();
 
           $notification->title = "Modification";
           $notification->user_id = $users->id;

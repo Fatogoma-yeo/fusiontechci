@@ -100,7 +100,7 @@
                                         </svg>
                                         <span class="text-lg hidden md:inline lg:text-2xl">{{ __( 'Hold' ) }}</span>
                                     </div>
-                                    <div @click="openDiscountPopupS()" id="discount-button" class="flex-shrink-0 w-1/4 flex items-center font-bold cursor-pointer justify-center bg-white border-r border-box-edge hover:bg-indigo-100 flex-auto text-gray-700">
+                                    <div @click="openDiscountPopup()" id="discount-button" class="flex-shrink-0 w-1/4 flex items-center font-bold cursor-pointer justify-center bg-white border-r border-box-edge hover:bg-indigo-100 flex-auto text-gray-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mr-2 inline-flex">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185zM9.75 9h.008v.008H9.75V9zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 4.5h.008v.008h-.008V13.5zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                         </svg>
@@ -134,7 +134,7 @@
                         </div>
                         <div class="overflow-hidden h-full flex-col flex">
                             @if($product_detail != null)
-                                <div class="flex xs:grid-cont-2 lg:grid-container sm:grid-cont-4 md:grid-cont-3 gap-0 flex-auto overflow-auto w-full h-full pb-6" id="pos_products">
+                                <div class="flex xs:grid-cont-2 lg:grid-container sm:grid-cont-4 md:grid-cont-3 gap-0 flex-auto overflow-auto w-full h-full" id="pos_products">
 
                                 </div>
                             @else
@@ -256,6 +256,7 @@
           discount_modal.style.display = "flex"; // Show modal
           x.style.overflow = "hidden"; //Disable scroll on body
         }else if (ids) {
+          document.getElementById("initkey").textContent = '';
           discount_modal.style.display = "flex"; // Show modal
           x.style.overflow = "hidden"; //Disable scroll on body
         }else {

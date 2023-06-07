@@ -86,8 +86,8 @@ class ProductController extends Controller
 
         $product->author_id = Auth::id();
         $product->save();
-        $productDetails = Product::with('category')->first();
-        $category = ProductCategory::where('id', $productDetails->category_id)->first();
+        $productDetails = Product::with('category')->firstOrFail();
+        $category = ProductCategory::where('id', $productDetails->category_id)->firstOrFail();
         $countProducts = $productDetails->count();
         $category->update(['total_items' => $countProducts]);
         // echo '<pre>';print_r($category); die;
@@ -138,7 +138,7 @@ class ProductController extends Controller
                 foreach ($data['product_id'] as $key => $value) {
 
                   if ($data['operation'] == "Défectueuse" || $data['operation'] == "Perdue") {
-                      $stock_hs_detail = Inventory::where('product_id', $value)->first();
+                      $stock_hs_detail = Inventory::where('product_id', $value)->firstOrFail();
                       if ($stock_hs_detail->stock_hs === null) {
 
                         $stock_hs = $data['quantity'][$key];

@@ -82,8 +82,8 @@ class ExpensesController extends Controller
 
         $expenses->save();
 
-        $expenses_details = Expense::where('created_at', Carbon::now())->first();
-        $expense_category = ExpenseCategory::where('id', $data["category_id"])->first();
+        $expenses_details = Expense::where('created_at', Carbon::now())->firstOrFail();
+        $expense_category = ExpenseCategory::where('id', $data["category_id"])->firstOrFail();
 
         $cash_flows->name = $data['name'];
         $cash_flows->expense_id = $expenses_details->id;
@@ -116,7 +116,7 @@ class ExpensesController extends Controller
      */
     public function edit(Expense $expense)
     {
-        $categoryDetail = ExpenseCategory::where('id', $expense->category_id)->first();
+        $categoryDetail = ExpenseCategory::where('id', $expense->category_id)->firstOrFail();
         $categoryDetail = json_decode($categoryDetail, true);
         $categories = ExpenseCategory::with('category')->get();
         // echo "<pre>"; print_r($categoryDetail); die;

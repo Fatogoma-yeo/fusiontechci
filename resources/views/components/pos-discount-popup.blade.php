@@ -80,52 +80,49 @@ $maxWidth = [
 
         function getkeyvaluefunc() {
             var id = document.getElementById("initkey").textContent;
-            if (id) {
-                $.ajax({
-                    type: 'get',
-                    url: "{{ route('popup.discount') }}",
-                    data:{"discount": key.value, "product_id": id},
-                    success: function(response){
-                      if (response.action == "not_reduce") {
-                          $('#notifDiv').fadeIn();
-                          $('#notifDiv').css('background', 'red');
-                          $('#notifDiv').text(response.message);
-                          setTimeout(() => {
-                              $('#notifDiv').fadeOut();
-                          }, 5000);
-                      }else {
-                        document.getElementById("rabais").textContent = key.value;
-                        $('.product_list').html(response);
-                        $(function () {
-                            var gtotal = 0;
-                            $("[id*=posSubTotals]").each(function(){
-                                gtotal = gtotal + parseFloat($(this).html());
-                            });
-                            $('#subTotal').html(gtotal.toString());
-                            $('#Total').html(gtotal.toString());
-                            document.getElementById("rabais").textContent = 0;
+            $.ajax({
+                type: 'get',
+                url: "{{ route('popup.discount') }}",
+                data:{"discount": key.value, "product_id": id},
+                success: function(response){
+                  if (response.action == "not_reduce") {
+                      $('#notifDiv').fadeIn();
+                      $('#notifDiv').css('background', 'red');
+                      $('#notifDiv').text(response.message);
+                      setTimeout(() => {
+                          $('#notifDiv').fadeOut();
+                      }, 5000);
+                  }else if (response.posDiscount) {
+                    var discount = response.posDiscount.discount_percentage;
+                      document.getElementById("rabais").textContent = discount;
+                      $(function () {
+                          var gtotal = 0;
+                          var discounTotal = 0;
+                          $("[id*=posSubTotals]").each(function(){
+                              gtotal = gtotal + parseFloat($(this).html());
+                          });
+                          $("[id*=rabais]").each(function(){
+                              discounTotal = discounTotal + parseFloat($(this).html());
+                          });
+                          $('#subTotal').html(gtotal.toString());
+                          $('#Total').html(gtotal.toString() - discounTotal.toString());
+                      });
+                  }else {
+                    $('.product_list').html(response);
+                    $(function () {
+                        var gtotal = 0;
+                        $("[id*=posSubTotals]").each(function(){
+                            gtotal = gtotal + parseFloat($(this).html());
                         });
-                        counter();
+                        $('#subTotal').html(gtotal.toString());
+                        $('#Total').html(gtotal.toString());
+                        document.getElementById("rabais").textContent = 0;
+                    });
+                    counter();
 
-                      }
-                    },
-                });
-            }else {
-                document.getElementById("rabais").textContent = key.value;
-                $(function () {
-                    var gtotal = 0;
-                    var discounTotal = 0;
-                    $("[id*=posSubTotals]").each(function(){
-                        gtotal = gtotal + parseFloat($(this).html());
-                    });
-                    $("[id*=rabais]").each(function(){
-                        discounTotal = discounTotal + parseFloat($(this).html());
-                    });
-                    $('#subTotal').html(gtotal.toString());
-                    $('#Total').html(gtotal.toString() - discounTotal.toString());
-                });
-                counter();
-            }
+                  }
+                },
+            });
 
             discount_modal.style.display = "none";
             x.style.overflow = "auto";

@@ -124,7 +124,7 @@ class ClientController extends Controller
 
             $customers->save();
 
-            $clients = Client::where('created_at', Carbon::now())->latest()->first();
+            $clients = Client::where('created_at', Carbon::now())->latest()->firstOrFail();
 
             return response()->json(["customer" => $clients]);
         }
