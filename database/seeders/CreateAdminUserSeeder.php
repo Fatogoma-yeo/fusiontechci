@@ -22,6 +22,7 @@ class CreateAdminUserSeeder extends Seeder
         $user = User::create([
             'name' => 'Antarès',
             'email' => 'admin@fusiontechci.com',
+            'status' => 'active',
             'password' => bcrypt('admin.faty200""')
         ]);
 

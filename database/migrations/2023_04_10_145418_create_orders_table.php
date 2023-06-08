@@ -24,6 +24,8 @@ return new class extends Migration
             $table->float( 'discount_percentage', 18, 5 )->nullable();
             $table->float( 'subtotal', 18, 5 )->default(0);
             $table->float( 'total', 18, 5 )->default(0);
+            $table->float( 'tendered', 18, 5 )->default(0);
+            $table->float( 'change', 18, 5 )->default(0);
             $table->datetime( 'final_payment_date' )->nullable();
             $table->integer( 'total_instalments' )->default(0);
             $table->integer( 'customer_id' );

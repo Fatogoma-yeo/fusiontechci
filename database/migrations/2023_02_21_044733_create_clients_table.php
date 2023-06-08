@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string( 'gender' )->nullable();
             $table->string( 'phone' )->nullable();
             $table->string( 'email' )->nullable();
-            $table->datetime( 'birth_date' )->nullable();
             $table->float( 'purchases_amount', 18, 5 )->default(0);
             $table->float( 'owed_amount', 18, 5 )->default(0);
             $table->float( 'credit_limit_amount', 18, 5 )->default(0)->nullable();
