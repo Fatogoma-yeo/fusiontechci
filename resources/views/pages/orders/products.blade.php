@@ -31,13 +31,7 @@
                 <div class="flex justify-between product-controls">
                     <div class="-mx-1 flex flex-wrap">
                         <div class="px-1 w-1/2 md:w-auto mb-1">
-                            <span class="hidden posprix" id="prices">
-                              @if($product['is_gross'] == 1)
-                                {{ $product["gross_purchase_price"] }}
-                              @else
-                                {{ $product["net_purchase_price"] }}
-                              @endif
-                            </span>
+                            <span class="hidden posprix" id="prices">@if($product['is_gross'] == 1){{ $product["gross_purchase_price"] }}@else{{ $product["net_purchase_price"] }}@endif</span>
                             <a class="outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm @if($product['is_gross'] == 1) border-green-600 text-green-600 @else border-blue-400 @endif">
                                 {{ __( 'Price' ) }} :
                                 <span id="net_purchase_price">
@@ -56,13 +50,7 @@
                             <a onclick="changeQuantity('{{ $product['product_id'] }}')" class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm" id="quantities">{{ __( 'Quantity' ) }}: {{ $product["quantity"] }} </a>
                         </div>
                         <div class="px-1 w-1/2 md:w-auto mb-1 lg:hidden">
-                            <span class="hidden" id="posSubTotals">
-                              @if($product['is_gross'] == 1)
-                                {{ $product["quantity"] * $product["gross_purchase_price"] }}
-                              @else
-                                {{ $product["quantity"] * $product["net_purchase_price"] }}
-                              @endif
-                            </span>
+                            <span class="hidden" id="posSubTotals">@if($product['is_gross'] == 1){{ $product["quantity"] * $product["gross_purchase_price"] }}@else{{ $product["quantity"] * $product["net_purchase_price"] }}@endif</span>
                             <span class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm">
                               {{ __( 'Total' ) }}:
                               <span id="total_purchase_price">
