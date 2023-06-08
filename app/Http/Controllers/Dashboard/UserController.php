@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\EmailAccount;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -39,8 +40,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $emails = EmailAccount::get();
         $roles = Role::where('name', '<>', 'Admin')->pluck('name','name')->all();
-        return view('pages.users.create',compact('roles'));
+        return view('pages.users.create',compact('roles', 'emails'));
     }
 
     /**

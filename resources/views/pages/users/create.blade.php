@@ -31,8 +31,12 @@
                             <!-- Email Address -->
                             <div class="mt-4">
                                 <x-input-label for="email" :value="__('Email')" />
-
-                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                                <select name="email" id="email" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 sm:text-sm" required>
+                                    <option value=""></option>
+                                    @foreach($emails as $name)
+                                        <option value="{{ $name->email }}" name="email">{{ $name->email }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <!-- Role -->

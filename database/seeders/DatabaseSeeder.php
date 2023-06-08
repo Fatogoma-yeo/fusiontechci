@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CreateAdminUserSeeder::class,
             CreateGenderSeeder::class,
             CreateExpenseCategorySeeder::class,
+            EmailAccountSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 
