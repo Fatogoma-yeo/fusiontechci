@@ -83,7 +83,7 @@ class OrdersController extends Controller
             PosList::where('author_id', Auth::user()->id)->delete();
         }
 
-        $product_detail = Product::firstOrFail();
+        $product_detail = Product::first();
 
         return view('pages.orders.index', compact('productsDetails', 'product_detail'));
     }
