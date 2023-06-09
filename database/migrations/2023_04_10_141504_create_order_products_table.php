@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string( 'product_name' );
             $table->integer( 'product_id' );
-            $table->integer( 'order_id' );
+            $table->integer( 'order_id' )->nullable();
             $table->integer( 'product_category_id' );
             $table->integer( 'procurement_product_id' )->nullable();
             $table->string( 'status' )->default( 'sold' ); // sold, refunded
