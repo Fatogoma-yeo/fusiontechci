@@ -323,6 +323,21 @@ class OrdersController extends Controller
     {
         $data = $request->all();
         // echo "</pre>"; print_r($data); die;
+
+        $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
+
+        $order = new Orders;
+
+        $order->payment_status = "paid";
+        $order->discount = $data['discount'];
+        $order->subtotal = $data['subtotal'];
+        $order->total = $data['total'];
+        $order->customer_id = $customersDetail->id;
+        $order->author = Auth::id();
+
+        $order->save();
+
+
         foreach ($data['product_id'] as $key => $value) {
             $product_id  = $data['product_id'][$key];
             $product_name = $data['product_name'][$key];
@@ -357,6 +372,7 @@ class OrdersController extends Controller
         foreach ($productDetail["product_id"] as $key => $value) {
             $ordersProducts = new OrderProduct;
             $products = Product::with('category')->where('id', $value)->get();
+            $orders = Orders::where('created_at', now())->latest()->firstOrFail();
             $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
             $productHistories = new ProductHistory;
             $inventories = new Inventory;
@@ -372,6 +388,7 @@ class OrdersController extends Controller
                 $ordersProducts->product_category_id = $productCatId;
             }
             $ordersProducts->product_id = $value;
+            $ordersProducts->order_id = $orders->id;
             $ordersProducts->product_name = $productDetail["product_name"][$key];
             $ordersProducts->quantity = $productDetail["product_quantity"][$key];
             $ordersProducts->unit_price = $productDetail["product_price"][$key];
@@ -394,7 +411,7 @@ class OrdersController extends Controller
             $productHistories->product_name = $productDetail["product_name"][$key];
             $productHistories->procurement_name = "N/A";
             $productHistories->product_id = $value;
-            $productHistories->order_id = $ProductOrderDetails->id;
+            $productHistories->orders_id = $ProductOrderDetails->id;
             $productHistories->operation = __('Sold');
             $productHistories->before_quantity = $ProductHistoryDetails->after_quantity;
             $productHistories->quantity = $productDetail["product_quantity"][$key];
@@ -430,20 +447,6 @@ class OrdersController extends Controller
         $cash_flows->author_id = Auth::id();
 
         $cash_flows->save();
-
-
-        $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
-
-        $order = new Orders;
-
-        $order->payment_status = "paid";
-        $order->discount = $data['discount'];
-        $order->subtotal = $data['subtotal'];
-        $order->total = $data['total'];
-        $order->customer_id = $customersDetail->id;
-        $order->author = Auth::id();
-
-        $order->save();
         // echo "</pre>"; print_r($date_generate); die;
 
         $category = ProductCategory::get();
