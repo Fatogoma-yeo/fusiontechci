@@ -11,6 +11,12 @@
                         </svg>
                         {{ __('Dashboard') }}
                     </a>
+                    <button id="ordermodal" class="bg-gray-100 inline-flex items-center px-2 py-2 border border-transparent rounded-md font-semibold text-sm text-gray-900 hover:bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1 inline-flex">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5V18M15 7.5V18M3 16.811V8.69c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 010 1.954l-7.108 4.061A1.125 1.125 0 013 16.811z" />
+                        </svg>
+                        {{ __('Orders') }}
+                    </button>
                     <button id="usermodal" class="bg-gray-100 inline-flex items-center px-2 py-2 border border-transparent rounded-md font-semibold text-sm text-gray-900 hover:bg-gray-200">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1 inline-flex">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -61,7 +67,7 @@
                                     <tbody>
                                         <tr class="border-b">
                                             <td class="whitespace-nowrap border-r px-4 py-2">
-                                                <a @click="userselectmodal()" class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm" id="selectuser">{{ __( 'Customer' ) }}: <span class="font-bold" id="pos_customer"></span></a>
+                                                <a @click="userselectmodal()" class="cursor-pointer outline-none border-dashed py-1 border-b-2 border-blue-400 text-sm" id="selectuser">{{ __( 'Customer' ) }}: <span class="font-bold" id="pos_customer">N/A</span></a>
                                             </td>
                                             <td class="whitespace-nowrap border-r px-4 py-2">
                                                 {{ __( 'Sub Total' ) }}
@@ -70,7 +76,7 @@
                                         </tr>
                                         <tr class="border-b">
                                             <td class="whitespace-nowrap border-r px-4 py-2">
-
+                                              <span class="hidden" id="orders_id"></span>
                                             </td>
                                             <td class="whitespace-nowrap border-r px-4 py-2">
                                                 {{ __( 'Discount' ) }}
@@ -204,6 +210,16 @@
         x.style.overflow = "auto";
     }
 
+    function pendingModalClosefun() {
+        document.getElementById('pending-orders-modal').style.display = "none";
+        x.style.overflow = "auto";
+    }
+
+    function orderProductModalclosefun() {
+        document.getElementById('order-products-modal').style.display = "none";
+        x.style.overflow = "auto";
+    }
+
     function userselectmodal() {
         var ids = document.getElementById('selectuser');
         if (ids) {
@@ -221,6 +237,11 @@
     $(document).on('click', '#user-select-close', function () {
         user_select.style.display = "none";
         x.style.overflow = "auto";
+    });
+
+    $(document).on('click', '#ordermodal', function () {
+        document.getElementById('pending-orders-modal').style.display = "flex";
+        x.style.overflow = "hidden";
     });
 
     function editModalClosefun() {
@@ -275,7 +296,7 @@
         var total = document.getElementById('Total').textContent;
         var customer = document.getElementById('pos_customer').textContent;
         if (ids) {
-            if (customer != "") {
+            if (customer != "N/A") {
                 modal.style.display = "flex"; // Show modal
                 x.style.overflow = "hidden"; //Disable scroll on body
                 document.getElementById('total_value').textContent = total;
@@ -333,9 +354,91 @@
         });
     }
 
+    function waiting_pos_condition() {
+        $.ajax({
+            type: "get",
+            url: "{{ route('clients.index') }}",
+            success: function(data) {
+                var customers = data.customers;
+                var notDetails = data.nothing;
+                var notDetailToNew = data.newuser;
+                var customer_name = document.getElementById('customer_name');
+                if (customers.length > 0) {
+                    $(".selectCustomer").html(customers);
+                    $(".vertical-menu").html(customers);
+                }else {;
+                  $(".selectCustomer").html(notDetailToNew);
+                  $(".vertical-menu").html(notDetails);
+                  // $(".selectCustomer").html(notDetails);
+                }
+            },
+        });
+        $(document).on("click", "#getCustomerSelect", function () {
+            var customer_name = $(this).find("#customer_name").text();
+            document.getElementById("pos_customer").innerHTML = customer_name;
+
+            user_modal.style.display = "none";
+            user_select.style.display = "none";
+            x.style.overflow = "auto";
+            waitingfunction();
+        });
+    }
+
+    function waitingfunction() {
+        var customer_name = document.getElementById('pos_customer').textContent;
+        var subtotal = document.getElementById('subTotal').textContent;
+        var rabais = document.getElementById('rabais').textContent;
+        var total = document.getElementById('Total').textContent;
+        var idAll = document.querySelectorAll('#pos_product_id');
+        var nameAll = document.querySelectorAll('#pos_product_name');
+        var priceAll = document.querySelectorAll('#prices');
+        var quantityAll = document.querySelectorAll('#quantitie');
+        var posSubTotalAll = document.querySelectorAll('#posSubTotals');
+        var productId = [];
+        var productName = [];
+        var price = [];
+        var quantity = [];
+        var posSubTotal = [];
+        if (idAll.length > 0) {
+            for (let i = 0; i < idAll.length; i++) {
+                productId.push(idAll[i].textContent);
+            }
+            for (let i = 0; i < nameAll.length; i++) {
+                productName.push(nameAll[i].textContent);
+            }
+            for (let i = 0; i < priceAll.length; i++) {
+                price.push(priceAll[i].textContent);
+            }
+            for (let i = 0; i < quantityAll.length; i++) {
+                quantity.push(quantityAll[i].textContent);
+            }
+            for (let i = 0; i < posSubTotalAll.length; i++) {
+                posSubTotal.push(posSubTotalAll[i].textContent);
+            }
+      }
+      $.ajax({
+          type: "get",
+          url: "{{ route('wait-pos.waiting') }}",
+          data: {'product_id': productId, 'product_name': productName, 'price': price, 'quantity': quantity, 'discount': rabais, 'pos_subtotal': posSubTotal,'subtotal': subtotal, 'total': total, 'customer': customer_name},
+          success:function (response) {
+            window.location.reload();
+          }
+      });
+    }
+
     function waiting_pos() {
         var ids = document.getElementById('pos_product_id');
+        var customer = document.getElementById('pos_customer').textContent;
+        console.log(customer);
         if (ids) {
+            if (customer != "N/A") {
+              waitingfunction();
+            }else {
+                user_select.style.display = "flex"; // Show modal
+                user_modal.style.display = "none";
+                x.style.overflow = "hidden"; //Disable scroll on body
+                waiting_pos_condition();
+            }
 
         }else {
             $('#notifDiv').fadeIn();
@@ -345,6 +448,39 @@
                 $('#notifDiv').fadeOut();
             }, 5000);
         }
+    }
+
+    function voidOngoingOrder() {
+      var orderId = document.getElementById('orders_id').textContent;
+        if ( orderId != '') {
+            $.ajax({
+                type: 'get',
+                url: "{{ route('cancel-order.pending') }}",
+                data: {"orders_id": orderId},
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        }else {
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text("Impossible d'annuler une commande impayée.");
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 5000);
+        }
+    }
+
+    function proceedOrderCustomer(query = '') {
+        $.ajax({
+            type: "get",
+            url: "{{ route('customer.proceed')}}",
+            data: {"orders_id": query},
+            success: function (response) {
+                document.getElementById('pos_customer').innerText = response;
+                console.log(response);
+            }
+        });
     }
 
     $(document).ready(function () {
@@ -359,6 +495,20 @@
                 data:{'pos_search':query},
                 success:function(data){
                     $("#pos_products").html(data);
+                }
+            });
+        }
+
+        fetch_pending_data();
+
+        function fetch_pending_data(query = '') {
+            $.ajax({
+                type: 'get',
+                url: "{{ route('pending.search') }}",
+                data: {'pending_search': query},
+                success: function (data) {
+                    $('#pending_products').html(data);
+                    console.log(data);
                 }
             });
         }

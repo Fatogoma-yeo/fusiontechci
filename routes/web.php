@@ -16,6 +16,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\ExpensesCategoriesController;
 use App\Http\Controllers\Dashboard\ExpensesController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\NotificationController;
 use App\Mail\OwnerNotificate;
 
 /*
@@ -48,6 +49,11 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::delete('delete', [OrdersController::class, 'pos_product'])->name('delete.pos_product');
     Route::get('gross', [OrdersController::class, 'price'])->name('gross.price');
     Route::get('pos', [OrdersController::class, 'search'])->name('pos.search');
+    Route::get('wait-pos', [OrdersController::class, 'waiting'])->name('wait-pos.waiting');
+    Route::get('pending', [OrdersController::class, 'pendingSearch'])->name('pending.search');
+    Route::get('proceed', [OrdersController::class, 'proceedOrder'])->name('proceed.order');
+    Route::get('preview', [OrdersController::class, 'previewOrderProducts'])->name('preview.order');
+    Route::get('cancel-order', [OrdersController::class, 'cancelOrders'])->name('cancel-order.pending');
     Route::get('quantity', [OrdersController::class, 'changeQuantity'])->name('quantity.change');
     Route::get('popup', [OrdersController::class, 'discount'])->name('popup.discount');
     Route::resource('roles', RoleController::class);
@@ -55,6 +61,7 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::resource('providers', ProviderController::class);
     Route::resource('clients', ClientController::class);
     Route::get('customers', [ClientController::class, 'posCustomer'])->name('customers.pos');
+    Route::get('customer', [ClientController::class, 'proceedCustomer'])->name('customer.proceed');
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
     Route::get('search', [ProductController::class, 'search'])->name('product.search');

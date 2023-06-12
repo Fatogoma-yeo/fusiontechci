@@ -24,4 +24,14 @@ class Orders extends Model
         'total_instalments',
         'discount_type',
     ];
+
+    public function orderProduct()
+    {
+      return $this->hasMany(OrderProduct::class);
+    }
+
+    public function customer()
+    {
+      return $this->belongsTo(Client::class);
+    }
 }

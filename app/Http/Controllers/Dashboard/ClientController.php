@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Gender;
+use App\Models\Orders;
 use App\Services\ClientService;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -127,6 +128,18 @@ class ClientController extends Controller
             $clients = Client::where('created_at', Carbon::now())->latest()->firstOrFail();
 
             return response()->json(["customer" => $clients]);
+        }
+    }
+
+    public function proceedCustomer(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            $order_customer = Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->firstOrFail();
+            $customer_detail = Client::where('id', $order_customer->customer_id)->firstOrFail();
+            $customer_name = $customer_detail->name;
+
+            return Response($customer_name);
         }
     }
 

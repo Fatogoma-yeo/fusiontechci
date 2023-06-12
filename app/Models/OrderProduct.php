@@ -25,4 +25,9 @@ class OrderProduct extends Model
         'purchase_price',
         'created_at',
     ];
+
+    public function order()
+    {
+      return $this->belongsTo(Orders::class);
+    }
 }

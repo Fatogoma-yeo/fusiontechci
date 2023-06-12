@@ -237,11 +237,12 @@ class ProcurementController extends Controller
             // echo '<pre>';print_r($procurement);die;
         }
 
-        $provider_purchases = Procurement::select(
+        $provider_purchases = Procurement::where('created_at', Carbon::now())
+        ->select(
             DB::raw('name as name'),
             DB::raw('payment_status as payment_status'),
             DB::raw('provider_id as provider_id'),
-            DB::raw('cost as total'),
+            DB::raw('cost as total')
         )
         ->groupBy('payment_status')
         ->groupBy('provider_id')

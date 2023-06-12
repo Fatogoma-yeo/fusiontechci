@@ -29,6 +29,8 @@
         <x-key-modal><x-check-modal /></x-key-modal>
         <x-edit-modal />
         <x-pos-discount-popup />
+        <x-pos-pending-orders-popup />
+        <x-pos-order-products-popup />
         <x-user-modal><x-pos-user-modal /></x-user-modal>
         <x-user-select-modal><x-pos-user-select /></x-user-select-modal>
         <div id="notifDiv" class="fixed top-4 right-4 w-auto font-normal text-white ml-96 p-2 rounded-lg"></div>

@@ -15,11 +15,17 @@ use App\Models\CashFlow;
 use App\Models\OrderProduct;
 use App\Models\Orders;
 use App\Models\Inventory;
+use App\Models\User;
 use Auth;
 use DB;
 
 class OrdersController extends Controller
 {
+
+    public function currency($amount)
+    {
+        return 'F CFA ' .number_format($amount);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -118,7 +124,7 @@ class OrdersController extends Controller
                                        </span>
                                        <span class="flex justify-center">
                                            <h3 class="text-sm font-bold">'.
-                                             $procurement->net_purchase_price .'F CFA
+                                             $this->currency($procurement->net_purchase_price ).'
                                            </h3>
                                          </span>
                                      </div>
@@ -179,7 +185,7 @@ class OrdersController extends Controller
                                        </span>
                                        <span class="flex justify-center">
                                            <h3 class="text-sm font-bold">'.
-                                             $procurement->net_purchase_price .'F CFA
+                                             $this->currency($procurement->net_purchase_price ).'
                                            </h3>
                                          </span>
                                      </div>
@@ -215,6 +221,74 @@ class OrdersController extends Controller
                return Response($output);
            }
        }
+    }
+
+    public function pendingSearch(Request $request)
+    {
+        if ($request->ajax()) {
+
+             $output = '';
+             $ordersDetail = Orders::with('customer')->where('change', '<>', 0)->where('author', Auth::id())->get();
+             $ordersDetailCount = Orders::with('customer')->where('change', '<>', 0)->where('author', Auth::id())->count();
+             $usersDetail = User::get();
+             if ($ordersDetailCount > 0 ) {
+                $cashier = __('Cashier'); $total = __('Total'); $customer = __('Customer'); $date = __('Date'); $open = __('Open'); $product = __('Products'); $print = __('Print');
+                foreach ($ordersDetail as $key => $orders) {
+                    $output .= '<div class="border-b w-full py-2">
+                                    <div class="px-2">
+                                        <div class="flex flex-wrap -mx-4">
+                                            <div class="md:w-1/2 p-1">';
+                                            foreach ($usersDetail as $user) {
+                                                if ($user->id == $orders->author) {
+                                                    $output .='<p class="text-sm py-1"><strong>'.$cashier.'</strong> : '.$user->name.'</p>';
+                                                }
+                                            }
+                    $output .=                '<p class="text-sm py-1"><strong>'.$total.'</strong> : '.$this->currency($orders->total).'</p>
+                                            </div>
+                                            <div class="md:w-1/2 p-1">
+                                                <p class="text-sm py-1"><strong>'.$customer.'</strong> : '.$orders->customer->name.'</p>
+                                                <p class="text-sm py-1"><strong>'.$date.'</strong> : '.$orders->created_at.'</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end w-full mt-2">
+                                        <div class="flex rounded-lg overflow-hidden ns-buttons">
+                                            <button onclick="proceedOpenOrder('.$orders->id.')" class="bg-blue-500 text-white outline-none px-2 py-1 text-sm">
+                                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                              </svg>
+                                               '.$open.'
+                                            </button>
+                                            <button @click="previewOrder('.$orders->id.')" class="bg-green-600 text-white outline-none px-2 py-1 text-sm">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                                '.$product.'
+                                            </button>
+                                            <button @click="printOrder('.$orders->id.')" class="bg-orange-600 text-white outline-none px-2 py-1 text-sm">
+                                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">
+                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+                                               </svg>
+                                               '.$print.'
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>';
+                  }
+
+                return Response($output);
+             }else {
+               $nothing = __('Nothing to display...');
+
+               $output .= '<div class="h-full v-full items-center justify-center flex">
+                               <h3 class="text-semibold flex justify-center">'.$nothing.'</h3>
+                           </div>';
+
+               return Response($output);
+             }
+
+        }
     }
 
     public function wishlist()
@@ -303,6 +377,137 @@ class OrdersController extends Controller
         }
     }
 
+    public function waiting(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            // echo "<pre>"; print_r($data); die;
+
+            $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
+
+            $orders = new Orders;
+
+            $orders->payment_status = "paid";
+            $orders->discount = $data['discount'];
+            $orders->subtotal = $data['subtotal'];
+            $orders->total = $data['total'];
+            $orders->tendered = 0;
+            $orders->change = $orders->tendered - $data['total'];
+            $orders->customer_id = $customersDetail->id;
+            $orders->author = Auth::id();
+
+            $orders->save();
+
+            foreach ($data['product_id'] as $key => $value) {
+                $ordersDetails = new OrderProduct;
+                $Order = Orders::where('created_at', now())->latest()->firstOrFail();
+                $products = Product::with('category')->where('id', $value)->get();
+                $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
+
+                foreach ($procur_product as $product_det) {
+                    $purchase_price = $product_det->purchase_price;
+                    $ordersDetails->procurement_product_id = $product_det->procurement_id;
+                    $ordersDetails->purchase_price = $purchase_price;
+                }
+                foreach ($products as $product) {
+                    $productCatId = $product->category->id;
+                    $ordersDetails->product_category_id = $productCatId;
+                }
+                $ordersDetails->product_id = $value;
+                $ordersDetails->orders_id = $Order->id;
+                $ordersDetails->product_name = $data["product_name"][$key];
+                $ordersDetails->quantity = $data["quantity"][$key];
+                $ordersDetails->unit_price = $data["price"][$key];
+                $ordersDetails->discount = $data["discount"];
+                $ordersDetails->pos_subtotal = $data["pos_subtotal"][$key];
+                $ordersDetails->author_id = Auth::id();
+
+                $ordersDetails->save();
+
+            }
+
+        }
+    }
+
+    public function proceedOrder(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $orders_detail = Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->firstOrFail();
+            $product_detail = OrderProduct::where(['orders_id' => $data['orders_id'], 'author_id' => Auth::id()])->get();
+            $tendered = 0 - $orders_detail->change;
+
+            foreach ($product_detail as $key => $order_product) {
+                $products = ProcurementsProduct::where('product_id', $order_product->product_id)->firstOrFail();
+                $poslist = new PosList;
+                $poslist->product_id = $order_product->product_id;
+                $poslist->product_name = $order_product->product_name;
+                $poslist->pos_discount = $orders_detail->discount;
+                $poslist->net_purchase_price = $order_product->unit_price;
+                $poslist->gross_purchase_price = $products->gross_purchase_price;
+                if ($poslist->net_purchase_price == $poslist->gross_purchase_price) {
+                    $poslist->is_gross = 1;
+                }else {
+                    $poslist->is_gross = 0;
+                }
+                $poslist->quantity = $order_product->quantity;
+                $poslist->author_id = $order_product->author_id;
+                $poslist->save();
+            }
+            // Orders::where('id', $data['orders_id'])->update(['tendered' => $tendered, 'change' => 0]);
+
+            $productsDetails = PosList::where('author_id', Auth::id())->get();
+            $productsDetails = json_decode($productsDetails, true);
+            return view('pages.orders.products', compact('productsDetails'));
+        }
+    }
+
+    public function previewOrderProducts(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $output = '';
+            $order_product_detail = OrderProduct::where('orders_id', $data['orders_id'])->get();
+            $categoryLabel = __( 'Category' );
+
+            foreach ($order_product_detail as $products) {
+                $product_det = Product::with('category')->where('id', $products->product_id)->firstOrFail();
+                $output .= '<div class="item">
+                              <div class="flex-col border-b border-info-primary py-2">
+                                  <div class="title font-semibold text-primary flex justify-between">
+                                      <span>'.$products->product_name.' (x'.$products->quantity.')</span>
+                                      <span>'.$this->currency($products->pos_subtotal).'</span>
+                                  </div>
+                                  <div class="text-sm text-primary">
+                                      <ul>
+                                          <li>'.$categoryLabel.' : '.$product_det->category->name.'</li>
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>';
+            }
+
+          return Response($output);
+        }
+    }
+
+    public function cancelOrders(Request $request)
+    {
+       if ($request->ajax()) {
+          $data = $request->all();
+
+          $orders_products = OrderProduct::where(['orders_id' => $data['orders_id'], 'author_id' => Auth::id()])->get();
+
+          foreach ($orders_products as $product) {
+             OrderProduct::where('product_id', $product->product_id)->delete();
+          }
+
+          Orders::where('id', $data['orders_id'])->delete();
+       }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -326,17 +531,30 @@ class OrdersController extends Controller
 
         $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
 
-        $order = new Orders;
+        if ($data['orders_id'] != '') {
 
-        $order->payment_status = "paid";
-        $order->discount = $data['discount'];
-        $order->subtotal = $data['subtotal'];
-        $order->total = $data['total'];
-        $order->customer_id = $customersDetail->id;
-        $order->author = Auth::id();
+            Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
+            ->update([
+              "discount" => $data["discount"],
+              "subtotal" => $data["subtotal"],
+              "tendered" => $data["total"],
+              "change" => 0,
+            ]);
 
-        $order->save();
+        }else {
+            $order = new Orders;
 
+            $order->payment_status = "paid";
+            $order->discount = $data['discount'];
+            $order->subtotal = $data['subtotal'];
+            $order->tendered = $data['total'];
+            $order->total = $data['total'];
+            $order->customer_id = $customersDetail->id;
+            $order->author = Auth::id();
+
+            $order->save();
+
+        }
 
         foreach ($data['product_id'] as $key => $value) {
             $product_id  = $data['product_id'][$key];
@@ -372,8 +590,13 @@ class OrdersController extends Controller
         foreach ($productDetail["product_id"] as $key => $value) {
             $ordersProducts = new OrderProduct;
             $products = Product::with('category')->where('id', $value)->get();
-            $orders = Orders::where('created_at', now())->latest()->firstOrFail();
+            if ($data['orders_id'] != '') {
+              $Orders = Orders::where('updated_at', now())->latest()->firstOrFail();
+            }else {
+              $Orders = Orders::where('created_at', now())->latest()->firstOrFail();
+            }
             $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
+            $in_orders_product = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->firstOrFail();
             $productHistories = new ProductHistory;
             $inventories = new Inventory;
 
@@ -387,20 +610,18 @@ class OrdersController extends Controller
                 $productCatId = $product->category->id;
                 $ordersProducts->product_category_id = $productCatId;
             }
-            $ordersProducts->product_id = $value;
-            $ordersProducts->order_id = $orders->id;
-            $ordersProducts->product_name = $productDetail["product_name"][$key];
-            $ordersProducts->quantity = $productDetail["product_quantity"][$key];
-            $ordersProducts->unit_price = $productDetail["product_price"][$key];
-            $ordersProducts->pos_subtotal = $productDetail["pos_subtotal"][$key];
-            $ordersProducts->author_id = Auth::id();
 
-            $ordersProducts->save();
+            if (!$in_orders_product) {
+                $ordersProducts->product_id = $value;
+                $ordersProducts->orders_id = $Orders->id;
+                $ordersProducts->product_name = $productDetail["product_name"][$key];
+                $ordersProducts->quantity = $productDetail["product_quantity"][$key];
+                $ordersProducts->unit_price = $productDetail["product_price"][$key];
+                $ordersProducts->pos_subtotal = $productDetail["pos_subtotal"][$key];
+                $ordersProducts->author_id = Auth::id();
 
-            $orderDetail = OrderProduct::where('created_at', now())->get();
-            foreach ($orderDetail as $order_detail) {
-                $order_id = $order_detail->id;
-                $orders = $order_detail;
+                $ordersProducts->save();
+
             }
 
 
@@ -411,7 +632,7 @@ class OrdersController extends Controller
             $productHistories->product_name = $productDetail["product_name"][$key];
             $productHistories->procurement_name = "N/A";
             $productHistories->product_id = $value;
-            $productHistories->orders_id = $ProductOrderDetails->id;
+            $productHistories->order_id = $ProductOrderDetails->id;
             $productHistories->operation = __('Sold');
             $productHistories->before_quantity = $ProductHistoryDetails->after_quantity;
             $productHistories->quantity = $productDetail["product_quantity"][$key];
@@ -430,8 +651,15 @@ class OrdersController extends Controller
         }
 
         // Cash Flow History
+        $in_orders_product = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->firstOrFail();
+        if (!$in_orders_product) {
+            $ordersDetails = OrderProduct::where('created_at', now())->get();
+            $orders = Orders::where('created_at', now())->firstOrFail();
+        }else {
+            $ordersDetails = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->get();
+            $orders = Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->firstOrFail();
+        }
 
-        $orders_details = OrderProduct::where('created_at', now())->firstOrFail();
         $expenseCategories = ExpenseCategory::where('account', '001')->firstOrFail();
 
 
@@ -440,22 +668,20 @@ class OrdersController extends Controller
         $date_generate = DATE_FORMAT(now(), 'dmy');
 
         $cash_flows->name = $date_generate.'-00'.rand(1,9);
-        $cash_flows->order_id = $orders_details->id;
+        $cash_flows->order_id = $orders->id;
         $cash_flows->expense_category_id = $expenseCategories->id;
         $cash_flows->value = $data["total"];
         $cash_flows->operation = 'credit';
         $cash_flows->author_id = Auth::id();
 
         $cash_flows->save();
+
         // echo "</pre>"; print_r($date_generate); die;
 
         $category = ProductCategory::get();
         foreach ($category as $cat) {
             $categoryDetail = $cat;
         }
-
-        $ordersDetails = OrderProduct::where('created_at', now())->get();
-        $orders = Orders::where('created_at', now())->firstOrFail();
 
         $before_purchases_amount = $customersDetail->purchases_amount;
         $purchases_amout = $before_purchases_amount + $orders->total;

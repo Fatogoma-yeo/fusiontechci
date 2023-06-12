@@ -10,6 +10,7 @@
     <input type="text" name="subtotal" id="product_subtotal">
     <input type="text" name="total" id="product_total">
     <input type="text" name="discount" id="discount_total">
+    <input type="text" name="orders_id" id="proceed_orders_id">
 
 </form>
 @push('javascript')
@@ -18,6 +19,7 @@
             $("#save_posForm").on('click', function(){
                 var customer_name = document.getElementById('pos_customer').textContent;
                 var ids = document.getElementById('pos_product_id').textContent;
+                var order_id = document.getElementById('orders_id').textContent;
                 var subtotal = document.getElementById('subTotal').textContent;
                 var rabais = document.getElementById('rabais').textContent;
                 var total = document.getElementById('Total').textContent;
@@ -59,6 +61,7 @@
                     document.getElementById("product_subtotal").value = subtotal;
                     document.getElementById("product_total").value = total;
                     document.getElementById("discount_total").value = rabais;
+                    document.getElementById("proceed_orders_id").value = order_id;
                 }
             });
         });
