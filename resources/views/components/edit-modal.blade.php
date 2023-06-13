@@ -86,20 +86,29 @@ $maxWidth = [
                   url: "{{ route('quantity.change') }}",
                   data:{"quantity": val.value, "product_id": id},
                   success: function(response){
-                      $('.product_list').html(response);
-                      $(function () {
-                          var gtotal = 0;
-                          var discounTotal = 0;
-                          $("[id*=posSubTotals]").each(function(){
-                              gtotal = gtotal + parseFloat($(this).html());
+                      if (response.action == 'low_quantity') {
+                          $('#notifDiv').fadeIn();
+                          $('#notifDiv').css('background', 'red');
+                          $('#notifDiv').text(response.message);
+                          setTimeout(() => {
+                              $('#notifDiv').fadeOut();
+                          }, 5000);
+                      }else {
+                          $('.product_list').html(response);
+                          $(function () {
+                              var gtotal = 0;
+                              var discounTotal = 0;
+                              $("[id*=posSubTotals]").each(function(){
+                                  gtotal = gtotal + parseFloat($(this).html());
+                              });
+                              $("[id*=rabais]").each(function(){
+                                  discounTotal = discounTotal + parseFloat($(this).html());
+                              });
+                              $('#subTotal').html(gtotal.toString());
+                              $('#Total').html(gtotal.toString() - discounTotal.toString());
                           });
-                          $("[id*=rabais]").each(function(){
-                              discounTotal = discounTotal + parseFloat($(this).html());
-                          });
-                          $('#subTotal').html(gtotal.toString());
-                          $('#Total').html(gtotal.toString() - discounTotal.toString());
-                      });
-                      counter();
+                          counter();
+                      }
                   },
               });
             }

@@ -302,11 +302,16 @@ class OrdersController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             // echo "<pre>"; print_r($data); die;
-            PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['quantity' => $data['quantity']]);
+            $History_product = ProductHistory::where('product_id', $data['product_id'])->latest()->firstOrFail();
+            if ($History_product->after_quantity >= $data['quantity']) {
+                PosList::where(['product_id' => $data['product_id'], 'author_id' => Auth::id()])->update(['quantity' => $data['quantity']]);
 
-            $productsDetails = PosList::where('author_id', Auth::id())->get();
-            $productsDetails = json_decode($productsDetails, true);
-            return view('pages.orders.products', compact('productsDetails'));
+                $productsDetails = PosList::where('author_id', Auth::id())->get();
+                $productsDetails = json_decode($productsDetails, true);
+                return view('pages.orders.products', compact('productsDetails'));
+            }else {
+                return response()->json(['action' => 'low_quantity', 'message' => 'La quantité restante de ce produit ne peut pas supporter cette commande. Reste '.$History_product->after_quantity.' !']);
+            }
         }
     }
 
