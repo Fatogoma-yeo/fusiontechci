@@ -225,7 +225,10 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        unlink(public_path($product->media));
+        
+        if ($product->media) {
+            unlink(public_path($product->media));
+        }
 
         return redirect()->back()->with('success', 'Le produit a été supprimer avec succès !');
     }
