@@ -592,12 +592,12 @@ class OrdersController extends Controller
             $ordersProducts = new OrderProduct;
             $products = Product::with('category')->where('id', $value)->get();
             if ($data['orders_id'] != '') {
-              $Orders = Orders::where('updated_at', now())->latest()->firstOrFail();
+              $Orders = Orders::where('id', $data['orders_id'])->latest()->firstOrFail();
             }else {
               $Orders = Orders::where('created_at', now())->latest()->firstOrFail();
             }
             $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
-            $in_orders_product = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->firstOrFail();
+            $in_orders_product = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->first();
             $productHistories = new ProductHistory;
             $inventories = new Inventory;
 
@@ -629,7 +629,11 @@ class OrdersController extends Controller
             // Product History
             $procurementProductDetails = ProcurementsProduct::where('product_id', $value)->latest()->firstOrFail();
             $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
-            $ProductOrderDetails = OrderProduct::where('product_id', $value)->latest()->firstOrFail();
+            if (!$in_orders_product) {
+                $ProductOrderDetails = OrderProduct::where(['product_id' => $value, 'created_at' => now()])->latest()->firstOrFail();
+            }else {
+                $ProductOrderDetails = OrderProduct::where('orders_id', $data['orders_id'])->latest()->firstOrFail();
+            }
             $productHistories->product_name = $productDetail["product_name"][$key];
             $productHistories->procurement_name = "N/A";
             $productHistories->product_id = $value;
@@ -645,14 +649,12 @@ class OrdersController extends Controller
             $productHistories->save();
 
 
-            $ProductsHistoryDetails = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
-            $inventories_quantity = $ProductsHistoryDetails->after_quantity;
+            $inventories_quantity = $ProductHistoryDetails->after_quantity;
             Inventory::where('product_id', $value)->update(['after_quantity' => $inventories_quantity]);
 
         }
 
         // Cash Flow History
-        $in_orders_product = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->firstOrFail();
         if (!$in_orders_product) {
             $ordersDetails = OrderProduct::where('created_at', now())->get();
             $orders = Orders::where('created_at', now())->firstOrFail();
