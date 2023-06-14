@@ -405,7 +405,7 @@ class OrdersController extends Controller
 
             foreach ($data['product_id'] as $key => $value) {
                 $ordersDetails = new OrderProduct;
-                $Order = Orders::where('created_at', now())->latest()->firstOrFail();
+                $Order = Orders::where(['created_at' => now(), 'author' => Auth::id()])->latest()->firstOrFail();
                 $products = Product::with('category')->where('id', $value)->get();
                 $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
 
@@ -599,7 +599,7 @@ class OrdersController extends Controller
             if ($data['orders_id'] != '') {
               $Orders = Orders::where('id', $data['orders_id'])->latest()->firstOrFail();
             }else {
-              $Orders = Orders::where('created_at', now())->latest()->firstOrFail();
+              $Orders = Orders::where(['created_at' => now(), 'author' => Auth::id()])->latest()->firstOrFail();
             }
             $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
             $in_orders_product = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->first();
@@ -662,8 +662,8 @@ class OrdersController extends Controller
 
         // Cash Flow History
         if (!$in_orders_product) {
-            $ordersDetails = OrderProduct::where('created_at', now())->get();
-            $orders = Orders::where('created_at', now())->firstOrFail();
+            $ordersDetails = OrderProduct::where(['created_at' => now(), 'author_id' => Auth::id()])->get();
+            $orders = Orders::where(['created_at' => now(), 'author' => Auth::id()])->firstOrFail();
         }else {
             $ordersDetails = OrderProduct::where(["orders_id" => $data['orders_id'], "author_id" => Auth::id()])->get();
             $orders = Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->firstOrFail();
