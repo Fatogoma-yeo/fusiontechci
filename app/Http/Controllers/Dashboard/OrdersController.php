@@ -654,7 +654,8 @@ class OrdersController extends Controller
             $productHistories->save();
 
 
-            $inventories_quantity = $ProductHistoryDetails->after_quantity;
+            $product_history_details = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
+            $inventories_quantity = $product_history_details->after_quantity;
             Inventory::where('product_id', $value)->update(['after_quantity' => $inventories_quantity]);
 
         }
