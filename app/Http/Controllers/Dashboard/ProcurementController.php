@@ -224,7 +224,7 @@ class ProcurementController extends Controller
                     $inventoryDetails = Inventory::where('product_id', $value)->latest()->firstOrFail();
                     $inventory_quantity = $inventoryDetails->before_quantity + $data['quantity'][$key];
 
-                    Inventory::where('product_id', $value)->update(['before_quantity' =>$inventory_quantity]);
+                    Inventory::where('product_id', $value)->update(['after_quantity' =>$inventory_quantity]);
                     break;
             }
 
