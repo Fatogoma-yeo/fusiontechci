@@ -98,128 +98,128 @@ class OrdersController extends Controller
     {
       if ($request->ajax()) {
 
-           $output = '';
-           $procurementDetail = ProcurementsProduct::with('product')->where('product_name','LIKE','%'.$request->pos_search."%")->get();
-           $products_Detail = Product::with('procurement')->where('name','LIKE','%'.$request->pos_search."%")->get();
+            $output = '';
+            $products_Detail = Product::with('procurement')->where('name','LIKE','%'.$request->pos_search."%")->get();
 
-           if ($request->pos_search != '') {
+            if ($request->pos_search != '') {
 
-               foreach ($procurementDetail as $key => $procurement) {
-                       $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
-                                       x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
-                                       <a href="#">
-                                           <input type="text" class="hidden" name="product_id" id="product_id" value='.$procurement->product->id.'  >';
+                foreach ($products_Detail as $products) {
+                    if (count($products->procurement) > 0) {
+                        foreach ($products->procurement->unique(fn ($p) => $p->gross_purchase_price) as $product) {
+                                $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
+                                                x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
+                                                <a href="#">
+                                                    <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->product_id.'  >';
 
-                       if($procurement->product->media){
-                           $output .= '<img src='.$procurement->product->media.' class="h-full w-full" alt="Image Produits" />';
-                       }else {
-                           $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
-                                           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                       </svg>';
-                       }
+                                if($products->media){
+                                    $output .= '<img src='.$products->media.' class="h-full object-cover" alt="Image Produits" />';
+                                }else {
+                                    $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                                </svg>';
+                                }
 
-                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
-                                       <span class="flex justify-center">
-                                           <h2 class="text-sm font-bold">'.$procurement->product->name.'</h2>
-                                       </span>
-                                       <span class="flex justify-center">
-                                           <h3 class="text-sm font-bold">'.
-                                             $this->currency($procurement->net_purchase_price ).'
-                                           </h3>
-                                         </span>
-                                     </div>
-                                 </a>
-                             </div>';
-               }
+                                $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
+                                                <span class="flex justify-center">
+                                                    <h2 class="text-sm font-bold">'.$product->product_name.'</h2>
+                                                </span>
+                                                <span class="flex justify-center">
+                                                    <h3 class="text-sm font-bold">'.
+                                                      $this->currency($product->net_purchase_price ).'
+                                                    </h3>
+                                                  </span>
+                                              </div>
+                                          </a>
+                                      </div>';
+                        }
+                    }else {
+                        $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
+                                        x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
+                                        <a href="#">
+                                            <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->id.'  >';
 
-               foreach ($products_Detail as $key => $product) {
-                 if (count($product->procurement) == 0) {
-                   $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
-                                   x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
-                                   <a href="#">
-                                       <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->id.'  >';
+                        if($products->media){
+                            $output .= '<img src='.$products->media.' class="h-full object-cover" alt="Image Produits" />';
+                        }else {
+                            $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                        </svg>';
+                        }
 
-                   if($product->media){
-                       $output .= '<img src='.$product->media.' class="h-full w-full" alt="Image Produits" />';
-                   }else {
-                       $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
-                                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                   </svg>';
-                   }
+                        $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
+                                        <span class="flex justify-center">
+                                            <h2 class="text-sm font-bold">'.$products->name.'</h2>
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>';
 
-                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
-                                   <span class="flex justify-center">
-                                       <h2 class="text-sm font-bold">'.$product->name.'</h2>
-                                   </span>
-                               </div>
-                           </a>
-                       </div>';
-                 }
-               }
+                    }
+                }
 
-               return Response($output);
+                return Response($output);
 
-           }else {
+            }else {
 
-               $output = '';
-               $procurementDetail = ProcurementsProduct::with('product')->get();
-               $products_Detail = Product::with('procurement')->get();
+                $output = '';
+                $products_Detail = Product::with('procurement')->get();
 
-               foreach ($procurementDetail as $key => $procurement) {
-                       $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
-                                       x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
-                                       <a href="#">
-                                           <input type="text" class="hidden" name="product_id" id="product_id" value='.$procurement->product->id.'  >';
+                foreach ($products_Detail as $products) {
+                    if (count($products->procurement) > 0) {
+                        foreach ($products->procurement->unique(fn ($p) => $p->gross_purchase_price) as $product) {
+                                $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
+                                                x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
+                                                <a href="#">
+                                                    <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->product_id.'  >';
 
-                       if($procurement->product->media){
-                           $output .= '<img src='.$procurement->product->media.' class="h-full w-full" alt="Image Produits" />';
-                       }else {
-                           $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
-                                           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                       </svg>';
-                       }
+                                if($products->media){
+                                    $output .= '<img src='.$products->media.' class="h-full object-cover" alt="Image Produits" />';
+                                }else {
+                                    $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                                </svg>';
+                                }
 
-                       $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
-                                       <span class="flex justify-center">
-                                           <h2 class="text-sm font-bold">'.$procurement->product->name.'</h2>
-                                       </span>
-                                       <span class="flex justify-center">
-                                           <h3 class="text-sm font-bold">'.
-                                             $this->currency($procurement->net_purchase_price ).'
-                                           </h3>
-                                         </span>
-                                     </div>
-                                 </a>
-                             </div>';
-               }
+                                $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
+                                                <span class="flex justify-center">
+                                                    <h2 class="text-sm font-bold">'.$product->product_name.'</h2>
+                                                </span>
+                                                <span class="flex justify-center">
+                                                    <h3 class="text-sm font-bold">'.
+                                                      $this->currency($product->net_purchase_price ).'
+                                                    </h3>
+                                                  </span>
+                                              </div>
+                                          </a>
+                                      </div>';
+                        }
+                    }else {
+                        $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
+                                        x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
+                                        <a href="#">
+                                            <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->id.'  >';
 
-               foreach ($products_Detail as $key => $product) {
-                 if (count($product->procurement) == 0) {
-                   $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
-                                   x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
-                                   <a href="#">
-                                       <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->id.'  >';
+                        if($products->media){
+                            $output .= '<img src='.$products->media.' class="h-full object-cover" alt="Image Produits" />';
+                        }else {
+                            $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                        </svg>';
+                        }
 
-                   if($product->media){
-                       $output .= '<img src='.$product->media.' class="h-full w-full" alt="Image Produits" />';
-                   }else {
-                       $output .= '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full">
-                                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                   </svg>';
-                   }
+                        $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
+                                        <span class="flex justify-center">
+                                            <h2 class="text-sm font-bold">'.$products->name.'</h2>
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>';
 
-                   $output .=' <div class="absolute bottom-0 flex flex-col bg-gray-200 opacity-75 px-1 shadow-md w-full h-20 py-2 text-center">
-                                   <span class="flex justify-center">
-                                       <h2 class="text-sm font-bold">'.$product->name.'</h2>
-                                   </span>
-                               </div>
-                           </a>
-                       </div>';
-                 }
-               }
+                    }
+                }
 
-               return Response($output);
-           }
+                return Response($output);
+            }
        }
     }
 
