@@ -132,7 +132,7 @@ class ProcurementController extends Controller
 
         $procurement->save();
 
-        $procurementDetail = Procurement::where('created_at', now())->firstOrFail();
+        $procurementDetail = Procurement::where('author_id', Auth::id())->latest()->firstOrFail();
         $expenseCategories = ExpenseCategory::where('account', '002')->firstOrFail();
 
         $cash_flows->name = $data['name'];
@@ -146,12 +146,6 @@ class ProcurementController extends Controller
 
         foreach ($data['product_id'] as $key => $value) {
             // procurement product
-            $procurementDetail = Procurement::where('created_at', Carbon::now())->get();
-            foreach ($procurementDetail as $procurement_detail) {
-                $procurement_id = $procurement_detail->id;
-                $procurement_name = $procurement_detail->name;
-            }
-
             $procurementProduct = new ProcurementsProduct;
             $productHistories = new ProductHistory;
             $inventories = new Inventory;
@@ -163,7 +157,7 @@ class ProcurementController extends Controller
             $procurementProduct->product_name = $product_name;
             $procurementProduct->gross_purchase_price = $data['gross_purchase_price'][$key];
             $procurementProduct->net_purchase_price = $data['net_purchase_price'][$key];
-            $procurementProduct->procurement_id = $procurement_id;
+            $procurementProduct->procurement_id = $procurementDetail->id;
             $procurementProduct->product_id = $value;
             $procurementProduct->quantity = $data['quantity'][$key];
             $procurementProduct->purchase_price = $data['purchase_price'][$key];
@@ -179,8 +173,8 @@ class ProcurementController extends Controller
                 case 0:
                     $productHistories->product_name = $product_name;
                     $productHistories->purchase_price = $data['purchase_price'][$key];
-                    $productHistories->procurement_id = $procurement_id;
-                    $productHistories->procurement_name = $procurement_name;
+                    $productHistories->procurement_id = $procurementDetail->id;
+                    $productHistories->procurement_name = $procurementDetail->name;
                     $productHistories->product_id = $value;
                     $productHistories->operation = __('Stocked');
                     $productHistories->before_quantity = 0;
@@ -198,8 +192,8 @@ class ProcurementController extends Controller
                     $ProductHistoryDetails = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
                     $productHistories->product_name = $product_name;
                     $productHistories->purchase_price = $data['purchase_price'][$key];
-                    $productHistories->procurement_id = $procurement_id;
-                    $productHistories->procurement_name = $procurement_name;
+                    $productHistories->procurement_id = $procurementDetail->id;
+                    $productHistories->procurement_name = $procurementDetail->name;
                     $productHistories->product_id = $value;
                     $productHistories->operation = __('Stocked');
                     $productHistories->before_quantity = $ProductHistoryDetails->after_quantity;
@@ -237,39 +231,20 @@ class ProcurementController extends Controller
             // echo '<pre>';print_r($procurement);die;
         }
 
-        $provider_purchases = Procurement::where('created_at', Carbon::now())
-        ->select(
-            DB::raw('name as name'),
-            DB::raw('payment_status as payment_status'),
-            DB::raw('provider_id as provider_id'),
-            DB::raw('cost as total')
-        )
-        ->groupBy('payment_status')
-        ->groupBy('provider_id')
-        ->groupBy('name')
-        ->groupBy('total')
-        ->get();
-
-        // echo '<pre>';print_r($provider_purchases);die;
-        foreach ($provider_purchases as $provider_purchase) {
-            $purchaseDetails = $provider_purchase;
-        }
-
-        $provider = Provider::where('id', $purchaseDetails->provider_id)->firstOrFail();
-        if ($purchaseDetails->payment_status == 'paid') {
-            $provider->update(['amount_paid' => $purchaseDetails->total]);
+        $provider = Provider::where('id', $procurementDetail->provider_id)->firstOrFail();
+        if ($procurementDetail->payment_status == 'paid') {
+            $provider->update(['amount_paid' => $procurementDetail->cost]);
         }else {
-            $provider->update(['amount_du' => $purchaseDetails->total]);
+            $provider->update(['amount_du' => $procurementDetail->cost]);
         }
 
         $notification = new Notification;
-        $procurements = Procurement::where('created_at', now())->firstOrFail();
-        $action_user = User::where('id', $procurements->author_id)->firstOrFail();
+        $action_user = User::where('id', $procurementDetail->author_id)->firstOrFail();
         $users = User::where('email', 'comptabilite@fusiontechci.com')->firstOrFail();
 
         $notification->title = "Achats";
         $notification->user_id = $users->id;
-        $notification->description = "Nouvel achat effectué par ".$action_user->name." chez ".$provider->name." portant la référence ".$procurements->name;
+        $notification->description = "Nouvel achat effectué par ".$action_user->name." chez ".$provider->name." portant la référence ".$procurementDetail->name;
 
         $notification->save();
 
