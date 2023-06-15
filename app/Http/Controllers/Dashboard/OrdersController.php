@@ -506,10 +506,10 @@ class OrdersController extends Controller
           $orders_products = OrderProduct::where(['orders_id' => $data['orders_id'], 'author_id' => Auth::id()])->get();
 
           foreach ($orders_products as $product) {
-             OrderProduct::where('product_id', $product->product_id)->delete();
+             OrderProduct::where(['product_id' => $product->product_id, 'author_id' => Auth::id()])->delete();
           }
 
-          Orders::where('id', $data['orders_id'])->delete();
+          Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->delete();
        }
     }
 

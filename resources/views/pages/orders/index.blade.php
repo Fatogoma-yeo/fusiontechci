@@ -429,7 +429,6 @@
     function waiting_pos() {
         var ids = document.getElementById('pos_product_id');
         var customer = document.getElementById('pos_customer').textContent;
-        console.log(customer);
         if (ids) {
             if (customer != "N/A") {
               waitingfunction();
@@ -459,7 +458,7 @@
                 data: {"orders_id": orderId},
                 success: function (response) {
                     window.location.reload();
-                }
+                },
             });
         }else {
             $('#notifDiv').fadeIn();
@@ -478,7 +477,6 @@
             data: {"orders_id": query},
             success: function (response) {
                 document.getElementById('pos_customer').innerText = response;
-                console.log(response);
             }
         });
     }
@@ -508,7 +506,6 @@
                 data: {'pending_search': query},
                 success: function (data) {
                     $('#pending_products').html(data);
-                    console.log(data);
                 }
             });
         }
