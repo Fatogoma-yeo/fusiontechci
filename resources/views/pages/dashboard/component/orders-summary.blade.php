@@ -3,14 +3,14 @@
     <div class="p-2 flex title justify-between border-b">
         <h3 class="font-semibold">{{ __( 'Recents Orders' ) }}</h3>
         <div class="">
-            
+
         </div>
     </div>
     <div class="head flex-auto flex-col flex h-56 overflow-y-auto ns-scrollbar">
         @forelse ($order_sammary as $order)
-            <div class="border-b border-green-600 bg-green-300 p-2 flex justify-between">
+            <div class="border-b @if($order->tendered != 0) border-green-600 bg-green-300 @else border-red-500 bg-red-400 @endif p-2 flex justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">{{ __( 'Order' ) }} : {{ $order->ref }}</h3>
+                    <h3 class="text-lg font-semibold">{{ __( 'Order' ) }} : {{ $order->code }}</h3>
                     <div class="flex -mx-2">
                         <div class="px-1">
                             <h4 class="text-semibold text-xs">
@@ -19,7 +19,7 @@
                                 </svg>
                                 <span>
                                     @foreach ($userDetails as $user)
-                                        @if($user->id == $order->author_id)
+                                        @if($user->id == $order->author)
                                             {{ $user->name }}
                                         @endif
                                     @endforeach
@@ -32,13 +32,13 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-flex">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>{{ $order["day"] }}</span>
+                                <span>{{ DATE_FORMAT($order->created_at,"d-m-Y H:m:s") }}</span>
                             </h4>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h2 class="text-lg font-bold">@currency($order["dayTotal"])</h2>
+                    <h2 class="text-lg font-bold">@currency($order->total)</h2>
                 </div>
             </div>
         @empty

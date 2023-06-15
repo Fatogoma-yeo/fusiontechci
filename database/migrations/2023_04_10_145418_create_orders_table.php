@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string( 'payment_status' ); // paid, unpaid, partially_paid
             $table->string( 'process_status' )->default( 'pending' ); // complete, ongoing, pending
             $table->string( 'delivery_status' )->default( 'pending' ); // pending, shipped, delivered,
+            $table->string( 'code' );
             $table->float( 'discount', 18, 5 )->default(0);
             $table->string( 'discount_type' )->nullable();
             $table->boolean( 'support_instalments' )->default(true); // define wether an order should only be paid using instalments feature

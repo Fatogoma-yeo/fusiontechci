@@ -136,7 +136,7 @@ class OrdersController extends Controller
                         $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
                                         x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
                                         <a href="#">
-                                            <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->id.'  >';
+                                            <input type="text" class="hidden" name="product_id" id="product_id" value='.$products->id.'  >';
 
                         if($products->media){
                             $output .= '<img src='.$products->media.' class="h-full object-cover" alt="Image Produits" />';
@@ -197,7 +197,7 @@ class OrdersController extends Controller
                         $output .= '<div class="relative border border-r-0 border-t-0" x-data=""
                                         x-on:click.prevent="$dispatch(\'open-modal\', \'confirm-product\')" onclick="getproductfunc(this)">
                                         <a href="#">
-                                            <input type="text" class="hidden" name="product_id" id="product_id" value='.$product->id.'  >';
+                                            <input type="text" class="hidden" name="product_id" id="product_id" value='.$products->id.'  >';
 
                         if($products->media){
                             $output .= '<img src='.$products->media.' class="h-full object-cover" alt="Image Produits" />';
@@ -390,8 +390,11 @@ class OrdersController extends Controller
 
             $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
 
+            $date_generate = DATE_FORMAT(now(), 'dmy');
+
             $orders = new Orders;
 
+            $orders->code = $date_generate.'-00'.rand(1,9);
             $orders->payment_status = "paid";
             $orders->discount = $data['discount'];
             $orders->subtotal = $data['subtotal'];
@@ -537,6 +540,8 @@ class OrdersController extends Controller
 
         $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
 
+        $date_generate = DATE_FORMAT(now(), 'dmy');
+
         if ($data['orders_id'] != '') {
 
             Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
@@ -550,6 +555,7 @@ class OrdersController extends Controller
         }else {
             $order = new Orders;
 
+            $order->code = $date_generate.'-00'.rand(1,9);
             $order->payment_status = "paid";
             $order->discount = $data['discount'];
             $order->subtotal = $data['subtotal'];
@@ -673,8 +679,6 @@ class OrdersController extends Controller
 
 
         $cash_flows = new CashFlow;
-
-        $date_generate = DATE_FORMAT(now(), 'dmy');
 
         $cash_flows->name = $date_generate.'-00'.rand(1,9);
         $cash_flows->order_id = $orders->id;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Expense;
+use App\Models\Orders;
 use App\Models\OrderProduct;
 use App\Models\ProductHistory;
 use Carbon\Carbon;
@@ -35,16 +36,6 @@ class DashboardController extends Controller
         // }else {
         //     $current_day = 0;
         // }
-
-        $order_sammary = OrderProduct::select(
-            DB::raw('SUM(pos_subtotal) as dayTotal'),
-            DB::raw('author_id as author_id'),
-            DB::raw('DATE_FORMAT(created_at,"%d-%m-%Y %H:%m:%s") as day')
-        )
-        ->groupBy('day')
-        ->groupBy('author_id')
-        ->orderBy('day','DESC')
-        ->get();
 
         $current_weeks = OrderProduct::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
         ->select(
@@ -85,15 +76,7 @@ class DashboardController extends Controller
         }
         // echo "<pre>"; print_r($current_day); die;
 
-        $order_sammary = OrderProduct::select(
-            DB::raw('SUM(pos_subtotal) as dayTotal'),
-            DB::raw('author_id as author_id'),
-            DB::raw('DATE_FORMAT(created_at,"%d-%m-%Y %H:%m:%s") as day')
-        )
-        ->groupBy('day')
-        ->groupBy('author_id')
-        ->orderBy('day','DESC')
-        ->get();
+        $order_sammary = Orders::limit(10)->get();
 
         $expense_sammary = Expense::select(
             DB::raw('SUM(value) as total'),
