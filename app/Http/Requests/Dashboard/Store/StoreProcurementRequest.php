@@ -28,4 +28,12 @@ class StoreProcurementRequest extends FormRequest
             'provider_id' => 'required',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.unique' => 'Un approvisionnement portant ce nom existe déjà.',
+            'provider_id.required' => 'Affectez un fournisseur à l\'approvisionnement',
+        ];
+    }
 }

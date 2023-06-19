@@ -29,6 +29,15 @@
                     </x-button>
                 </div>
             </div>
+            @error('name')
+                <p
+                    x-data="{ show: true }"
+                    x-show="show"
+                    x-transition
+                    x-init="setTimeout(() => show = false, 8000)"
+                    class="text-md text-white bg-red-500 rounded-md shadow-md w-60 px-4"
+                >{{ $message }}</p>
+            @enderror
 
             <ul class="pt-2 px-2">
                 <li  class="" @click=" openTab = 1 ">

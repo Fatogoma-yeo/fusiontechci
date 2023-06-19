@@ -1,11 +1,11 @@
 <section>
     <header>
-        <h2 class="text-lg font-bold text-gray-900 flex justify-center">
-            {{ __('Profile Information') }}
+        <h2 class="text-2xl font-bold text-gray-900 flex justify-center underline">
+            {{ __('My Profile') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Define what is the user first name. If not provided, the username is used instead.") }}
         </p>
     </header>
 
@@ -25,7 +25,7 @@
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" readonly/>
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -47,7 +47,7 @@
             @endif
         </div>
 
-        <div class="flex items-center justify-end gap-4">
+        <div class="md:flex items-center justify-end gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
@@ -55,9 +55,9 @@
                     x-data="{ show: true }"
                     x-show="show"
                     x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
+                    x-init="setTimeout(() => show = false, 3000)"
                     class="text-sm text-green-600"
-                >{{ __('Saved.') }}</p>
+                >{{ __('The profile has been successfully saved.') }}</p>
             @endif
         </div>
     </form>
