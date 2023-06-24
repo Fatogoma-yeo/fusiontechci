@@ -31,6 +31,7 @@
 
         function numbers(v){
             cash.value+=v;
+            document.getElementById("cash_value").value = cash.value;
         }
 
         function cancels(){

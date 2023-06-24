@@ -13,6 +13,8 @@ use App\Models\PosList;
 use App\Models\Client;
 use App\Models\CashFlow;
 use App\Models\OrderProduct;
+use App\Models\OrderInstalment;
+use App\Models\OrderPayment;
 use App\Models\Orders;
 use App\Models\Inventory;
 use App\Models\User;
@@ -228,16 +230,17 @@ class OrdersController extends Controller
         if ($request->ajax()) {
 
              $output = '';
-             $ordersDetail = Orders::with('customer')->where('change', '<>', 0)->where('author', Auth::id())->get();
-             $ordersDetailCount = Orders::with('customer')->where('change', '<>', 0)->where('author', Auth::id())->count();
+             $ordersDetail = Orders::with('customer')->where('change', '!=', 0)->where(['tendered' => 0, 'author' => Auth::id()])->get();
+             $ordersDetailCount = Orders::with('customer')->where('change', '!=', 0)->where(['tendered' => 0, 'author' => Auth::id()])->count();
              $usersDetail = User::get();
              if ($ordersDetailCount > 0 ) {
-                $cashier = __('Cashier'); $total = __('Total'); $customer = __('Customer'); $date = __('Date'); $open = __('Open'); $product = __('Products'); $print = __('Print');
+                  $cashier = __('Cashier'); $total = __('Total'); $customer = __('Customer'); $date = __('Date'); $open = __('Open'); $product = __('Products'); $print = __('Print'); $type = __('on hold');
                 foreach ($ordersDetail as $key => $orders) {
                     $output .= '<div class="border-b w-full py-2">
                                     <div class="px-2">
                                         <div class="flex flex-wrap -mx-4">
-                                            <div class="md:w-1/2 p-1">';
+                                            <div class="md:w-1/2 p-1">
+                                               <p class="text-sm mt-1"><strong>Code</strong> : '.$orders->code.'</p>';
                                             foreach ($usersDetail as $user) {
                                                 if ($user->id == $orders->author) {
                                                     $output .='<p class="text-sm py-1"><strong>'.$cashier.'</strong> : '.$user->name.'</p>';
@@ -248,6 +251,7 @@ class OrdersController extends Controller
                                             <div class="md:w-1/2 p-1">
                                                 <p class="text-sm py-1"><strong>'.$customer.'</strong> : '.$orders->customer->name.'</p>
                                                 <p class="text-sm py-1"><strong>'.$date.'</strong> : '.$orders->created_at.'</p>
+                                                <p class="text-sm mt-1"><strong>Type</strong> : '.$type.'</p>
                                             </div>
                                         </div>
                                     </div>
@@ -288,6 +292,77 @@ class OrdersController extends Controller
                return Response($output);
              }
 
+        }
+    }
+
+    public function pendingPartialSearch(Request $request)
+    {
+        if ($request->ajax()) {
+
+             $output = '';
+             $ordersDetail = Orders::with('customer')->where('change', '!=', 0)->where('tendered', '!=', 0)->where('author', Auth::id())->get();
+             $ordersDetailCount = Orders::with('customer')->where('change', '!=', 0)->where('tendered', '!=', 0)->where('author', Auth::id())->count();
+             $usersDetail = User::get();
+
+              if ($ordersDetailCount > 0 ) {
+                  $cashier = __('Cashier'); $total = __('Total'); $customer = __('Customer'); $date = __('Date'); $paid = __('Paid'); $product = __('Products'); $print = __('Print'); $type = __('staggering'); $instalment = __('Installments');
+                  foreach ($ordersDetail as $key => $orders) {
+                      $output .= '<div class="border-b w-full py-2">
+                                      <div class="px-2">
+                                          <div class="flex flex-wrap -mx-4">
+                                              <div class="md:w-1/2 p-1">
+                                                 <p class="text-sm mt-1"><strong>Code</strong> : '.$orders->code.'</p>';
+                                              foreach ($usersDetail as $user) {
+                                                  if ($user->id == $orders->author) {
+                                                      $output .='<p class="text-sm mt-1"><strong>'.$cashier.'</strong> : '.$user->name.'</p>';
+                                                  }
+                                              }
+                      $output .=                '<p class="text-sm mt-1"><strong>'.$total.'</strong> : '.$this->currency($orders->total).'</p>
+                                                 <p class="text-sm mt-1"><strong>'.$instalment.'</strong> : '.$this->currency($orders->tendered).'</p>
+                                              </div>
+                                              <div class="md:w-1/2 p-1">
+                                                  <p class="text-sm mt-1"><strong>'.$customer.'</strong> : '.$orders->customer->name.'</p>
+                                                  <p class="text-sm mt-1"><strong>'.$date.'</strong> : '.$orders->created_at.'</p>
+                                                  <p class="text-sm mt-1"><strong>Type</strong> : '.$type.'</p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="flex justify-end w-full">
+                                          <div class="flex rounded-lg overflow-hidden ns-buttons">
+                                              <button onclick="proceedPaidOrder('.$orders->id.')" class="bg-blue-500 text-white outline-none px-2 py-1 text-sm">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                                                  </svg>
+                                                 '.$paid.'
+                                              </button>
+                                              <button @click="previewPartialOrder('.$orders->id.')" class="bg-green-600 text-white outline-none px-2 py-1 text-sm">
+                                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                  </svg>
+                                                  '.$product.'
+                                              </button>
+                                              <button @click="printOrder('.$orders->id.')" class="bg-orange-600 text-white outline-none px-2 py-1 text-sm">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+                                                 </svg>
+                                                 '.$print.'
+                                              </button>
+                                          </div>
+                                      </div>
+                                  </div>';
+                    }
+
+                  return Response($output);
+               }else {
+                 $nothing = __('Nothing to display...');
+
+                 $output .= '<div class="h-full v-full items-center justify-center flex">
+                                 <h3 class="text-semibold flex justify-center">'.$nothing.'</h3>
+                             </div>';
+
+                 return Response($output);
+               }
         }
     }
 
@@ -471,7 +546,103 @@ class OrdersController extends Controller
         }
     }
 
+    public function proceedPaidOrder(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            $order_instalment = new OrderInstalment;
+            $orders_payment = new OrderPayment;
+
+            $orders_detail = Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->firstOrFail();
+
+            OrderInstalment::where(['order_id' => $data['orders_id']])->delete();
+
+            if ( abs($orders_detail->change) == $data['cash'] ) {
+                Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
+                ->update([
+                  'payment_status' => 'paid',
+                  'tendered' => $orders_detail->tendered + $data['cash'],
+                  'change' => $orders_detail->change + $data['cash'],
+                ]);
+
+                $order_instalment->order_id = $data['orders_id'];
+                $order_instalment->amount_paid = $data['cash'] + $orders_detail->tendered;
+                $order_instalment->amount_unpaid = $orders_detail->total - ($data['cash'] + $orders_detail->tendered);
+
+                $order_instalment->save();
+
+                $orders_payment->order_id = $data['orders_id'];
+                $orders_payment->value = $data['cash'];
+                $orders_payment->author_id = Auth::id();
+
+                $orders_payment->save();
+
+            }elseif ( abs($orders_detail->change) > $data['cash'] ) {
+
+                Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
+                ->update([
+                  'tendered' => $orders_detail->tendered + $data['cash'],
+                  'change' => $orders_detail->change + $data['cash'],
+                ]);
+
+                $order_instalment->order_id = $data['orders_id'];
+                $order_instalment->amount_paid = $data['cash'] + $orders_detail->tendered;
+                $order_instalment->amount_unpaid = $orders_detail->total - ($data['cash'] + $orders_detail->tendered);
+
+                $order_instalment->save();
+
+                $orders_payment->order_id = $data['orders_id'];
+                $orders_payment->value = $data['cash'];
+                $orders_payment->author_id = Auth::id();
+
+                $orders_payment->save();
+
+            }elseif (abs($orders_detail->change) < $data['cash']) {
+                return response()->json(['action' => 'error', 'message' => 'La somme saisie est plus que celle dû. Merci de ressaisir la somme.']);
+            }
+        }
+    }
+
+    public function ordersDetail(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            $details = Orders::where(['id' => $data['order_id'], 'author' => Auth::id()])->firstOrFail();
+            return Response()->json(['orders' =>$details]);
+        }
+    }
+
     public function previewOrderProducts(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $output = '';
+            $order_product_detail = OrderProduct::where('orders_id', $data['orders_id'])->get();
+            $categoryLabel = __( 'Category' );
+
+            foreach ($order_product_detail as $products) {
+                $product_det = Product::with('category')->where('id', $products->product_id)->firstOrFail();
+                $output .= '<div class="item">
+                              <div class="flex-col border-b border-info-primary py-2">
+                                  <div class="title font-semibold text-primary flex justify-between">
+                                      <span>'.$products->product_name.' (x'.$products->quantity.')</span>
+                                      <span>'.$this->currency($products->pos_subtotal).'</span>
+                                  </div>
+                                  <div class="text-sm text-primary">
+                                      <ul>
+                                          <li>'.$categoryLabel.' : '.$product_det->category->name.'</li>
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>';
+            }
+
+          return Response($output);
+        }
+    }
+
+    public function previewPartialOrderProducts(Request $request)
     {
         if ($request->ajax()) {
             $data = $request->all();
@@ -552,19 +723,49 @@ class OrdersController extends Controller
               "change" => 0,
             ]);
 
-        }else {
+        }elseif ($data['orders_id'] == '') {
             $order = new Orders;
+            $order_instalment = new OrderInstalment;
+            $orders_payment = new OrderPayment;
 
-            $order->code = $date_generate.'-00'.rand(1,9);
-            $order->payment_status = "paid";
-            $order->discount = $data['discount'];
-            $order->subtotal = $data['subtotal'];
-            $order->tendered = $data['total'];
-            $order->total = $data['total'];
-            $order->customer_id = $customersDetail->id;
-            $order->author = Auth::id();
+            if ($data['cash_value'] != '' && $data['cash_value'] < $data['total']) {
+                $order->code = $date_generate.'-00'.rand(1,9);
+                $order->payment_status = "partially_paid";
+                $order->discount = $data['discount'];
+                $order->subtotal = $data['subtotal'];
+                $order->tendered = $data['cash_value'];
+                $order->change = $data['cash_value'] - $data['total'];
+                $order->total = $data['total'];
+                $order->customer_id = $customersDetail->id;
+                $order->author = Auth::id();
 
-            $order->save();
+                $order->save();
+
+                $orderId = Orders::where(['author' =>Auth::id(), 'created_at' =>now()])->latest()->firstOrFail();
+                $order_instalment->order_id = $orderId->id;
+                $order_instalment->amount_paid = $data['cash_value'];
+                $order_instalment->amount_unpaid = $data['total'] - $data['cash_value'];
+
+                $order_instalment->save();
+
+                $orders_payment->order_id = $orderId->id;
+                $orders_payment->value = $data['cash_value'];
+                $orders_payment->author_id = Auth::id();
+
+                $orders_payment->save();
+
+            }elseif ($data['cash_value'] == '' || $data['cash_value'] == $data['total']) {
+                $order->code = $date_generate.'-00'.rand(1,9);
+                $order->payment_status = "paid";
+                $order->discount = $data['discount'];
+                $order->subtotal = $data['subtotal'];
+                $order->tendered = $data['total'];
+                $order->total = $data['total'];
+                $order->customer_id = $customersDetail->id;
+                $order->author = Auth::id();
+
+                $order->save();
+            }
 
         }
 

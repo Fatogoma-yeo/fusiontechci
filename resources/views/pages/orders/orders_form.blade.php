@@ -11,6 +11,7 @@
     <input type="text" name="total" id="product_total">
     <input type="text" name="discount" id="discount_total">
     <input type="text" name="orders_id" id="proceed_orders_id">
+    <input type="text" name="cash_value" id="cash_value">
 
 </form>
 @push('javascript')

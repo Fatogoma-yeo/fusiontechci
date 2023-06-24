@@ -215,8 +215,18 @@
         x.style.overflow = "auto";
     }
 
+    function instalmentModalClosefun() {
+        document.getElementById('instalment-modal').style.display = "none";
+        x.style.overflow = "auto";
+    }
+
     function orderProductModalclosefun() {
         document.getElementById('order-products-modal').style.display = "none";
+        x.style.overflow = "auto";
+    }
+
+    function orderPartialProductModalclosefun() {
+        document.getElementById('order-partial-products-modal').style.display = "none";
         x.style.overflow = "auto";
     }
 
@@ -506,6 +516,19 @@
                 data: {'pending_search': query},
                 success: function (data) {
                     $('#pending_products').html(data);
+                }
+            });
+        }
+
+        fetch_partial_pending_data();
+
+        function fetch_partial_pending_data(query = '') {
+            $.ajax({
+                type: 'get',
+                url: "{{ route('pending.partial') }}",
+                data: {'partial_pending_search': query},
+                success: function (data) {
+                    $('#partial_pending_products').html(data);
                 }
             });
         }

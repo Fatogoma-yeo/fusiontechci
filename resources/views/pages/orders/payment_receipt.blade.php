@@ -79,16 +79,16 @@
                             </tr> -->
                             <tr>
                                 <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Total Paid' ) }}</td>
-                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">@currency( $orders->total )</td>
+                                <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">@currency( $orders->tendered )</td>
                             </tr>
-                            @switch( $orders->status )
-                                @case( 'sold' )
+                            @switch( $orders->payment_status )
+                                @case( 'paids' )
                                 <tr>
                                     <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Change' ) }}</td>
-                                    <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">0 f cfa</td>
+                                    <td class="p-2 border-b border-gray-800 text-sm text-right uppercase">@currency( $orders->tendered )</td>
                                 </tr>
                                 @break
-                                @case( 'partially' )
+                                @case( 'partially_paid' )
                                 <tr>
                                     <td colspan="2" class="p-2 border-b border-gray-800 text-sm font-semibold">{{ __( 'Due' ) }}</td>
                                     <td class="p-2 border-b border-gray-800 text-sm text-right">@currency( abs( $orders->change ) )</td>
