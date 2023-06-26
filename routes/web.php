@@ -66,6 +66,7 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::resource('clients', ClientController::class);
     Route::get('customers', [ClientController::class, 'posCustomer'])->name('customers.pos');
     Route::get('customer', [ClientController::class, 'proceedCustomer'])->name('customer.proceed');
+    Route::get('customer-account', [ClientController::class, 'CustomerAccountHistory'])->name('customer.account');
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
     Route::get('search', [ProductController::class, 'search'])->name('product.search');

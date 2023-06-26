@@ -230,8 +230,8 @@ class OrdersController extends Controller
         if ($request->ajax()) {
 
              $output = '';
-             $ordersDetail = Orders::with('customer')->where('change', '!=', 0)->where(['tendered' => 0, 'author' => Auth::id()])->get();
-             $ordersDetailCount = Orders::with('customer')->where('change', '!=', 0)->where(['tendered' => 0, 'author' => Auth::id()])->count();
+             $ordersDetail = Orders::orderBy('id', 'DESC')->with('customer')->where('change', '!=', 0)->where(['tendered' => 0, 'author' => Auth::id()])->get();
+             $ordersDetailCount = Orders::orderBy('id', 'DESC')->with('customer')->where('change', '!=', 0)->where(['tendered' => 0, 'author' => Auth::id()])->count();
              $usersDetail = User::get();
              if ($ordersDetailCount > 0 ) {
                   $cashier = __('Cashier'); $total = __('Total'); $customer = __('Customer'); $date = __('Date'); $open = __('Open'); $product = __('Products'); $print = __('Print'); $type = __('on hold');
@@ -300,8 +300,8 @@ class OrdersController extends Controller
         if ($request->ajax()) {
 
              $output = '';
-             $ordersDetail = Orders::with('customer')->where('change', '!=', 0)->where('tendered', '!=', 0)->where('author', Auth::id())->get();
-             $ordersDetailCount = Orders::with('customer')->where('change', '!=', 0)->where('tendered', '!=', 0)->where('author', Auth::id())->count();
+             $ordersDetail = Orders::orderBy('id', 'DESC')->with('customer')->where('change', '!=', 0)->where('tendered', '!=', 0)->where('author', Auth::id())->get();
+             $ordersDetailCount = Orders::orderBy('id', 'DESC')->with('customer')->where('change', '!=', 0)->where('tendered', '!=', 0)->where('author', Auth::id())->count();
              $usersDetail = User::get();
 
               if ($ordersDetailCount > 0 ) {
@@ -467,46 +467,53 @@ class OrdersController extends Controller
 
             $date_generate = DATE_FORMAT(now(), 'dmy');
 
-            $orders = new Orders;
+            $detail_for_order = Orders::where(['customer_id' =>$customersDetail->id, 'author' =>Auth::id()])->first();
 
-            $orders->code = $date_generate.'-00'.rand(1,9);
-            $orders->payment_status = "paid";
-            $orders->discount = $data['discount'];
-            $orders->subtotal = $data['subtotal'];
-            $orders->total = $data['total'];
-            $orders->tendered = 0;
-            $orders->change = $orders->tendered - $data['total'];
-            $orders->customer_id = $customersDetail->id;
-            $orders->author = Auth::id();
+            if (!$detail_for_order) {
+                $orders = new Orders;
 
-            $orders->save();
+                $orders->code = $date_generate.'-00'.rand(1,9);
+                $orders->payment_status = "hold";
+                $orders->discount = $data['discount'];
+                $orders->subtotal = $data['subtotal'];
+                $orders->total = $data['total'];
+                $orders->tendered = 0;
+                $orders->change = $orders->tendered - $data['total'];
+                $orders->customer_id = $customersDetail->id;
+                $orders->author = Auth::id();
 
-            foreach ($data['product_id'] as $key => $value) {
-                $ordersDetails = new OrderProduct;
-                $Order = Orders::where(['created_at' => now(), 'author' => Auth::id()])->latest()->firstOrFail();
-                $products = Product::with('category')->where('id', $value)->get();
-                $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
+                $orders->save();
 
-                foreach ($procur_product as $product_det) {
-                    $purchase_price = $product_det->purchase_price;
-                    $ordersDetails->procurement_product_id = $product_det->procurement_id;
-                    $ordersDetails->purchase_price = $purchase_price;
+                foreach ($data['product_id'] as $key => $value) {
+                    $ordersDetails = new OrderProduct;
+                    $Order = Orders::where(['created_at' => now(), 'author' => Auth::id()])->latest()->firstOrFail();
+                    $products = Product::with('category')->where('id', $value)->get();
+                    $procur_product = ProcurementsProduct::with('procurement')->where('product_id', $value)->get();
+
+                    foreach ($procur_product as $product_det) {
+                        $purchase_price = $product_det->purchase_price;
+                        $ordersDetails->procurement_product_id = $product_det->procurement_id;
+                        $ordersDetails->purchase_price = $purchase_price;
+                    }
+                    foreach ($products as $product) {
+                        $productCatId = $product->category->id;
+                        $ordersDetails->product_category_id = $productCatId;
+                    }
+                    $ordersDetails->product_id = $value;
+                    $ordersDetails->orders_id = $Order->id;
+                    $ordersDetails->product_name = $data["product_name"][$key];
+                    $ordersDetails->quantity = $data["quantity"][$key];
+                    $ordersDetails->unit_price = $data["price"][$key];
+                    $ordersDetails->discount = $data["discount"];
+                    $ordersDetails->pos_subtotal = $data["pos_subtotal"][$key];
+                    $ordersDetails->author_id = Auth::id();
+
+                    $ordersDetails->save();
+
                 }
-                foreach ($products as $product) {
-                    $productCatId = $product->category->id;
-                    $ordersDetails->product_category_id = $productCatId;
-                }
-                $ordersDetails->product_id = $value;
-                $ordersDetails->orders_id = $Order->id;
-                $ordersDetails->product_name = $data["product_name"][$key];
-                $ordersDetails->quantity = $data["quantity"][$key];
-                $ordersDetails->unit_price = $data["price"][$key];
-                $ordersDetails->discount = $data["discount"];
-                $ordersDetails->pos_subtotal = $data["pos_subtotal"][$key];
-                $ordersDetails->author_id = Auth::id();
 
-                $ordersDetails->save();
-
+            }elseif ($detail_for_order) {
+                return response()->json(['action' =>'is_in_order', 'message' =>'Une commande de '.$customersDetail->name.' est actuellement en attente. Veillez la valider avant de proceder à une autre.']);
             }
 
         }
@@ -554,6 +561,7 @@ class OrdersController extends Controller
             $orders_payment = new OrderPayment;
 
             $orders_detail = Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])->firstOrFail();
+            $customersDetail = Client::where('id', $orders_detail->customer_id)->firstOrFail();
 
             OrderInstalment::where(['order_id' => $data['orders_id']])->delete();
 
@@ -577,6 +585,14 @@ class OrdersController extends Controller
 
                 $orders_payment->save();
 
+                $before_owed_amount = $customersDetail->owed_amount;
+                $owed_amount = $before_owed_amount - $data['cash'];
+
+                $before_purchases_amount = $customersDetail->purchases_amount;
+                $purchases_amout = $before_purchases_amount + $data['cash'];
+
+                Client::where('id', $orders_detail->customer_id)->update(['owed_amount' => $owed_amount, 'purchases_amount' => $purchases_amout]);
+
             }elseif ( abs($orders_detail->change) > $data['cash'] ) {
 
                 Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
@@ -596,6 +612,14 @@ class OrdersController extends Controller
                 $orders_payment->author_id = Auth::id();
 
                 $orders_payment->save();
+
+                $before_owed_amount = $customersDetail->owed_amount;
+                $owed_amount = $before_owed_amount - $data['cash'];
+
+                $before_purchases_amount = $customersDetail->purchases_amount;
+                $purchases_amout = $before_purchases_amount + $data['cash'];
+
+                Client::where('id', $orders_detail->customer_id)->update(['owed_amount' => $owed_amount, 'purchases_amount' => $purchases_amout]);
 
             }elseif (abs($orders_detail->change) < $data['cash']) {
                 return response()->json(['action' => 'error', 'message' => 'La somme saisie est plus que celle dû. Merci de ressaisir la somme.']);
@@ -754,6 +778,10 @@ class OrdersController extends Controller
 
                 $orders_payment->save();
 
+                $before_owed_amount = $customersDetail->owed_amount;
+                $owed_amount = $before_owed_amount + ($data['total'] - $data['cash_value']);
+                Client::where('name', 'LIKE', '%'.$data["customer"].'%')->update(['owed_amount' => $owed_amount]);
+
             }elseif ($data['cash_value'] == '' || $data['cash_value'] == $data['total']) {
                 $order->code = $date_generate.'-00'.rand(1,9);
                 $order->payment_status = "paid";
@@ -898,7 +926,11 @@ class OrdersController extends Controller
         }
 
         $before_purchases_amount = $customersDetail->purchases_amount;
-        $purchases_amout = $before_purchases_amount + $orders->total;
+        if ($data['cash_value'] != '' && $data['cash_value'] < $data['total']) {
+            $purchases_amout = $before_purchases_amount + $orders->tendered;
+        }elseif ($data['cash_value'] == '' || $data['cash_value'] == $data['total']) {
+            $purchases_amout = $before_purchases_amount + $orders->total;
+        }
         Client::where('name', 'LIKE', '%'.$data["customer"].'%')->update(['purchases_amount' => $purchases_amout]);
 
         $customer_name = $data["customer"];

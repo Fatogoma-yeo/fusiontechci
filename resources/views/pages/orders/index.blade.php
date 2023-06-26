@@ -431,7 +431,16 @@
           url: "{{ route('wait-pos.waiting') }}",
           data: {'product_id': productId, 'product_name': productName, 'price': price, 'quantity': quantity, 'discount': rabais, 'pos_subtotal': posSubTotal,'subtotal': subtotal, 'total': total, 'customer': customer_name},
           success:function (response) {
-            window.location.reload();
+            if (response.action == 'is_in_order') {
+                $('#notifDiv').fadeIn();
+                $('#notifDiv').css('background', 'red');
+                $('#notifDiv').text(response.message);
+                setTimeout(() => {
+                    $('#notifDiv').fadeOut();
+                }, 6000);
+            }else {
+                window.location.reload();
+            }
           }
       });
     }
@@ -489,6 +498,17 @@
                 document.getElementById('pos_customer').innerText = response;
             }
         });
+    }
+
+    function openCustomerHistory(id) {
+      $.ajax({
+          type: 'get',
+          url: "{{ route('customer.account')}}",
+          data: {'customer_id': id},
+          success: function (response) {
+             $(".vertical-menu").html(response);
+          }
+      });
     }
 
     $(document).ready(function () {

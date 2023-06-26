@@ -2078,6 +2078,14 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(37 99 235 / var(--tw-bg-opacity));
 }
+.hover\:bg-blue-700:hover {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(29 78 216 / var(--tw-bg-opacity)) !important;
+}
+.hover\:bg-blue-800:hover {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgb(30 64 175 / var(--tw-bg-opacity)) !important;
+}
 .hover\:bg-gray-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
@@ -2514,6 +2522,16 @@ select {
 
   .md\:min-h-screen {
     min-height: 100vh;
+  }
+
+  .md\:px-2 {
+    padding-left: 0.5rem/* 8px */ !important;
+    padding-right: 0.5rem/* 8px */ !important;
+  }
+
+  .md\:-mx-2 {
+    margin-left: -0.5rem/* -8px */ !important;
+    margin-right: -0.5rem/* -8px */ !important;
   }
 
   .md\:-mx-8 {
