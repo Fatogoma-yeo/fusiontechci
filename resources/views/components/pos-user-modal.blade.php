@@ -18,7 +18,7 @@
             <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="inline-block cursor-pointer text-gray-900 bg-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-2 px-4 text-md font-medium text-center border-transparent border-b-2">{{ __( 'Customer Account' ) }}</a>
         </li>
     </ul>
-    <div class="p-2 overflow-y-auto">
+    <div class="p-2 overflow-hidden">
         <div  x-show="openTab === 1" class="" id="new_customer">
           <div class="w-full">
               <div  class="h-full hidden flex-col w-full flex items-center justify-center text-primary">
@@ -82,7 +82,7 @@
           </div>
         </div>
         <div  x-show="openTab === 2" class="w-full flex flex-col items-center justify-center" id="customer_account">
-            <div id="pos-customer-select" class="w-full">
+            <div id="pos-customer-select" class="w-full h-5/7-screen overflow-y-auto">
                 <div id="header" class="border-b ns-box-header text-center font-semibold text-2xl py-2">
                     <h2>{{ __( 'Select Customer' ) }}</h2>
                 </div>
