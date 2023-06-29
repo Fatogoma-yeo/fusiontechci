@@ -932,10 +932,8 @@ class OrdersController extends Controller
             $purchases_amout = $before_purchases_amount + $orders->total;
         }
         Client::where('name', 'LIKE', '%'.$data["customer"].'%')->update(['purchases_amount' => $purchases_amout]);
-
-        $customer_name = $data["customer"];
-        // echo "<pre>"; print_r($purchases_amout); die;
-        return view('pages.orders.payment_receipt', compact('ordersDetails', 'categoryDetail', 'orders', 'customer_name'));
+        
+        return redirect()->back()->with(['status' => 'orders-store', 'success' => 'Commande placée avec succès !']);
     }
 
     /**

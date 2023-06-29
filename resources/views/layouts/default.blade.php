@@ -23,6 +23,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans" id="body">
+        @includeWhen(session('status') === 'orders-store', 'pages.orders.payment_receipt')
         <x-pos-modal name="confirm-product" :show="$errors->userDeletion->isNotEmpty()" focusable>
             <x-quantity-modal />
         </x-pos-modal>

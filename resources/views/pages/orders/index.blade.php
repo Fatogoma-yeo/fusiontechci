@@ -506,7 +506,12 @@
           url: "{{ route('customer.account')}}",
           data: {'customer_id': id},
           success: function (response) {
-             $(".vertical-menu").html(response);
+             $("#pos-customer-select").html(response);
+             user_modal.style.display = 'flex';
+             user_select.style.display = "none";
+             x.style.overflow = "hidden";
+             $('#customer_account').show();
+             $('#new_customer').hide();
           }
       });
     }

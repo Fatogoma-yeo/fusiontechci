@@ -30,4 +30,9 @@ class OrderProduct extends Model
     {
       return $this->belongsTo(Orders::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
 }

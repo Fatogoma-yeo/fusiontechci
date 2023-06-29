@@ -19,7 +19,7 @@
         </li>
     </ul>
     <div class="p-2 overflow-y-auto">
-        <div  x-show="openTab === 1" class="">
+        <div  x-show="openTab === 1" class="" id="new_customer">
           <div class="w-full">
               <div  class="h-full hidden flex-col w-full flex items-center justify-center text-primary">
                   <i class="lar la-hand-paper ns-icon text-6xl"></i>
@@ -81,7 +81,7 @@
               </div>
           </div>
         </div>
-        <div  x-show="openTab === 2" class="w-full flex flex-col items-center justify-center">
+        <div  x-show="openTab === 2" class="w-full flex flex-col items-center justify-center" id="customer_account">
             <div id="pos-customer-select" class="w-full">
                 <div id="header" class="border-b ns-box-header text-center font-semibold text-2xl py-2">
                     <h2>{{ __( 'Select Customer' ) }}</h2>
