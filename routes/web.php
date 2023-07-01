@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\ExpensesCategoriesController;
 use App\Http\Controllers\Dashboard\ExpensesController;
+use App\Http\Controllers\InstalmentController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\NotificationController;
 use App\Mail\OwnerNotificate;
@@ -87,6 +88,8 @@ Route::middleware('auth')->group(function ()
   Route::match(['get', 'post'], 'inventory/physic-stock-hs', [InventoryController::class, 'inventoryPhysicStockHs'])->name('inventory.physic-stock-hs');
   Route::match(['get', 'post'], 'inventory/stock-validate', [InventoryController::class, 'inventoryStockValidate'])->name('inventory.stock-validate');
   Route::get('inventory/stock-hs', [InventoryController::class, 'inventoryStockHs'])->name('inventory.stock-hs');
+
+  Route::resource('instalments', InstalmentController::class);
 
 });
 

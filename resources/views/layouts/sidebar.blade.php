@@ -106,9 +106,9 @@
             </div>
           @endcan
           @can('cash_flow_show')
-            <div class="pt-1 pb-2 space-y-1">
+            <div class="pt-1 space-y-1">
                 <a href="{{ route('expense.history') }}" class="text-white ml-4 mr-2">
-                    {{ __('Flux de trésorie') }}
+                    {{ __('Cash Flow History') }}
                 </a>
             </div>
           @endcan
@@ -116,6 +116,11 @@
             <div class="pt-1 pb-2 space-y-1">
                 <a href="{{ route('expenses.history') }}" class="text-white ml-4 mr-2">
                     {{ __('Flux de trésorie') }}
+                </a>
+            </div>
+            <div class="pt-1 pb-2 space-y-1">
+                <a href="{{ route('instalments.index') }}" class="text-white ml-4 mr-2">
+                    {{ __('Instalments') }}
                 </a>
             </div>
           @endcan
@@ -181,6 +186,11 @@
                 </a>
             </div>
           @endcan
+            <div class="pt-1 pb-2 space-y-1">
+                <a href="{{ route('report.flux-history') }}" class="text-white ml-4 mr-2">
+                    {{ __('Stock Flow Records') }}
+                </a>
+            </div>
         </div>
 
         @can('users_access')

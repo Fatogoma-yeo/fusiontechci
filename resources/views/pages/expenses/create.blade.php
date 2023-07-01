@@ -34,7 +34,7 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-4 w-full">
-            <div class="grid grid-cols-2 gap-4 pb-8">
+            <div class="grid md:grid-cols-2 gap-4 pb-8">
                 <!-- Categories -->
                 <div class="col-span-1 mt-4">
                     <x-input-label for="category_id" :value="__('Expense Category')" />

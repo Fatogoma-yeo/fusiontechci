@@ -49,7 +49,7 @@
             </ul>
             <div class="bg-white rounded-md shadow-lg px-4 w-full">
                 <div  x-show="openTab === 1" class="">
-                    <div class="grid grid-cols-3 gap-4 pb-8">
+                    <div class="grid md:grid-cols-3 gap-4 pb-8">
                         <!-- Invoice Number -->
                         <div class="col-span-1 mt-4">
                             <x-input-label for="invoice_number" :value="__('N° Facture')" />

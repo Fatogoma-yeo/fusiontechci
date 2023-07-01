@@ -34,12 +34,12 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-4 w-full">
-            <div class="grid grid-cols-3 gap-6 pb-8">
+            <div class="grid md:grid-cols-3 gap-6 pb-8">
                 <!-- Media -->
                 <div class="mt-4">
                     <x-input-label for="media" :value="__('Image')" />
                     <div class="w-full">
-                        <x-media-input />	
+                        <x-media-input />
                     </div>
                 </div>
                 <!-- Displays on pos -->
