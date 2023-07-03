@@ -41,7 +41,7 @@
                         <!-- Instalment Number -->
                         <div class="col-span-1 mt-4">
                             <x-input-label for="instalment_number" :value="__('N° de Bordereau / MoMo')" />
-                            <x-text-input id="instalment_number" class="block mt-1 w-full" type="number" name="instalment_number" :value="old('instalment_number')"  required/>
+                            <x-text-input id="instalment_number" class="block mt-1 w-full" type="tel" name="instalment_number" :value="old('instalment_number')"  required/>
                         </div>
                         <!-- Instalment Amount -->
                         <div class="col-span-1 mt-4">

@@ -180,7 +180,7 @@
             </div>
           @endcan
           @can('ajust_stock')
-            <div class="pt-1 pb-2 space-y-1">
+            <div class="pt-1 space-y-1">
                 <a href="{{ route('product.stock-ajustment') }}" class="text-white ml-4 mr-2">
                     {{ __('Stock Adjustment') }}
                 </a>

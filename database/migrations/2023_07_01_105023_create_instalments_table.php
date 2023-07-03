@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('instalments', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->integer('number');
+            $table->string('number');
             $table->float('amount', 18, 5 )->default(0);
             $table->integer('author_id');
             $table->datetime('date');
