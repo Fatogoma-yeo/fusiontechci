@@ -29,8 +29,8 @@
                     <div class="grid md:grid-cols-2 gap-4 pb-8">
                         <!-- Instalment Type -->
                         <div class="col-span-1 mt-4">
-                            <x-input-label for="instalment_type" :value="__('Type de Versement')" />
-                            <select name="instalment_type" id="instalment_type" class="mt-1 block w-full py-2 px-3 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                            <x-input-label for="type" :value="__('Type de Versement')" />
+                            <select name="type" id="type" class="mt-1 block w-full py-2 px-3 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                 <option value=""></option>
                                 <option value="Bancaire">Bancaire</option>
                                 <option value="Orange Money">Orange Money</option>
@@ -40,18 +40,27 @@
                         </div>
                         <!-- Instalment Number -->
                         <div class="col-span-1 mt-4">
-                            <x-input-label for="instalment_number" :value="__('N° de Bordereau / MoMo')" />
-                            <x-text-input id="instalment_number" class="block mt-1 w-full" type="tel" name="instalment_number" :value="old('instalment_number')"  required/>
+                            <x-input-label for="number" :value="__('N° de Bordereau / MoMo')" />
+                            <x-text-input id="number" class="block mt-1 w-full" type="tel" name="number" :value="old('number')"  required/>
+                            @error('number')
+                              <div
+                                    x-data="{ show: true }"
+                                    x-show="show"
+                                    x-transition
+                                    x-init="setTimeout(() => show = false, 8000)"
+                                    class="text-red-500"
+                                    >{{ __('Veillez saisir un numéro valide.') }}</div>
+                            @enderror
                         </div>
                         <!-- Instalment Amount -->
                         <div class="col-span-1 mt-4">
-                            <x-input-label for="instalment_amount" :value="__('Montant du Versement')" />
-                            <x-text-input id="instalment_amount" class="block mt-1 w-full" type="number" name="instalment_amount" :value="old('instalment_amount')"  required/>
+                            <x-input-label for="amount" :value="__('Montant du Versement')" />
+                            <x-text-input id="amount" class="block mt-1 w-full" type="number" name="amount" :value="old('amount')"  required/>
                         </div>
                         <!-- Instalment date -->
                         <div class="col-span-1 mt-4">
-                            <x-input-label for="instalment_date" :value="__('Date de Versement')" />
-                            <x-text-input id="instalment_date" class="block mt-1 w-full" type="date" name="instalment_date" :value="old('instalment_date')"  required/>
+                            <x-input-label for="date" :value="__('Date de Versement')" />
+                            <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date')"  required/>
                         </div>
                     </div>
                 </div>

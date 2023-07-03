@@ -46,10 +46,10 @@ class InstalmentController extends Controller
 
         $instalment = new Instalment;
 
-        $instalment->type = $data['instalment_type'];
-        $instalment->number = $data['instalment_number'];
-        $instalment->amount = $data['instalment_amount'];
-        $instalment->date = $data['instalment_date'];
+        $instalment->type = $data['type'];
+        $instalment->number = $data['number'];
+        $instalment->amount = $data['amount'];
+        $instalment->date = $data['date'];
         $instalment->author_id = Auth::id();
 
         $instalment->save();

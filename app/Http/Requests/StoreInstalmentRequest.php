@@ -24,7 +24,10 @@ class StoreInstalmentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+          'type' => 'string|required',
+          'number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|max:10',
+          'amount' => 'required',
+          'date' => 'required',
         ];
     }
 }
