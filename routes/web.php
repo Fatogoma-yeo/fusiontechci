@@ -61,6 +61,8 @@ Route::group(['prefix' => '/', 'middleware' => ['auth', 'verified']], function (
     Route::get('cancel-order', [OrdersController::class, 'cancelOrders'])->name('cancel-order.pending');
     Route::get('quantity', [OrdersController::class, 'changeQuantity'])->name('quantity.change');
     Route::get('popup', [OrdersController::class, 'discount'])->name('popup.discount');
+    Route::get('void-orders', [OrdersController::class, 'VoidOrders'])->name('void.orders');
+    Route::get('void', [OrdersController::class, 'OrderVoid'])->name('order.void');
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('providers', ProviderController::class);

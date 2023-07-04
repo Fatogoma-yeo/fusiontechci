@@ -294,6 +294,11 @@
                 </a>
             </div>
           @endcan
+            <div class="pt-1 space-y-1">
+                <a href="{{ route('void.orders') }}" class="text-white ml-4 mr-2">
+                    {{ __('Void The Order') }}
+                </a>
+            </div>
         </div>
 
         @can('report_access')

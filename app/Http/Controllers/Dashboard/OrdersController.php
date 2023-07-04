@@ -877,7 +877,7 @@ class OrdersController extends Controller
             $productHistories->product_name = $productDetail["product_name"][$key];
             $productHistories->procurement_name = "N/A";
             $productHistories->product_id = $value;
-            $productHistories->order_id = $ProductOrderDetails->id;
+            $productHistories->order_id = $Orders->id;
             $productHistories->operation = __('Sold');
             $productHistories->before_quantity = $ProductHistoryDetails->after_quantity;
             $productHistories->quantity = $productDetail["product_quantity"][$key];
@@ -932,7 +932,7 @@ class OrdersController extends Controller
             $purchases_amout = $before_purchases_amount + $orders->total;
         }
         Client::where('name', 'LIKE', '%'.$data["customer"].'%')->update(['purchases_amount' => $purchases_amout]);
-        
+
         return redirect()->back()->with(['status' => 'orders-store', 'success' => 'Commande placée avec succès !']);
     }
 
