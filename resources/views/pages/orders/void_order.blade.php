@@ -12,8 +12,8 @@
             <div class="flex flex-wrap -mx-2 my-2 pb-2">
                 <div class="px-2 mb-2">
                     <select class="w-full rounded py-1 px-8 border-gray-300 bg-white focus:border-indigo-500 focus:ring-indigo-500 shadow" name="order_author_id" id="order_author_id">
+                        <option value="">Choisis une option</option>
                         @foreach ($users as $user)
-                            <option value="">Choisis une option</option>
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </select>

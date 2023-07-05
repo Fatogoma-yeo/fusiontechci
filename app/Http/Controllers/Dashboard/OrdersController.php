@@ -737,7 +737,7 @@ class OrdersController extends Controller
             }
         }
 
-        $users = User::get();
+        $users = User::where('email', '!=', 'admin@fusiontechci.com')->get();
         $orders = Orders::where('payment_status', 'paid')->get();
         return view('pages.orders.void_order', compact('users', 'orders'));
     }
