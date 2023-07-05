@@ -54,11 +54,6 @@
                 currency: 'XOF',
             });
 
-            window.addEventListener('resize', () => {
-                this._responsive.detect();
-                this.defineCurrentScreen();
-            });
-
             // function totalfun() {
             //     var $finalPrice = $('#Total');
             //     $finalPrice.on('calculate', function() {

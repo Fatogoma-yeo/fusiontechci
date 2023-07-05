@@ -260,7 +260,7 @@ class ReportsController extends Controller
             // echo "<pre>"; print_r($startDate); die;
 
             $expense_details = ExpenseCategory::get();
-            $cash_flow_details = CashFlow::whereBetween('created_at', [$startDate, $endDate])
+            $cash_flow_details = CashFlow::whereBetween('created_at', [$startDate, $endDate])->Where('status', 'active')
             ->select(
                 DB::raw('SUM(value) as value'),
                 DB::raw('expense_category_id as category_id'),

@@ -26,7 +26,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($cash_flow_history as $history)
-                                        <tr :class="@if($history->operation === 'debit')  'bg-red-200' @else 'bg-green-200' @endif" class="text-sm">
+                                        <tr :class="@if($history->operation === 'credit' && $history->status === 'active') 'bg-green-200' @elseif($history->operation === 'credit' && $history->status === 'inactive') 'bg-blue-200' @endif" class="text-sm">
                                             <td class="py-4 px-2 border border-gray-500">
                                                 @if($history->operation == 'debit')
                                                     {{ __('Order') }} : {{ $history->name }}

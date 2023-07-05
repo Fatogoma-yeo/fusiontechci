@@ -52,7 +52,13 @@
                 </div>
             </div>
         </div>
-        <script>
+        <script type="text/javascript">
+            $.ajaxSetup({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+
             $(document).ready(function() {
                 toastr.options.timeOut = 8000;
                 @if (Session::has('error'))
@@ -62,17 +68,6 @@
                 @elseif(Session::has('warning'))
                     toastr.warning('{{ Session::get('warning') }}');
                 @endif
-            });
-        </script>
-        <script type="text/javascript">
-            $.ajaxSetup({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-            });
-            window.addEventListener('resize', () => {
-                this._responsive.detect();
-                this.defineCurrentScreen();
             });
 
             $(document).ready(function(){

@@ -126,7 +126,7 @@
                         total_credit += parseFloat(creditcompte[i].textContent);
                     }
 
-                    var balance = total_debit + total_credit;
+                    var balance = total_debit - total_credit;
                     $('#total_debit').html(current.format(total_debit));
                     $('#total_credit').html(current.format(total_credit));
                     $('#balance').html(current.format(balance));
