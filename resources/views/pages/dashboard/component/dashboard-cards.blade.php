@@ -16,7 +16,7 @@
                             +<span id="total_sales">@currency($detals->total_sales)</span>
                         @empty
                             +<span id="total_sales">@currency(00)</span>
-                        @endforelse 
+                        @endforelse
                         {{ __( 'Today' ) }}
                     </h4>
                 </div>
@@ -75,10 +75,10 @@
                     <h6 class="font-bold inline-block text-right md:hidden">{{ __( 'Expenses' ) }}</h6>
                     <h4 class="text-xs text-right">
                         @forelse($expense_sammary as $details)
-                            +<span id="total_sales">@currency($details->dayValue)</span>
+                            +<span id="">@currency($details->total)</span>
                         @empty
-                            +<span id="total_sales">@currency(00)</span>
-                        @endforelse 
+                            +<span id="">@currency(00)</span>
+                        @endforelse
                         {{ __( 'Today' ) }}
                     </h4>
                 </div>

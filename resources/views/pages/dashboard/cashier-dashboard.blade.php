@@ -27,14 +27,21 @@
             <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-red-400 to-red-600 text-white px-3 py-5">
                 <div class="flex flex-row md:flex-col flex-auto">
                     <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
-                        <h6 class="font-bold hidden text-right md:inline-block">{{ __( 'Total Refunds' ) }}</h6>
+                        <h6 class="font-bold hidden text-right md:inline-block">{{ __( 'Total des dépenses' ) }}</h6>
                         <h3 class="text-2xl font-bold uppercase">
                             f cfa 0.0
                         </h3>
                     </div>
                     <div class="w-1/2 md:w-full flex flex-col px-2 justify-end items-end">
-                        <h6 class="font-bold inline-block text-right md:hidden">{{ __( 'Total Refunds' ) }}</h6>
-                        <h4 class="text-xs text-right">+F FCA 00 {{ __( 'Today' ) }}</h4>
+                        <h6 class="font-bold inline-block text-right md:hidden">{{ __( 'Total des dépenses' ) }}</h6>
+                        <h4 class="text-xs text-right">
+                            @forelse($expense_sammary as $details)
+                                +<span id="">@currency($details->total)</span>
+                            @empty
+                                +<span id="">@currency(00)</span>
+                            @endforelse
+                            {{ __( 'Today' ) }}
+                        </h4>
                     </div>
                 </div>
             </div>
