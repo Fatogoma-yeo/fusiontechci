@@ -7,7 +7,7 @@
         <h3>Modifier la dépense et enregistrez-la.</h3>
     </label>
     <div for="title" class="text-sm my-2 text-primary">
-        <a href="{{ route('expenses.index') }}" class="rounded-full border ns-inset-button error hover:bg-gray-200 hover:text-gray-900 text-white  px-1 py-1">
+        <a href="{{ route('expense_categories.index') }}" class="rounded-full border ns-inset-button error hover:bg-gray-200 hover:text-gray-900 text-white  px-1 py-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-flex">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -35,7 +35,7 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-4 w-full">
-            <div class="grid grid-cols-2 gap-14 pb-8">
+            <div class="grid grid-cols-1 pb-8">
                 <!-- Categories -->
                 <div class="col-span-1 mt-4">
                     <x-input-label for="operation" :value="__('Operation')" />
@@ -45,13 +45,6 @@
                         <option value="credit">Crédit</option>
                     </select>
                     <h6 class="text-xs mt-1">{{ __("All entities attached to this category will either produce a \"credit\" or \"debit\" to the cash flow history.") }}</h6>
-                </div>
-
-                <!-- N° de compte -->
-                <div class="col-span-1 mt-4">
-                    <x-input-label for="account" :value="__('Account')" />
-                    <x-text-input id="account" class="block mt-1 w-full" type="number" name="account" value="{{$expenseCategory->account}}"  />
-                    <h6 class="text-xs mt-1">{{ __('Provide the accounting number for this category.') }}</h6>
                 </div>
             </div>
         </div>

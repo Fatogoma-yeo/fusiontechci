@@ -27,7 +27,6 @@ class UpdatExpenseCategoryRequest extends FormRequest
         return [
             'name' => ['string', 'required'],
             'operation' => 'required',
-            'account' => 'required',
         ];
     }
 }

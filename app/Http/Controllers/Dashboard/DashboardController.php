@@ -78,9 +78,10 @@ class DashboardController extends Controller
 
         $order_sammary = Orders::limit(10)->get();
 
-        $expense_sammary = Expense::select(
+        $expense_sammary = Expense::whereDay('created_at', Carbon::now())
+        ->select(
             DB::raw('SUM(value) as total'),
-            DB::raw('DATE_FORMAT(created_at,"%W") as day'),
+            DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
         ->get();

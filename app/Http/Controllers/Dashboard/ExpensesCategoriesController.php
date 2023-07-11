@@ -50,11 +50,13 @@ class ExpensesCategoriesController extends Controller
     public function store(ExpenseCategoryRequest $request)
     {
 
+        $account = '00'.rand(3,9);
+        
         $expense_category = new ExpenseCategory;
 
         $expense_category->name = $request['name'];
         $expense_category->operation = $request['operation'];
-        $expense_category->account = $request['account'];
+        $expense_category->account = $account;
 
         $expense_category->author_id = Auth::id();
 

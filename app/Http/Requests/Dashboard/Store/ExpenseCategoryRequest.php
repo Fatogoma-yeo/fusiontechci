@@ -26,7 +26,6 @@ class ExpenseCategoryRequest extends FormRequest
         return [
             'name' => 'string|required|unique:expense_categories',
             'operation' => 'required',
-            'account' => 'required',
         ];
     }
 }

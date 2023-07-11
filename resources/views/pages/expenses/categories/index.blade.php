@@ -54,6 +54,8 @@
                             @foreach ($userDetails as $user)
                                 @if($user->id == $account->author_id)
                                     <span class="font-semibold px-2 py-2 bg-green-0 rounded-full">{{ $user->name }}</span>
+                                @elseif ($account->author_id == 0)
+                                    <span class="font-semibold px-2 py-2 bg-green-0 rounded-full">Sytème</span>
                                 @endif
                             @endforeach
                         </td>

@@ -259,36 +259,51 @@ class ReportsController extends Controller
             $endDate = Carbon::createFromFormat('Y-m-d', $data['endDate']);
             // echo "<pre>"; print_r($startDate); die;
 
-            $expense_details = ExpenseCategory::get();
+            $expense_details = ExpenseCategory::with('cashflow')->get();
             $cash_flow_details = CashFlow::whereBetween('created_at', [$startDate, $endDate])->Where('status', 'active')
             ->select(
                 DB::raw('SUM(value) as value'),
-                DB::raw('expense_category_id as category_id'),
+                DB::raw('expense_category_id as expense_category_id'),
             )
-            ->groupBy('category_id')
+            ->groupBy('expense_category_id')
+            ->with('category')
             ->get();
 
             $output="";
-            foreach ($expense_details as $expense_detail) {
-                foreach ($cash_flow_details as $cash_flow) {
-                  if ($expense_detail->id == $cash_flow->category_id) {
-                      $cashsum = $cash_flow->value;
-                  }
-                }
+            foreach ($cash_flow_details as $cash_flow) {
                 $output.=   '<tr>'.
                                   '<td class="p-2 border border-gray-500">'.
                                       '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">'.
                                           '<path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />'.
                                       '</svg>'.
-                                      '<strong>'.$expense_detail->account.'</strong> : '.$expense_detail->name.'
+                                      '<strong>'.$cash_flow->category->account.'</strong> : '.$cash_flow->category->name.'
                                    </td>'.
                                   '<td class="p-2 border border-red-400 bg-red-200 text-right">';
-                                      if($expense_detail->operation == "debit") { $output .= $this->currency($cashsum).'<span class="hidden" id="debitCompte">'.$cashsum.'</span>'; }else { $output .= $this->currency(0).'<span class="hidden" id="debitCompte">0</span>'; }
+                                      if($cash_flow->category->operation == "debit") { $output .= $this->currency($cash_flow->value).'<span class="hidden" id="debitCompte">'.$cash_flow->value.'</span>'; }else { $output .= $this->currency(0).'<span class="hidden" id="debitCompte">0</span>'; }
                       $output .=  '</td>'.
                                   '<td class="p-2 border text-right border-green-600 bg-green-200">';
-                                      if($expense_detail->operation == "credit") { $output .= $this->currency($cashsum).'<span class="hidden" id="creditCompte">'.$cashsum.'</span>'; }else { $output .= $this->currency(0).'<span class="hidden" id="creditCompte">0</span>'; }
+                                      if($cash_flow->category->operation == "credit") { $output .= $this->currency($cash_flow->value).'<span class="hidden" id="creditCompte">'.$cash_flow->value.'</span>'; }else { $output .= $this->currency(0).'<span class="hidden" id="creditCompte">0</span>'; }
                       $output .=  '</td>'.
                               '</tr>';
+            }
+
+            foreach ($expense_details as $detail) {
+                if (count($detail->cashflow) === 0) {
+                  $output.=   '<tr>'.
+                                    '<td class="p-2 border border-gray-500">'.
+                                        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-flex">'.
+                                            '<path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />'.
+                                        '</svg>'.
+                                        '<strong>'.$detail->account.'</strong> : '.$detail->name.'
+                                     </td>'.
+                                    '<td class="p-2 border border-red-400 bg-red-200 text-right">';
+                                        if($detail->operation == "debit") { $output .= $this->currency(0).'<span class="hidden" id="debitCompte">0</span>'; }else { $output .= $this->currency(0).'<span class="hidden" id="debitCompte">0</span>'; }
+                        $output .=  '</td>'.
+                                    '<td class="p-2 border text-right border-green-600 bg-green-200">';
+                                        if($detail->operation == "credit") { $output .= $this->currency(0).'<span class="hidden" id="creditCompte">0</span>'; }else { $output .= $this->currency(0).'<span class="hidden" id="creditCompte">0</span>'; }
+                        $output .=  '</td>'.
+                                '</tr>';
+                }
             }
 
             return response()->json(['cashflow' => $output]);

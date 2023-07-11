@@ -34,7 +34,7 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-6 w-full">
-            <div class="grid md:grid-cols-2 gap-14 pb-8">
+            <div class="grid md:grid-cols-1 pb-8">
                 <!-- Categories -->
                 <div class="col-span-1 mt-4">
                     <x-input-label for="operation" :value="__('Operation')" />
@@ -44,13 +44,6 @@
                         <option value="credit">Crédit</option>
                     </select>
                     <h6 class="text-xs mt-1">{{ __("All entities attached to this category will either produce a \"credit\" or \"debit\" to the cash flow history.") }}</h6>
-                </div>
-
-                <!-- N° de compte -->
-                <div class="col-span-1 mt-4">
-                    <x-input-label for="account" :value="__('Account')" />
-                    <x-text-input id="account" class="block mt-1 w-full" type="number" name="account" :value="old('value')"  />
-                    <h6 class="text-xs mt-1">{{ __('Provide the accounting number for this category.') }}</h6>
                 </div>
             </div>
         </div>

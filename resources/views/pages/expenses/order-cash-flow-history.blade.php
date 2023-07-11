@@ -28,9 +28,11 @@
                                     @forelse ($cash_flow_history as $history)
                                         <tr :class="@if($history->operation === 'credit' && $history->status === 'active') 'bg-green-200' @elseif($history->operation === 'credit' && $history->status === 'inactive') 'bg-blue-200' @endif" class="text-sm">
                                             <td class="py-4 px-2 border border-gray-500">
-                                                @if($history->operation == 'debit')
+                                                @if($history->operation == 'debit' && $history->procurement_id )
                                                     {{ __('Order') }} : {{ $history->name }}
-                                                @else
+                                                @elseif ($history->operation == 'debit' && $history->procurement_id == null)
+                                                    {{ __('Expense') }} : {{ $history->name }}
+                                                @elseif ($history->operation == 'credit')
                                                     {{ __('Sale') }} : {{ $history->name }}
                                                 @endif
                                             </td>
