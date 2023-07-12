@@ -118,12 +118,12 @@
                     {{ __('Flux de trésorie') }}
                 </a>
             </div>
-            <div class="pt-1 pb-2 space-y-1">
-                <a href="{{ route('instalments.index') }}" class="text-white ml-4 mr-2">
-                    {{ __('Instalments') }}
-                </a>
-            </div>
           @endcan
+          <div class="pt-1 pb-2 space-y-1">
+              <a href="{{ route('instalments.index') }}" class="text-white ml-4 mr-2">
+                  {{ __('Instalments') }}
+              </a>
+          </div>
         </div>
 
         @can('inventory_access')
@@ -179,7 +179,7 @@
                 </a>
             </div>
           @endcan
-          @can('param_access')
+          @can('cash_flow_show')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('product.stock-ajustment') }}" class="text-white ml-4 mr-2">
                     {{ __('Stock Adjustment') }}

@@ -4,7 +4,7 @@ use App\Models\Orders;
 use App\Models\OrderProduct;
 use Illuminate\Support\Facades\View;
 
-$order = Orders::where(['created_at' =>now(), 'author' => Auth::id()])->firstOrFail();
+$order = Orders::where('author', Auth::id())->latest()->firstOrFail();
 $orders = OrderProduct::with('category')->where('orders_id', $order->id)->get();
 $customer = Client::where('id', $order->customer_id)->firstOrFail();
 

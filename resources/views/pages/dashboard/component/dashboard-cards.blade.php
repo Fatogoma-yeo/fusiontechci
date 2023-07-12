@@ -33,12 +33,23 @@
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
                     <h6 class="font-bold hidden text-right md:inline-block">{{ __( 'Incomplete Orders' ) }}</h6>
                     <h3 class="text-2xl font-bold uppercase">
-                        f cfa 0
+                        @forelse($instalments as $instalment)
+                            <span id="total_sales">@currency($instalment->total)</span>
+                        @empty
+                            <span id="total_sales">@currency(00)</span>
+                        @endforelse
                     </h3>
                 </div>
                 <div class="w-1/2 md:w-full flex flex-col px-2 justify-end items-end">
                     <h6 class="font-bold inline-block text-right md:hidden">{{ __( 'Incomplete Orders' ) }}</h6>
-                    <h4 class="text-xs text-right">+F FCA 00 {{ __( 'Today' ) }}</h4>
+                    <h4 class="text-xs text-right">
+                        @forelse($instalment_sammary as $details)
+                            +<span id="total_sales">@currency($details->instalment)</span>
+                        @empty
+                            +<span id="total_sales">@currency(00)</span>
+                        @endforelse
+                      {{ __( 'Today' ) }}
+                    </h4>
                 </div>
             </div>
         </div>
@@ -49,14 +60,18 @@
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
                     <h6 class="font-bold hidden text-right md:inline-block">{{ __( 'Wasted Goods' ) }}</h6>
                     <h3 class="text-2xl font-bold uppercase">
-                        f cfa 0
+                        @forelse($defectives as $defective)
+                            <span id="total_sales">@currency($defective->total)</span>
+                        @empty
+                            <span id="total_sales">@currency(00)</span>
+                        @endforelse
                     </h3>
                 </div>
                 <div class="w-1/2 md:w-full flex flex-col px-2 justify-end items-end">
                     <h6 class="font-bold text-right md:hidden">{{ __( 'Wasted Goods' ) }}</h6>
                     <h4 class="text-xs text-right">
                         @forelse($defective_sammary as $details)
-                            +<span id="total_sales">@currency($details->dayDefective)</span>
+                            +<span id="total_sales">@currency($details->total)</span>
                         @empty
                             +<span id="total_sales">@currency(00)</span>
                         @endforelse
@@ -72,8 +87,8 @@
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
                     <h6 class="font-bold hidden text-right md:inline-block">{{ __( 'Expenses' ) }}</h6>
                     <h3 class="text-2xl font-bold uppercase">
-                        @forelse($expense_sammary as $details)
-                            <span id="">@currency($details->total)</span>
+                        @forelse($expenses as $expense)
+                            <span id="">@currency($expense->total)</span>
                         @empty
                             <span id="">@currency(00)</span>
                         @endforelse

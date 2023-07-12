@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Expense;
 use App\Models\Orders;
 use App\Models\OrderProduct;
+use App\Models\OrderInstalment;
 use App\Models\ProductHistory;
 use Carbon\Carbon;
 use DB;
@@ -24,9 +25,9 @@ class DashboardController extends Controller
     {
         $userDetails = User::get();
 
-        $current_days = OrderProduct::whereDay('created_at', Carbon::now())
+        $current_days = Orders::whereDay('created_at', Carbon::now())
         ->select(
-            DB::raw('SUM(pos_subtotal) as total_sales'),
+            DB::raw('SUM(tendered) as total_sales'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
@@ -81,20 +82,45 @@ class DashboardController extends Controller
         $expense_sammary = Expense::whereDay('created_at', Carbon::now())
         ->select(
             DB::raw('SUM(value) as total'),
+            DB::raw('DATE_FORMAT(created_at,"%W") as day'),
+        )
+        ->groupBy('day')
+        ->get();
+
+        $expenses = Expense::select(
+            DB::raw('SUM(value) as total')
+        )
+        ->get();
+
+        $defective_sammary = ProductHistory::where(['created_at'=> Carbon::now(), 'operation' => __('Defective')])
+        ->select(
+            DB::raw('SUM(total_price) as total'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
         ->get();
 
-        $defective_sammary = ProductHistory::where('operation', __('Defective'))->select(
-            DB::raw('SUM(total_price) as dayDefective'),
+        $defectives = ProductHistory::where('operation', __('Defective'))
+        ->select(
+            DB::raw('SUM(total_price) as total')
+        )
+        ->get();
+
+        $instalment_sammary = OrderInstalment::whereDay('created_at', Carbon::now())
+        ->select(
+            DB::raw('SUM(amount_unpaid) as instalment'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
         ->get();
 
-        $customersDetails = Client::orderBy('purchases_amount', 'DESC')->get();
+        $instalments = OrderInstalment::select(
+            DB::raw('SUM(amount_unpaid) as total')
+        )
+        ->get();
 
-        return view('dashboard', compact('current_days','order_sammary','day_of_currentweek_detail','day_of_lastweek_detail', 'userDetails', 'customersDetails', 'expense_sammary', 'defective_sammary'));
+        $customersDetails = Client::orderBy('purchases_amount', 'DESC')->limit(10)->get();
+
+        return view('dashboard', compact('current_days','order_sammary','day_of_currentweek_detail','day_of_lastweek_detail', 'userDetails', 'customersDetails', 'expense_sammary', 'expenses', 'defective_sammary', 'defectives', 'instalment_sammary', 'instalments'));
     }
 }
