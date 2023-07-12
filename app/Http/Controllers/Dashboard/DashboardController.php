@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\Expense;
 use App\Models\Orders;
-use App\Models\OrderProduct;
+// use App\Models\OrderProduct;
 use App\Models\OrderInstalment;
 use App\Models\ProductHistory;
 use Carbon\Carbon;
@@ -26,6 +26,7 @@ class DashboardController extends Controller
         $userDetails = User::get();
 
         $current_days = Orders::whereDay('created_at', Carbon::now())
+        ->orWhere(['payment_status' => 'paid', 'payment_status' => 'partially_paid' ])
         ->select(
             DB::raw('SUM(tendered) as total_sales'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
@@ -38,17 +39,19 @@ class DashboardController extends Controller
         //     $current_day = 0;
         // }
 
-        $current_weeks = OrderProduct::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+        $current_weeks = Orders::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+        ->orWhere(['payment_status' => 'paid', 'payment_status' => 'partially_paid' ])
         ->select(
-            DB::raw('SUM(pos_subtotal) as sales_total'),
+            DB::raw('SUM(tendered) as sales_total'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
         ->get();
 
-        $last_weeks = OrderProduct::whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])
+        $last_weeks = Orders::whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])
+        ->orWhere(['payment_status' => 'paid', 'payment_status' => 'partially_paid' ])
         ->select(
-            DB::raw('SUM(pos_subtotal) as sales_total'),
+            DB::raw('SUM(tendered) as sales_total'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
         )
         ->groupBy('day')
