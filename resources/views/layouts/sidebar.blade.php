@@ -179,18 +179,20 @@
                 </a>
             </div>
           @endcan
-          @can('cash_flow_show')
+          @can('param_access')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('product.stock-ajustment') }}" class="text-white ml-4 mr-2">
                     {{ __('Stock Adjustment') }}
                 </a>
             </div>
           @endcan
+          @can('stock_show')
             <div class="pt-1 pb-2 space-y-1">
                 <a href="{{ route('report.flux-history') }}" class="text-white ml-4 mr-2">
                     {{ __('Stock Flow Records') }}
                 </a>
             </div>
+          @endcan
         </div>
 
         @can('users_access')
