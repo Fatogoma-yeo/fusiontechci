@@ -16,7 +16,7 @@
                 <div class="w-1/2 md:w-full flex flex-col px-2 justify-end items-end">
                     <h6 class="font-bold inline-block text-right md:hidden">{{ __( 'Total Sales' ) }}</h6>
                     <h4 class="text-xs text-right">
-                        @forelse($current_days as $detals)
+                        @forelse($current_day as $detals)
                             +<span id="total_sales">@currency($detals->total_sales)</span>
                         @empty
                             +<span id="total_sales">@currency(00)</span>

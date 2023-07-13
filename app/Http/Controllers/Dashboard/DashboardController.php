@@ -25,12 +25,19 @@ class DashboardController extends Controller
     {
         $userDetails = User::get();
 
-        $current_days = Orders::whereDay('created_at', Carbon::now())
+        $current_day = Orders::whereDay('created_at', Carbon::now())
+        ->where('tendered', '!=', 0)
+        ->where('payment_status', '!=', 'Annulé')
         ->select(
-            DB::raw('SUM(tendered) as total_sales'),
-            DB::raw('DATE_FORMAT(created_at,"%W") as day')
+            DB::raw('SUM(tendered) as total_sales')
         )
-        ->groupBy('day')
+        ->get();
+
+        $current_days = Orders::where('tendered', '!=', 0)
+        ->where('payment_status', '!=', 'Annulé')
+        ->select(
+            DB::raw('SUM(tendered) as total_sales')
+        )
         ->get();
         // if ($current_days !== null) {
         //     $current_day = $current_days;
@@ -39,7 +46,8 @@ class DashboardController extends Controller
         // }
 
         $current_weeks = Orders::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        ->orWhere(['payment_status' => 'paid', 'payment_status' => 'partially_paid' ])
+        ->where('tendered', '!=', 0)
+        ->where('payment_status', '!=', 'Annulé')
         ->select(
             DB::raw('SUM(tendered) as sales_total'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
@@ -48,7 +56,8 @@ class DashboardController extends Controller
         ->get();
 
         $last_weeks = Orders::whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])
-        ->orWhere(['payment_status' => 'paid', 'payment_status' => 'partially_paid' ])
+        ->where('tendered', '!=', 0)
+        ->where('payment_status', '!=', 'Annulé')
         ->select(
             DB::raw('SUM(tendered) as sales_total'),
             DB::raw('DATE_FORMAT(created_at,"%W") as day')
@@ -83,10 +92,8 @@ class DashboardController extends Controller
 
         $expense_sammary = Expense::whereDay('created_at', Carbon::now())
         ->select(
-            DB::raw('SUM(value) as total'),
-            DB::raw('DATE_FORMAT(created_at,"%W") as day'),
+            DB::raw('SUM(value) as total')
         )
-        ->groupBy('day')
         ->get();
 
         $expenses = Expense::select(
@@ -94,12 +101,11 @@ class DashboardController extends Controller
         )
         ->get();
 
-        $defective_sammary = ProductHistory::where(['created_at'=> Carbon::now(), 'operation' => __('Defective')])
+        $defective_sammary = ProductHistory::whereDay('created_at', Carbon::now())
+        ->where('operation', __('Defective'))
         ->select(
-            DB::raw('SUM(total_price) as total'),
-            DB::raw('DATE_FORMAT(created_at,"%W") as day')
+            DB::raw('SUM(total_price) as total')
         )
-        ->groupBy('day')
         ->get();
 
         $defectives = ProductHistory::where('operation', __('Defective'))
@@ -110,10 +116,8 @@ class DashboardController extends Controller
 
         $instalment_sammary = OrderInstalment::whereDay('created_at', Carbon::now())
         ->select(
-            DB::raw('SUM(amount_unpaid) as instalment'),
-            DB::raw('DATE_FORMAT(created_at,"%W") as day')
+            DB::raw('SUM(amount_unpaid) as instalment')
         )
-        ->groupBy('day')
         ->get();
 
         $instalments = OrderInstalment::select(
@@ -123,6 +127,6 @@ class DashboardController extends Controller
 
         $customersDetails = Client::orderBy('purchases_amount', 'DESC')->limit(10)->get();
 
-        return view('dashboard', compact('current_days','order_sammary','day_of_currentweek_detail','day_of_lastweek_detail', 'userDetails', 'customersDetails', 'expense_sammary', 'expenses', 'defective_sammary', 'defectives', 'instalment_sammary', 'instalments'));
+        return view('dashboard', compact('current_days', 'current_day','order_sammary','day_of_currentweek_detail','day_of_lastweek_detail', 'userDetails', 'customersDetails', 'expense_sammary', 'expenses', 'defective_sammary', 'defectives', 'instalment_sammary', 'instalments'));
     }
 }
