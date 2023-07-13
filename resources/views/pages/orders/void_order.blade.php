@@ -19,7 +19,7 @@
                     </select>
                 </div>
                 <div class="px-2 mb-2">
-                    <select class="w-full rounded py-1 px-8 border-gray-300 bg-white focus:border-indigo-500 focus:ring-indigo-500 shadow" name="order_date" id="order_date">
+                    <select class="w-full rounded py-1 px-4 border-gray-300 bg-white focus:border-indigo-500 focus:ring-indigo-500 shadow" name="order_date" id="order_date">
                         <option value="">Choisis la date de la commande</option>
                         @foreach ($orders as $order)
                             <option value="{{ $order->created_at }}">
