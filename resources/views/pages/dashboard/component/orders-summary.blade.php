@@ -8,7 +8,7 @@
     </div>
     <div class="head flex-auto flex-col flex h-56 overflow-y-auto ns-scrollbar">
         @forelse ($order_sammary as $order)
-            <div class="border-b @if($order->tendered != 0) border-green-600 bg-green-300 @else border-red-500 bg-red-400 @endif p-2 flex justify-between">
+            <div class="border-b @if($order->tendered != 0 && $order->payment_status == 'paid' || $order->payment_status == 'partially_paid' ) border-green-600 bg-green-300 @elseif($order->tendered != 0 && $order->payment_status == 'Annulé') bg-white @elseif($order->tendered == 0 ) border-red-500 bg-red-400 @endif p-2 flex justify-between">
                 <div>
                     <h3 class="text-lg font-semibold">{{ __( 'Order' ) }} : {{ $order->code }}</h3>
                     <div class="flex -mx-2">

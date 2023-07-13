@@ -773,6 +773,9 @@ class OrdersController extends Controller
                 $productHistories->author_id = $histories->author_id;
 
                 $productHistories->save();
+
+                $HistoryDetails = ProductHistory::where('product_id', $histories->product_id)->latest()->firstOrFail();
+                Inventory::where('product_id', $histories->product_id)->update(['after_quantity' => $HistoryDetails->after_quantity]);
             }
 
             if ($order_detail->payment_status == 'partially_paid') {
@@ -978,8 +981,7 @@ class OrdersController extends Controller
 
 
             $product_history_details = ProductHistory::where('product_id', $value)->latest()->firstOrFail();
-            $inventories_quantity = $product_history_details->after_quantity;
-            Inventory::where('product_id', $value)->update(['after_quantity' => $inventories_quantity]);
+            Inventory::where('product_id', $value)->update(['after_quantity' => $product_history_details->after_quantity]);
 
         }
 
