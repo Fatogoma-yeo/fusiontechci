@@ -467,7 +467,7 @@ class OrdersController extends Controller
 
             $date_generate = DATE_FORMAT(now(), 'dmy');
 
-            $detail_for_order = Orders::where(['customer_id' =>$customersDetail->id, 'author' =>Auth::id()])->first();
+            $detail_for_order = Orders::where(['customer_id' =>$customersDetail->id, 'author' =>Auth::id(), 'payment_status' => 'hold'])->first();
 
             if (!$detail_for_order) {
                 $orders = new Orders;
@@ -738,7 +738,7 @@ class OrdersController extends Controller
         }
 
         $users = User::where('email', '!=', 'admin@fusiontechci.com')->get();
-        $orders = Orders::where('payment_status', 'paid')->get();
+        $orders = Orders::where('payment_status', '!=', 'Annulé')->where('payment_status', '!=', 'hold')->get();
         return view('pages.orders.void_order', compact('users', 'orders'));
     }
 
@@ -775,9 +775,26 @@ class OrdersController extends Controller
                 $productHistories->save();
             }
 
+            if ($order_detail->payment_status == 'partially_paid') {
+                $order_instalment = OrderInstalment::where('order_id', $request->order_id)->firstOrFail();
+                $order_change = $order_detail->change + $order_instalment->amount_unpaid;
+                $order_tendered = $order_detail->tendered + $order_instalment->amount_unpaid;
+
+                Orders::where(['id' =>$request->order_id, 'author' =>$order_detail->author])
+                ->update([
+                  "payment_status" =>$status,
+                  "tendered" =>$order_tendered,
+                  "change" =>$order_change
+                ]);
+
+                OrderInstalment::where('order_id', $request->order_id)->delete();
+                OrderPayment::where('order_id', $request->order_id)->delete();
+            }else {
+                Orders::where(['id' =>$request->order_id, 'author' =>$order_detail->author])->update(["payment_status" =>$status]);
+            }
+
             CashFlow::where(['order_id' =>$request->order_id, 'author_id' =>$order_detail->author])->update(["status" =>"inactive"]);
             OrderProduct::where(['orders_id' =>$request->order_id, 'author_id' =>$order_detail->author])->update(["status" =>$status]);
-            Orders::where(['id' =>$request->order_id, 'author' =>$order_detail->author])->update(["payment_status" =>$status]);
 
         }
     }
