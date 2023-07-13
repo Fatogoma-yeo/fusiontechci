@@ -738,7 +738,7 @@ class OrdersController extends Controller
         }
 
         $users = User::where('email', '!=', 'admin@fusiontechci.com')->get();
-        $orders = Orders::where('payment_status', '!=', 'Annulé')->where('payment_status', '!=', 'hold')->get();
+        $orders = Orders::with('customer')->where('payment_status', '!=', 'Annulé')->where('payment_status', '!=', 'hold')->get();
         return view('pages.orders.void_order', compact('users', 'orders'));
     }
 

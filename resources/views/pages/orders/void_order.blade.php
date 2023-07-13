@@ -22,7 +22,14 @@
                     <select class="w-full rounded py-1 px-8 border-gray-300 bg-white focus:border-indigo-500 focus:ring-indigo-500 shadow" name="order_date" id="order_date">
                         <option value="">Choisis la date de la commande</option>
                         @foreach ($orders as $order)
-                            <option value="{{ $order->created_at }}">{{ $order->created_at }}</option>
+                            <option value="{{ $order->created_at }}">
+                              {{ $order->customer->name }} ( {{ $order->created_at }} ) -
+                              @if($order->payment_status == 'paid')
+                                <b>Payé</b>
+                              @else
+                                <b>Partiellement payé</b>
+                              @endif
+                            </option>
                         @endforeach
                     </select>
                 </div>
