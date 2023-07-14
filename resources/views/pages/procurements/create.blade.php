@@ -29,15 +29,6 @@
                     </x-button>
                 </div>
             </div>
-            @error('name')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 8000)"
-                    class="text-md text-white bg-red-500 rounded-md shadow-md w-60 px-4"
-                >{{ $message }}</p>
-            @enderror
 
             <ul class="pt-2 px-2">
                 <li  class="" @click=" openTab = 1 ">
@@ -75,7 +66,7 @@
                         <!-- Provider -->
                         <div class="col-span-1 mt-4">
                             <x-input-label for="porvider_id" :value="__('Founisseur')" required/>
-                            <select name="provider_id" id="provider_id" class="mt-1 block w-full py-2 px-3 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" >
+                            <select name="provider_id" id="provider_id" class="mt-1 block w-full py-2 px-3 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" onblur="procurmentNameGeneretor(this)">
                                 <option value=""></option>
                                     @foreach($providers as $provider)
                                         <option value="{{ $provider->id}}">{{ $provider->name }}</option>
