@@ -179,7 +179,7 @@
                 </a>
             </div>
           @endcan
-          @can('param_access')
+          @can('stock_show')
             <div class="pt-1 space-y-1">
                 <a href="{{ route('product.stock-ajustment') }}" class="text-white ml-4 mr-2">
                     {{ __('Stock Adjustment') }}

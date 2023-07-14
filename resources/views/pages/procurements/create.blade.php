@@ -23,7 +23,7 @@
                 <!-- Name -->
                 <x-label for="name" :value="__('Nom d\'approvisionnement')" />
                 <div class="flex justify-between rounded-md border-2 bg-indigo-600 border-indigo-600">
-                    <x-input id="name" class="block w-full" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-input id="name" class="block w-full" type="text" name="name" id="name" :value="old('name')" required autofocus />
                     <x-button>
                         {{ __('Sauvegarder') }}
                     </x-button>
@@ -78,7 +78,7 @@
                             <select name="provider_id" id="provider_id" class="mt-1 block w-full py-2 px-3 border-gray-300 bg-gray-100 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" >
                                 <option value=""></option>
                                     @foreach($providers as $provider)
-                                        <option value="{{ $provider->id}}" name="provider_id">{{ $provider->name }}</option>
+                                        <option value="{{ $provider->id}}">{{ $provider->name }}</option>
                                     @endforeach
                             </select>
                         </div>
@@ -129,3 +129,21 @@
     </form>
 </div>
 @endsection
+
+@push('javascript')
+<script type="text/javascript">
+    function procurmentNameGeneretor() {
+      var id = document.querySelector('#provider_id').value;
+      $.ajax({
+          type: "get",
+          url:"{{ route('procurements.create') }}",
+          data: {"provider_id": id},
+          success:function (response) {
+            var name = response.provider_name;
+            var matches = name+'-'+"CMD"+Math.floor(Math.random() * 100);
+            document.getElementById('name').value = matches;
+          }
+      });
+    }
+</script>
+@endpush

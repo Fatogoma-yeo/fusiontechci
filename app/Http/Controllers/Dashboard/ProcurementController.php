@@ -82,10 +82,15 @@ class ProcurementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $providers = Provider::get();
+        if ($request->ajax()) {
+          $customer = Provider::where('id', $request->provider_id)->firstOrFail();
+          $customer_name = $customer->name;
+          return response()->json(['provider_name' => $customer_name]);
+        }
 
+        $providers = Provider::get();
         return view('pages.procurements.create', compact('providers'));
     }
 
