@@ -100,6 +100,7 @@ $maxWidth = [
                   $('#subTotal').html(gtotal.toString());
                   $('#Total').html(gtotal.toString() - discounTotal.toString());
               });
+              counter();
 
               document.getElementById('rabais').innerText = document.getElementById('pending_pos_discount').textContent;
               document.getElementById('orders_id').innerText = id;

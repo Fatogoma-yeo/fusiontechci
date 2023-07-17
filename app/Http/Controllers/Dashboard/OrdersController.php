@@ -830,13 +830,32 @@ class OrdersController extends Controller
 
         if ($data['orders_id'] != '') {
 
-            Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
-            ->update([
-              "discount" => $data["discount"],
-              "subtotal" => $data["subtotal"],
-              "tendered" => $data["total"],
-              "change" => 0,
-            ]);
+            if ($data['cash_value'] != '' && $data['cash_value'] < $data['total']) {
+
+                Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
+                ->update([
+                  "payment_status" => "partially_paid",
+                  "discount" => $data["discount"],
+                  "subtotal" => $data["subtotal"],
+                  "tendered" => $data["cash_value"],
+                  "change" => $data['cash_value'] - $data['total'],
+                ]);
+
+                $before_owed_amount = $customersDetail->owed_amount;
+                $owed_amount = $before_owed_amount + ($data['total'] - $data['cash_value']);
+                Client::where('name', 'LIKE', '%'.$data["customer"].'%')->update(['owed_amount' => $owed_amount]);
+
+            }elseif ($data['cash_value'] == '' || $data['cash_value'] == $data['total']) {
+
+                Orders::where(['id' => $data['orders_id'], 'author' => Auth::id()])
+                ->update([
+                  "payment_status" => "paid",
+                  "discount" => $data["discount"],
+                  "subtotal" => $data["subtotal"],
+                  "tendered" => $data["total"],
+                  "change" => 0,
+                ]);
+            }
 
         }elseif ($data['orders_id'] == '') {
             $order = new Orders;
@@ -1009,11 +1028,6 @@ class OrdersController extends Controller
         $cash_flows->save();
 
         // echo "</pre>"; print_r($date_generate); die;
-
-        $category = ProductCategory::get();
-        foreach ($category as $cat) {
-            $categoryDetail = $cat;
-        }
 
         $before_purchases_amount = $customersDetail->purchases_amount;
         if ($data['cash_value'] != '' && $data['cash_value'] < $data['total']) {
