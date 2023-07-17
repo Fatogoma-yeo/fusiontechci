@@ -25,7 +25,7 @@ class DashboardController extends Controller
     {
         $userDetails = User::get();
 
-        $current_day = Orders::whereDay('created_at', Carbon::now())
+        $current_day = Orders::whereDate('created_at', date('Y-m-d'))
         ->where('tendered', '!=', 0)
         ->where('payment_status', '!=', 'Annulé')
         ->select(
@@ -90,7 +90,7 @@ class DashboardController extends Controller
 
         $order_sammary = Orders::limit(15)->latest()->get();
 
-        $expense_sammary = Expense::whereDay('created_at', Carbon::now())
+        $expense_sammary = Expense::whereDate('created_at', date('Y-m-d'))
         ->select(
             DB::raw('SUM(value) as total')
         )
@@ -101,7 +101,7 @@ class DashboardController extends Controller
         )
         ->get();
 
-        $defective_sammary = ProductHistory::whereDay('created_at', Carbon::now())
+        $defective_sammary = ProductHistory::whereDate('created_at', date('Y-m-d'))
         ->where('operation', __('Defective'))
         ->select(
             DB::raw('SUM(total_price) as total')
@@ -114,7 +114,7 @@ class DashboardController extends Controller
         )
         ->get();
 
-        $instalment_sammary = OrderInstalment::whereDay('created_at', Carbon::now())
+        $instalment_sammary = OrderInstalment::whereDate('created_at', date('Y-m-d'))
         ->select(
             DB::raw('SUM(amount_unpaid) as instalment')
         )
