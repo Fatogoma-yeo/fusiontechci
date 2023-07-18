@@ -827,6 +827,8 @@ class OrdersController extends Controller
         $customersDetail = Client::where('name', 'LIKE', '%'.$data["customer"].'%')->firstOrFail();
 
         $date_generate = DATE_FORMAT(now(), 'dmy');
+        $order_instalment = new OrderInstalment;
+        $orders_payment = new OrderPayment;
 
         if ($data['orders_id'] != '') {
 
@@ -840,6 +842,18 @@ class OrdersController extends Controller
                   "tendered" => $data["cash_value"],
                   "change" => $data['cash_value'] - $data['total'],
                 ]);
+
+                $order_instalment->order_id = $data['orders_id'];
+                $order_instalment->amount_paid = $data['cash_value'];
+                $order_instalment->amount_unpaid = $data['total'] - $data['cash_value'];
+
+                $order_instalment->save();
+
+                $orders_payment->order_id = $data['orders_id'];
+                $orders_payment->value = $data['cash_value'];
+                $orders_payment->author_id = Auth::id();
+
+                $orders_payment->save();
 
                 $before_owed_amount = $customersDetail->owed_amount;
                 $owed_amount = $before_owed_amount + ($data['total'] - $data['cash_value']);
@@ -859,8 +873,6 @@ class OrdersController extends Controller
 
         }elseif ($data['orders_id'] == '') {
             $order = new Orders;
-            $order_instalment = new OrderInstalment;
-            $orders_payment = new OrderPayment;
 
             if ($data['cash_value'] != '' && $data['cash_value'] < $data['total']) {
                 $order->code = $date_generate.'-00'.rand(1,9);
