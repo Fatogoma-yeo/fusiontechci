@@ -208,11 +208,13 @@
     function userModalClosefun() {
         user_modal.style.display = "none";
         x.style.overflow = "auto";
+        location.replace(location.href);
     }
 
     function pendingModalClosefun() {
         document.getElementById('pending-orders-modal').style.display = "none";
         x.style.overflow = "auto";
+        location.replace(location.href);
     }
 
     function instalmentModalClosefun() {
