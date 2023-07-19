@@ -17,8 +17,7 @@
                           @csrf
 
                           <div class="flex justify-end p-2">
-                            @if($productDetail)
-                              @if($productDetail->inventory != null)
+                            @if($product_detailCount !=0)
                                 <button class="inline-flex items-center px-4 py-2 bg-indigo-600 rounded font-semibold text-sm text-white tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                                 @foreach($products_detail as $products)
                                 @if($products->inventory)
@@ -28,7 +27,6 @@
 
                                     {{ __( 'Proceed' ) }}
                                 </button>
-                              @endif
                             @endif
                           </div>
                           <div class="bg-white relative overflow-x-auto">

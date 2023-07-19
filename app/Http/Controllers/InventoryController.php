@@ -52,13 +52,13 @@ class InventoryController extends Controller
         }
 
         $products_detail = Product::with('inventory')->get();
-        $productDetail = Product::with('inventory')->firstOrFail();
+        $product_detailCount = Product::with('inventory')->count();
         $inventoryCount = Inventory::count();
         $inventoryCheckCount = Inventory::where(['check_stock_physic_1' =>1, 'check_stock_physic_2' =>1])->count();
 
         // dd($inventoryCount, $inventoryCheckCount);
 
-        return view('pages.inventory.inventory_validate', compact('products_detail', 'inventoryCount', 'inventoryCheckCount', 'productDetail'));
+        return view('pages.inventory.inventory_validate', compact('products_detail', 'inventoryCount', 'inventoryCheckCount', 'product_detailCount'));
     }
 
     public function inventoryPhysicStockHs(StoreInventoryRequest $request)
@@ -144,9 +144,9 @@ class InventoryController extends Controller
     public function create()
     {
         $products_detail = Product::with('inventory')->get();
-        $productDetail = Product::with('inventory')->firstOrFail();
+        $product_detailCount = Product::with('inventory')->count();
 
-        return view('pages.inventory.physic_stock', compact('products_detail', 'productDetail'));
+        return view('pages.inventory.physic_stock', compact('products_detail', 'product_detailCount'));
     }
 
     /**
