@@ -1,7 +1,7 @@
 
 <div class="flex flex-auto bg-white flex-col shadow rounded-lg py-2 w-full">
     <!-- <div id="chartContainer" class="w-full h-72"></div> -->
-  <canvas id="myChart"></canvas>
+  <canvas class="flex flex-auto w-full" id="myChart"></canvas>
   <div id="" class="flex justify-center">
     <ul class="text-sm">
         <li onclick="updateChart(0)" class="px-2 cursor-pointer" id="legend_0">
