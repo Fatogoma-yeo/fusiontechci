@@ -1,6 +1,6 @@
 <div class="p-4">
     <div class="flex -mx-4 flex-wrap">
-        <div class="px-4 mb-6 md:w-1/3">
+        <div class="px-4 mb-6 w-screen md:w-1/3">
             <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-purple-400 to-purple-600 text-white px-3 py-5">
                 <div class="flex flex-row md:flex-col flex-auto">
                     <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="px-4 mb-6 md:w-1/3">
+        <div class="px-4 mb-6 w-screen md:w-1/3">
             <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-red-400 to-red-600 text-white px-3 py-5">
                 <div class="flex flex-row md:flex-col flex-auto">
                     <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="px-4 mb-6 md:w-1/3">
+        <div class="px-4 mb-6 w-screen md:w-1/3">
             <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-blue-400 to-blue-600 text-white px-3 py-5">
                 <div class="flex flex-row md:flex-col flex-auto">
                     <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">

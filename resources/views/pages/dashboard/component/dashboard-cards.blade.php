@@ -1,6 +1,6 @@
 
 <div class="-m-4 flex flex-wrap" id="dashboard-cards">
-    <div class="p-4 md:w-1/2 lg:w-1/4">
+    <div class="p-4 w-screen md:w-1/2 lg:w-1/4">
         <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-cyan-500 to-blue-500 text-white px-3 py-5">
             <div class="flex flex-row md:flex-col flex-auto">
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="p-4 md:w-1/2 lg:w-1/4">
+    <div class="p-4 w-screen md:w-1/2 lg:w-1/4">
         <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-green-400 to-green-600 text-white px-3 py-5">
             <div class="flex flex-row md:flex-col flex-auto">
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
@@ -54,7 +54,7 @@
             </div>
         </div>
     </div>
-    <div class="p-4 md:w-1/2 lg:w-1/4">
+    <div class="p-4 w-screen md:w-1/2 lg:w-1/4">
         <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-red-300 via-red-400 to-red-500 text-white px-3 py-5">
             <div class="flex flex-row md:flex-col flex-auto">
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">
@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-    <div class="p-4 md:w-1/2 lg:w-1/4">
+    <div class="p-4 w-screen md:w-1/2 lg:w-1/4">
         <div class="flex flex-auto flex-col rounded-lg shadow-lg bg-gradient-to-br from-indigo-400 to-indigo-600 text-white px-3 py-5">
             <div class="flex flex-row md:flex-col flex-auto">
                 <div class="w-1/2 md:w-full flex md:flex-col md:items-start justify-center">

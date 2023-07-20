@@ -1,5 +1,5 @@
 
-<div class="flex flex-auto bg-white flex-col shadow rounded-lg py-2">
+<div class="flex flex-auto bg-white flex-col shadow rounded-lg py-2 w-full">
     <!-- <div id="chartContainer" class="w-full h-72"></div> -->
   <canvas id="myChart"></canvas>
   <div id="" class="flex justify-center">
@@ -25,7 +25,7 @@
 
 <script>
   const ctx = document.getElementById('myChart');
-    
+
   const chartDetails1 = <?php echo $day_of_currentweek_detail ?>;
     const chartDetails2 = <?php echo $day_of_lastweek_detail ?>;
     var lsale1 = 0; var lsale2 = 0;
@@ -49,7 +49,7 @@
             dayDetail === "Sunday" ? dimsale1+=saleDetail : dimsale1+=0;
         });
     }
-    if (chartDetails2) { 
+    if (chartDetails2) {
         chartDetails2.forEach(element => {
             var dayDetail = element.day;
             var saleDetail = element.sale;
@@ -77,7 +77,7 @@
                         'rgb(219 234 254)',
                     ];
                     if (!context.chart.chartArea) {
-                        return; 
+                        return;
                     }
                     const {ctx, data, chartArea: {top, bottom} } = context.chart;
                     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
@@ -103,7 +103,7 @@
                         'rgb(243 244 246)',
                     ];
                     if (!context.chart.chartArea) {
-                        return; 
+                        return;
                     }
                     const {ctx, data, chartArea: {top, bottom} } = context.chart;
                     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
@@ -140,7 +140,7 @@
         }
     });
     function updateChart(dataset) {
-      
+
         const isDataShown = myChart.isDatasetVisible(dataset);
         if (isDataShown === false) {
             myChart.show(dataset);
