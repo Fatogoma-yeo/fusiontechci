@@ -7,11 +7,11 @@
         <h3>Modifiez le produit et enregistrez-le.</h3>
     </label>
     <div for="title" class="text-sm my-2 text-primary">
-        <a href="{{ route('products.index') }}" class="rounded-full border ns-inset-button error hover:bg-gray-200 hover:text-gray-900 text-white  px-1 py-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-flex">
+        <a href="{{ route('products.index') }}" class="rounded-full border ns-inset-button error hover:bg-gray-200 hover:text-gray-900 text-white flex px-1 py-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            {{ __( 'Retour' ) }}
+            <span class="px-1">{{ __( 'Go Back' ) }}</span>
         </a>
     </div>
 </div>
@@ -35,12 +35,12 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-4 w-full">
-            <div class="grid grid-cols-3 gap-6 pb-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
                 <!-- Media -->
                 <div class="mt-4">
                     <x-input-label for="media" :value="__('Image')" />
                     <div class="w-full">
-                        <x-media-input />	
+                        <x-media-input />
                     </div>
                 </div>
                 <!-- Displays on pos -->

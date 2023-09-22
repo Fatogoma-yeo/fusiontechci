@@ -118,7 +118,7 @@ class ExpensesController extends Controller
     {
         $categoryDetail = ExpenseCategory::where('id', $expense->category_id)->firstOrFail();
         $categoryDetail = json_decode($categoryDetail, true);
-        $categories = ExpenseCategory::with('category')->get();
+        $categories = ExpenseCategory::get();
         // echo "<pre>"; print_r($categoryDetail); die;
         return view('pages.expenses.edit', compact('expense', 'categories', 'categoryDetail'));
     }

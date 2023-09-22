@@ -7,11 +7,11 @@
         <h3>Modifiez la catégorie et enregistrez-la.</h3>
     </label>
     <div for="title" class="text-sm my-2 text-primary">
-        <a href="{{ route('categories.index') }}" class="rounded-full border ns-inset-button error hover:bg-gray-200 hover:text-gray-900 text-white  px-1 py-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-flex">
+        <a href="{{ route('categories.index') }}" class="rounded-full border ns-inset-button error hover:bg-gray-200 hover:text-gray-900 text-white flex px-1 py-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            {{ __( 'Retour' ) }}
+            <span class="px-1">{{ __( 'Go Back' ) }}</span>
         </a>
     </div>
 </div>
@@ -35,7 +35,7 @@
             <x-input-label :value="__('Information Générale')" />
         </div>
         <div class="bg-white rounded-md shadow-lg px-4 w-full">
-            <div class="grid grid-cols-3 gap-6 pb-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
                 <!-- Media -->
                 <div class="mt-4">
                     <x-input-label for="media_id" :value="__('Image')" />
@@ -45,11 +45,11 @@
                                 <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
                                 <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
                                 <circle cx="12" cy="13" r="3" />
-                            </svg>						
+                            </svg>
                             Choisir l'Image
                         </label>
                         <div class="w-full text-gray-500 text-xs mt-1">Cliquer pour ajouter l'image de la catégorie</div>
-                        <x-text-input name="media_id" id="fileInput" accept="image/*" class="hidden" type="file" />	
+                        <x-text-input name="media_id" id="fileInput" accept="image/*" class="hidden" type="file" />
                     </div>
                 </div>
                 <!-- Displays on pos -->
@@ -75,7 +75,7 @@
                     <x-input-label for="parent_id" :value="__('Parent')" />
                     <select name="parent_id" id="parent_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 sm:text-sm" >
                         <option value=""></option>
-                        
+
                     </select>
                 </div>
             </div>
