@@ -9,6 +9,8 @@ use App\Http\Requests\Dashboard\Update\UpdateCategoryRequest;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\User;
+
 class CategoryController extends Controller
 {
     /**
@@ -25,11 +27,11 @@ class CategoryController extends Controller
     }
     public function index()
     {
-        $userDetails = User::get();
+        $users = User::get();
         $categories = ProductCategory::orderBy('id', 'DESC')->paginate(5);
         $parentCategory = ProductCategory::where('parent_id', null)->get();
 
-        return view('pages.categories.index', compact('categories', 'parentCategory', 'userDetails'));
+        return view('pages.categories.index', compact('categories', 'parentCategory', 'users'));
     }
 
     /**

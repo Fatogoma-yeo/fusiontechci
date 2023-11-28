@@ -86,10 +86,13 @@ class ProductController extends Controller
 
         $product->author_id = Auth::id();
         $product->save();
-        $productDetails = Product::with('category')->firstOrFail();
-        $category = ProductCategory::where('id', $productDetails->category_id)->firstOrFail();
-        $countProducts = $productDetails->count();
-        $category->update(['total_items' => $countProducts]);
+
+        $products = Product::with('category')
+                          ->where('category_id', $request->category_id)
+                          ->get();
+        $category = ProductCategory::where('id', $request->category_id)->firstOrFail();
+        $count_product = $products->count();
+        $category->update(['total_items' => $count_product]);
         // echo '<pre>';print_r($category); die;
 
         return redirect()->back()->with('success', 'Le produit a été créer avec succès !');
@@ -225,7 +228,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        
+
         if ($product->media) {
             unlink(public_path($product->media));
         }

@@ -51,7 +51,7 @@
                             {{ $account->operation }}
                         </td>
                         <td class="px-2 py-4 whitespace-nowrap text-gray-900">
-                            @foreach ($userDetails as $user)
+                            @foreach ($users as $user)
                                 @if($user->id == $account->author_id)
                                     <span class="font-semibold px-2 py-2 bg-green-0 rounded-full">{{ $user->name }}</span>
                                 @elseif ($account->author_id == 0)
