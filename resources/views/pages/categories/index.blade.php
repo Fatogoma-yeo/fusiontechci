@@ -63,7 +63,7 @@
                             @endif
                         </td>
                         <td class="px-2 py-4 whitespace-nowrap text-gray-900">
-                            @foreach ($userDetails as $user)
+                            @foreach ($users as $user)
                                 @if($user->id == $category->author_id)
                                     <span class="rounded-full bg-green-0 px-2 py-2">{{ $user->name }}</span>
                                 @endif
