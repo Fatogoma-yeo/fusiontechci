@@ -43,21 +43,17 @@
                     </div>
                 </div>
                 <!-- Displays on pos -->
-                <div x-data ="{ checked: 2, activeClasses:'shadow rounded-lg bg-indigo-600 text-white', inactiveClasses:'focus:bg-white', active:1, inactive:0, textColor:'text-white', textInColor:'text-gray-900' }" class="mt-4 sm:px-6" x-cloak>
+                <div class="mt-4 w-full sm:px-6">
                     <x-input-label for="status" :value="__('Status du produit')" />
                     <div class="flex border-transparent rounded-lg bg-white shadow-lg w-full mt-1">
-                        <label class="inline-flex items-center justify-center w-full py-2" @click=" checked = 1 " :class="checked === 1 ? activeClasses : inactiveClasses">
-                            <input type="radio" name="status" :value="checked ===1 ? active : inactive" class="w-5 h-5 text-red-600 hidden"/>
-                            <span class="ml-2 text-lg" :class="checked === 1 ? textColor : textInColor">
-                                Cachée
-                            </span>
-                        </label>
-                        <label class="inline-flex items-center justify-center w-full py-2" @click=" checked = 2 " :class="checked === 2 ? activeClasses : inactiveClasses">
-                            <input type="radio" name="status" :value="checked ===2 ? active : inactive" class="w-5 h-5 text-red-600 hidden" checked/>
-                            <span class="ml-2 text-lg" :class="checked === 2 ? textColor : textInColor">
-                                En soldes
-                            </span>
-                        </label>
+                        <div class="flex items-center justify-center w-full">
+                          <input type="radio" name="status" id="active" checked value="1" class="hidden"/>
+                          <label for="active" class="radio w-full text-center text-lg py-2 px-4 rounded-l-lg cursor-pointer hover:opacity-75">En soldes</label>
+                        </div>
+                        <div class="flex items-center justify-center w-full">
+                          <input type="radio" name="status" id="inactive" value="0" class="hidden"/>
+                          <label for="inactive" class="radio w-full text-center text-lg py-2 px-4 rounded-r-lg cursor-pointer hover:opacity-75">Cachée</label>
+                        </div>
                     </div>
                 </div>
                 <!-- Parent -->
