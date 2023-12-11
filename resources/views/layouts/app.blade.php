@@ -154,6 +154,8 @@
             function deleteRow(el) {
                 var row = upTo(el, 'tr')
                 if (row) row.parentNode.removeChild(row);
+                totalResult();
+                valueResult();
             }
 
             var Total = document.getElementById("Total");
