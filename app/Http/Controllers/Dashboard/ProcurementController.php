@@ -238,9 +238,9 @@ class ProcurementController extends Controller
 
         $provider = Provider::where('id', $procurementDetail->provider_id)->firstOrFail();
         if ($procurementDetail->payment_status == 'paid') {
-            $provider->update(['amount_paid' => $procurementDetail->cost]);
+            $provider->update(['amount_paid' => $provider->amount_paid + $procurementDetail->cost]);
         }else {
-            $provider->update(['amount_du' => $procurementDetail->cost]);
+            $provider->update(['amount_du' => $provider->amount_du + $procurementDetail->cost]);
         }
 
         $notification = new Notification;
